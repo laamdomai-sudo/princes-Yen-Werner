@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chương 10 — Princes of the Yen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --cream: #faf8f3;
+    --paper: #f4f0e8;
+    --bone: #ede8dc;
+    --ink: #1a1714;
+    --ink-light: #3d3830;
+    --ink-muted: #7a7165;
+    --accent: #2d5f3f;        /* xanh lá — tín dụng / hồi phục */
+    --accent-pale: #e8f3ec;
+    --accent2: #8b2010;       /* đỏ đậm — sai lầm chính sách */
+    --accent2-pale: #f6ebe8;
+    --blue: #1b4b82;
+    --blue-pale: #e8eef7;
+    --gold: #b07820;
+    --gold-pale: #fdf4e0;
+    --border: #d9d3c7;
+    --shadow: rgba(26,23,20,0.08);
+    --shadow-md: rgba(26,23,20,0.14);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--cream); color: var(--ink);
+    min-height: 100vh; font-size: 16px; line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #1a2e20 0%, #0e1f14 100%);
+    color: var(--cream); padding: 2.2rem 3rem 1.8rem;
+    position: relative; overflow: hidden;
+  }
+  header::before {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      -45deg, transparent, transparent 29px,
+      rgba(255,255,255,0.015) 30px
+    );
+  }
+  header::after {
+    content: ''; position: absolute;
+    right: -60px; top: -40px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(45,95,63,0.3) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.18em;
+    color: #7ec89a; text-transform: uppercase;
+    margin-bottom: 0.5rem; position: relative;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; line-height: 1.2;
+    position: relative;
+  }
+  .header-sub {
+    font-family: 'Playfair Display', serif;
+    font-style: italic; font-size: 1.1rem;
+    color: #a0c8ae; margin-top: 0.3rem; position: relative;
+  }
+  .header-meta {
+    margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;
+    position: relative;
+  }
+  .meta-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.1em;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #a0c8ae; padding: 0.3rem 0.8rem; border-radius: 2px;
+  }
+
+  /* ── KEY QUESTION BANNER ── */
+  .question-banner {
+    background: var(--accent2-pale);
+    border-top: 3px solid var(--accent2);
+    padding: 1rem 3rem;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--accent2);
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .question-banner span { font-style: normal; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent2); color: #fff; padding: 0.2rem 0.6rem; border-radius: 2px; white-space: nowrap; }
+
+  /* ── LAYOUT ── */
+  .layout { display: grid; grid-template-columns: 1fr 360px; min-height: calc(100vh - 150px); }
+  .main-content { padding: 2rem 2.5rem; border-right: 1px solid var(--border); }
+
+  /* ── TABS ── */
+  .tabs { display: flex; flex-wrap: wrap; border-bottom: 2px solid var(--border); margin-bottom: 2rem; }
+  .tab-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.07em; text-transform: uppercase;
+    background: none; border: none;
+    border-bottom: 3px solid transparent; margin-bottom: -2px;
+    padding: 0.65rem 1rem; cursor: pointer;
+    color: var(--ink-muted); transition: all 0.2s; white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--ink); background: var(--bone); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--accent-pale); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; } }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 700;
+    color: var(--ink); margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .sicon {
+    font-size: 1rem; width: 28px; height: 28px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 4px; flex-shrink: 0;
+  }
+  .sicon-green { background: var(--accent-pale); color: var(--accent); }
+  .sicon-red   { background: var(--accent2-pale); color: var(--accent2); }
+  .sicon-blue  { background: var(--blue-pale); color: var(--blue); }
+  .sicon-gold  { background: var(--gold-pale); color: var(--gold); }
+
+  /* ── CARD ── */
+  .card {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 6px; padding: 1.4rem; margin-bottom: 1.4rem;
+    box-shadow: 0 1px 4px var(--shadow);
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700; color: var(--ink);
+    margin-bottom: 0.85rem;
+    display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+  }
+  .tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.15rem 0.5rem; border-radius: 2px;
+  }
+  .tag-green { background: var(--accent-pale); color: var(--accent); }
+  .tag-red   { background: var(--accent2-pale); color: var(--accent2); }
+  .tag-blue  { background: var(--blue-pale); color: var(--blue); }
+  .tag-gold  { background: var(--gold-pale); color: var(--gold); }
+
+  p.body-text {
+    color: var(--ink-light); font-size: 0.93rem;
+    line-height: 1.75; margin-bottom: 0.7rem;
+  }
+  p.body-text:last-child { margin-bottom: 0; }
+
+  /* ── STAT GRID ── */
+  .stat-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.8rem; margin: 1rem 0;
+  }
+  .stat-box {
+    background: var(--paper); border: 1px solid var(--border);
+    border-radius: 5px; padding: 0.9rem; text-align: center;
+  }
+  .stat-box.danger { border-color: #d4a090; background: #fff5f2; }
+  .stat-box.good   { border-color: #90c8a0; background: #f0faf3; }
+  .stat-box.neutral { border-color: #c8c0a8; background: var(--paper); }
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700; line-height: 1;
+    display: block; margin-bottom: 0.3rem;
+  }
+  .num-green { color: var(--accent); }
+  .num-red   { color: var(--accent2); }
+  .num-gold  { color: var(--gold); }
+  .num-blue  { color: var(--blue); }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--ink-muted); line-height: 1.3;
+  }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-pale);
+    padding: 1rem 1.2rem; margin: 1.1rem 0;
+    border-radius: 0 5px 5px 0;
+    font-size: 0.91rem; color: var(--ink-light);
+    font-style: italic; line-height: 1.7;
+  }
+  .callout.red  { border-left-color: var(--accent2); background: var(--accent2-pale); }
+  .callout.gold { border-left-color: var(--gold); background: var(--gold-pale); font-style: normal; }
+  .callout.blue { border-left-color: var(--blue); background: var(--blue-pale); font-style: normal; }
+  .callout.dark { border-left-color: #5a5248; background: #f2f0ec; font-style: normal; }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 1.8rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 0.5rem; top: 0.4rem; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .tl-item { position: relative; margin-bottom: 1.2rem; }
+  .tl-item::before {
+    content: ''; position: absolute;
+    left: -1.35rem; top: 0.35rem;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--cream); outline: 1px solid var(--accent);
+  }
+  .tl-item.red::before  { background: var(--accent2); outline-color: var(--accent2); }
+  .tl-item.gold::before { background: var(--gold); outline-color: var(--gold); }
+  .tl-item.blue::before { background: var(--blue); outline-color: var(--blue); }
+  .tl-year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em;
+    color: var(--accent); margin-bottom: 0.2rem;
+  }
+  .tl-item.red .tl-year  { color: var(--accent2); }
+  .tl-item.gold .tl-year { color: var(--gold); }
+  .tl-item.blue .tl-year { color: var(--blue); }
+  .tl-text { font-size: 0.9rem; color: var(--ink-light); line-height: 1.6; }
+
+  /* ── INSIGHT LIST ── */
+  .insight-list { list-style: none; }
+  .insight-list li {
+    display: flex; gap: 0.8rem;
+    padding: 0.75rem 0; border-bottom: 1px solid var(--bone);
+    font-size: 0.91rem; color: var(--ink-light); line-height: 1.6;
+    align-items: flex-start;
+  }
+  .insight-list li:last-child { border-bottom: none; }
+  .in {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; font-weight: 500; color: #fff;
+    border-radius: 50%; width: 20px; height: 20px;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 0.15rem;
+  }
+  .in-green { background: var(--accent); }
+  .in-red   { background: var(--accent2); }
+  .in-blue  { background: var(--blue); }
+  .in-gold  { background: var(--gold); }
+
+  /* ── COMPARISON TABLE ── */
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; margin: 0.6rem 0; }
+  .cmp-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.63rem; letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--paper); padding: 0.55rem 0.85rem;
+    text-align: left; color: var(--ink-muted); border-bottom: 2px solid var(--border);
+  }
+  .cmp-table td {
+    padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--bone);
+    color: var(--ink-light); vertical-align: top; line-height: 1.5;
+  }
+  .cmp-table tr:last-child td { border-bottom: none; }
+  .cmp-table td:first-child { font-weight: 600; color: var(--ink); }
+  .cmp-table tr.highlight td { background: var(--accent-pale); }
+  .cmp-table tr.highlight-bad td { background: var(--accent2-pale); }
+
+  /* ── MECHANISM FLOW ── */
+  .flow-wrap { margin: 1rem 0; }
+  .flow-row { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin: 0.4rem 0; }
+  .fbox {
+    padding: 0.38rem 0.75rem; border-radius: 4px; border: 1px solid;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.71rem; font-weight: 500;
+    white-space: nowrap;
+  }
+  .fbox-green { background: var(--accent-pale); border-color: #90c8a0; color: var(--accent); }
+  .fbox-red   { background: var(--accent2-pale); border-color: #d4a090; color: var(--accent2); }
+  .fbox-gold  { background: var(--gold-pale); border-color: #d4b060; color: var(--gold); }
+  .fbox-blue  { background: var(--blue-pale); border-color: #90b4d8; color: var(--blue); }
+  .farr { color: var(--ink-muted); font-size: 1.1rem; }
+
+  /* ── POLICY GAUGE ── */
+  .gauge-row { margin-bottom: 1rem; }
+  .gauge-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.3rem; }
+  .gauge-name { font-size: 0.85rem; color: var(--ink-light); }
+  .gauge-val  { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--ink-muted); }
+  .gauge-track { height: 8px; background: var(--bone); border-radius: 4px; overflow: hidden; position: relative; }
+  .gauge-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+  .gauge-mark { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--accent2); border-radius: 1px; }
+
+  /* ── VERDICT BOX ── */
+  .verdict-box {
+    background: #0e1f14; color: var(--cream);
+    border-radius: 6px; padding: 1.3rem 1.5rem;
+    margin: 1.2rem 0;
+  }
+  .verdict-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: #7ec89a; margin-bottom: 0.5rem;
+  }
+  .verdict-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-style: italic;
+    line-height: 1.65; color: #e0f0e8;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar { background: var(--paper); padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+  .sidebar-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--ink-muted); margin-bottom: 0.8rem;
+    padding-bottom: 0.4rem; border-bottom: 1px solid var(--border);
+  }
+
+  /* ── TERMS ── */
+  .term-item { margin-bottom: 0.85rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--bone); }
+  .term-item:last-child { border: none; margin: 0; padding: 0; }
+  .term-name { font-family: 'Playfair Display', serif; font-size: 0.88rem; font-weight: 700; color: var(--ink); margin-bottom: 0.18rem; }
+  .term-def  { font-size: 0.8rem; color: var(--ink-muted); line-height: 1.5; }
+
+  /* ── QUICK STATS ── */
+  .qs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+  .qs-box { background: #fff; border: 1px solid var(--border); border-radius: 5px; padding: 0.75rem; text-align: center; }
+  .qs-num { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; line-height: 1; display: block; margin-bottom: 0.22rem; }
+  .qs-lbl { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-muted); line-height: 1.3; }
+
+  /* ── NOTES ── */
+  .notes-panel { background: #fff; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; box-shadow: 0 1px 4px var(--shadow); }
+  .notes-header { background: #0e1f14; color: var(--cream); padding: 0.7rem 1rem; display: flex; align-items: center; justify-content: space-between; }
+  .notes-header-title { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; }
+  .notes-toolbar { display: flex; gap: 2px; padding: 0.4rem 0.7rem; background: var(--bone); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .tool-btn {
+    background: #fff; border: 1px solid var(--border); border-radius: 3px;
+    padding: 0.25rem 0.5rem; cursor: pointer; font-size: 0.78rem;
+    color: var(--ink-light); transition: all 0.15s; font-weight: 600;
+    line-height: 1; display: flex; align-items: center; justify-content: center;
+    min-width: 26px; height: 26px;
+  }
+  .tool-btn:hover { background: var(--accent-pale); color: var(--accent); border-color: var(--accent); }
+  .tool-sep { width: 1px; background: var(--border); margin: 0 3px; align-self: stretch; }
+  .notes-area {
+    min-height: 250px; max-height: 360px; padding: 0.9rem 1rem; overflow-y: auto; outline: none;
+    font-family: 'Source Serif 4', serif; font-size: 0.88rem;
+    color: var(--ink); line-height: 1.75; caret-color: var(--accent);
+  }
+  .notes-area:empty::before { content: 'Ghi chú Chương 10…'; color: var(--ink-muted); pointer-events: none; font-style: italic; }
+  .notes-area ul { padding-left: 1.3rem; }
+  .notes-area li { margin-bottom: 0.2rem; }
+  .notes-footer { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.9rem; background: var(--paper); border-top: 1px solid var(--border); }
+  .save-status { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; color: var(--ink-muted); display: flex; align-items: center; gap: 0.35rem; }
+  .save-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-muted); transition: background 0.3s; }
+  .save-dot.saved { background: var(--accent); }
+  .save-dot.dirty { background: var(--gold); }
+  .clear-btn { background: none; border: none; font-size: 0.7rem; color: var(--ink-muted); cursor: pointer; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; padding: 0.2rem 0.4rem; border-radius: 3px; transition: all 0.15s; }
+  .clear-btn:hover { color: var(--accent2); background: var(--accent2-pale); }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { border-top: 1px solid var(--border); }
+    header { padding: 1.5rem; }
+    .question-banner { padding: 0.9rem 1.5rem; }
+    .main-content { padding: 1.5rem; }
+  }
+  strong { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-eyebrow">Princes of the Yen · Chương 10</div>
+  <div class="header-title">How to Prolong a Recession</div>
+  <div class="header-sub">Làm Thế Nào Để Kéo Dài Một Cuộc Suy Thoái</div>
+  <div class="header-meta">
+    <span class="meta-badge">📅 Thập niên mất mát 1991–2002</span>
+    <span class="meta-badge">🏦 Chính sách BoJ</span>
+    <span class="meta-badge">❌ Thất bại tài khóa & tiền tệ</span>
+    <span class="meta-badge">💡 Giải pháp in tiền trực tiếp</span>
+  </div>
+</header>
+
+<!-- KEY QUESTION BANNER -->
+<div class="question-banner">
+  <span>Câu hỏi trọng tâm</span>
+  Khi cả chính sách lãi suất lẫn chi tiêu tài khóa đều thất bại — tại sao BoJ vẫn không bật máy in tiền? Và ai được lợi từ suy thoái kéo dài?
+</div>
+
+<div class="layout">
+  <div class="main-content">
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('overview',this)">Tổng quan</button>
+      <button class="tab-btn" onclick="switchTab('failures',this)">Thất bại chính sách</button>
+      <button class="tab-btn" onclick="switchTab('solution',this)">Giải pháp in tiền</button>
+      <button class="tab-btn" onclick="switchTab('boj',this)">BoJ đã làm gì?</button>
+      <button class="tab-btn" onclick="switchTab('verdict',this)">Phán quyết</button>
+      <button class="tab-btn" onclick="switchTab('insights',this)">Luận điểm chính</button>
+    </div>
+
+    <!-- TAB 1: OVERVIEW -->
+    <div id="tab-overview" class="tab-panel active">
+      <div class="section-title"><span class="sicon sicon-red">📉</span>Thập niên mất mát — Bức tranh tổng thể</div>
+
+      <div class="stat-grid">
+        <div class="stat-box danger">
+          <span class="stat-number num-red">¥80/$</span>
+          <span class="stat-label">Yên tăng kỷ lục giữa 1995 — ép xuất khẩu</span>
+        </div>
+        <div class="stat-box danger">
+          <span class="stat-number num-red">¥147/$</span>
+          <span class="stat-label">Yên sụt 06/1998 — 80% từ đỉnh 1995</span>
+        </div>
+        <div class="stat-box danger">
+          <span class="stat-number num-red">¥145T</span>
+          <span class="stat-label">Tổng gói kích thích tài khóa 1990s — không hiệu quả</span>
+        </div>
+        <div class="stat-box danger">
+          <span class="stat-number num-red">10×</span>
+          <span class="stat-label">Số lần BoJ hạ lãi suất trong thập niên 1990s</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Chu kỳ giả hồi phục — "False Starts" <span class="tag tag-red">Pattern</span></div>
+        <div class="timeline">
+          <div class="tl-item red">
+            <div class="tl-year">1991</div>
+            <div class="tl-text">Suy thoái bắt đầu. Yên mạnh (~¥80/$) đè nặng xuất khẩu. Thất nghiệp leo thang. Ngân hàng ngập nợ xấu.</div>
+          </div>
+          <div class="tl-item gold">
+            <div class="tl-year">1996</div>
+            <div class="tl-text"><strong>Bất ngờ phục hồi</strong> — GDP tăng ~4%. Đây là kết quả của BoJ bơm tín dụng giai đoạn 1995. Nhiều người lạc quan.</div>
+          </div>
+          <div class="tl-item red">
+            <div class="tl-year">1997–1998</div>
+            <div class="tl-text">Kinh tế sụt trở lại. Yên phá đáy ¥147/$. Hệ thống tài chính gần như tan vỡ. BoJ rút tiền về — hủy phục hồi.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">1998 (tháng 3)</div>
+            <div class="tl-text">BoJ đột ngột bơm tín dụng mạnh nhất kể từ 1974. Tín hiệu tốt.</div>
+          </div>
+          <div class="tl-item gold">
+            <div class="tl-year">1999</div>
+            <div class="tl-text"><strong>Phục hồi lần 2</strong> — Nikkei tăng hơn 50%. GDP tăng trở lại. Nhưng BoJ lại rút tiền ngay sau đó.</div>
+          </div>
+          <div class="tl-item red">
+            <div class="tl-year">2000–2001</div>
+            <div class="tl-text">Suy thoái lần 3. BoJ tăng lãi suất (8/2000) — sai lầm nghiêm trọng. Thị trường và kinh tế sụt ngay.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">2001 (tháng 6)</div>
+            <div class="tl-text">BoJ lại đảo chiều, bơm tiền mạnh. Đóng góp tích cực 2002 dù nền kinh tế vẫn yếu.</div>
+          </div>
+        </div>
+        <div class="callout red">
+          Mô hình lặp đi lặp lại: BoJ bơm → kinh tế phục hồi → BoJ rút → kinh tế sụt. Đây không phải là quản lý kinh tế chu kỳ mà là <strong>chủ động tạo ra các đợt phục hồi tạm thời rồi dập tắt</strong> — khiến suy thoái kéo dài hơn một thập kỷ.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Bài học từ chu kỳ kinh doanh <span class="tag tag-blue">Big Picture</span></div>
+        <p class="body-text">Werner đưa ra một quan sát đắt giá: <strong>việc đánh giá "mô hình kinh tế tốt" phụ thuộc hoàn toàn vào pha của chu kỳ kinh doanh</strong>, không phải bản chất thực của hệ thống.</p>
+        <table class="cmp-table">
+          <tr><th>Giai đoạn</th><th>Mỹ</th><th>Nhật Bản</th><th>Bài học</th></tr>
+          <tr><td>1991</td><td>Suy thoái — BĐS/ngân hàng vỡ nợ</td><td>Bắt đầu suy thoái</td><td>Cả hai đều có vấn đề tín dụng</td></tr>
+          <tr><td>1991–2000</td><td>Bùng nổ — "New Economy"</td><td>Thập niên mất mát</td><td>Mỹ bơm tín dụng đúng thời điểm; Nhật thì không</td></tr>
+          <tr class="highlight"><td>Kết luận</td><td colspan="3">Không phải hệ thống kinh tế quyết định thành công — mà là <em>tạo tín dụng</em>. Mỹ tưởng "thắng" nhờ thị trường tự do; thực ra nhờ Fed bơm tiền đúng lúc.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 2: FAILURES -->
+    <div id="tab-failures" class="tab-panel">
+      <div class="section-title"><span class="sicon sicon-red">❌</span>Vì sao cả hai chính sách đều thất bại?</div>
+
+      <div class="card">
+        <div class="card-title">Thất bại 1: Chính sách lãi suất (Monetarism) <span class="tag tag-red">Thất bại</span></div>
+        <p class="body-text">BoJ hạ lãi suất 10 lần trong thập niên 1990, tiến dần đến lãi suất <strong>0% (tháng 2/1999)</strong> và cuối cùng chỉ còn <strong>0,001%</strong>. Toàn bộ đều vô hiệu.</p>
+        <div class="gauge-row">
+          <div class="gauge-label"><span class="gauge-name">ODR đầu 1991</span><span class="gauge-val">6.0%</span></div>
+          <div class="gauge-track"><div class="gauge-fill" style="width:100%; background: var(--accent2);"></div></div>
+        </div>
+        <div class="gauge-row">
+          <div class="gauge-label"><span class="gauge-name">Trước 9/1993</span><span class="gauge-val">1.75%</span></div>
+          <div class="gauge-track"><div class="gauge-fill" style="width:29%; background: var(--gold);"></div></div>
+        </div>
+        <div class="gauge-row">
+          <div class="gauge-label"><span class="gauge-name">4/1995</span><span class="gauge-val">1.0%</span></div>
+          <div class="gauge-track"><div class="gauge-fill" style="width:17%; background: var(--gold);"></div></div>
+        </div>
+        <div class="gauge-row">
+          <div class="gauge-label"><span class="gauge-name">9/1995</span><span class="gauge-val">0.5%</span></div>
+          <div class="gauge-track"><div class="gauge-fill" style="width:8%; background: var(--blue);"></div></div>
+        </div>
+        <div class="gauge-row">
+          <div class="gauge-label"><span class="gauge-name">2/1999 — "Zero Rate Policy"</span><span class="gauge-val">0.1%</span></div>
+          <div class="gauge-track"><div class="gauge-fill" style="width:2%; background: var(--accent);"></div></div>
+        </div>
+        <div class="gauge-row">
+          <div class="gauge-label"><span class="gauge-name">Cuối cùng</span><span class="gauge-val">0.001%</span></div>
+          <div class="gauge-track"><div class="gauge-fill" style="width:0.5%; background: var(--accent);"></div></div>
+        </div>
+        <div class="callout red" style="margin-top:0.9rem;">
+          <strong>Tại sao thất bại?</strong> Lãi suất thấp không tự tạo ra tín dụng khi ngân hàng đang sợ rủi ro và ngập nợ xấu. Ngân hàng ration tín dụng — không phải theo giá (lãi suất) mà theo số lượng (hạn mức). Lãi suất bằng 0 nhưng không ai vay vì không được phê duyệt.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Thất bại 2: Chi tiêu tài khóa (Keynesianism) <span class="tag tag-red">Thất bại</span></div>
+        <p class="body-text">Hơn một chục gói kích thích tài khóa lớn trong thập niên 1990, tổng cộng hơn <strong>¥145 nghìn tỷ</strong>. Nợ chính phủ leo thang kỷ lục. Vẫn thất bại.</p>
+        <div class="callout dark">
+          <strong>Cơ chế thất bại — Werner giải thích bằng "Fallacy of Composition":</strong><br/>
+          Chính phủ phát hành trái phiếu → Các nhà đầu tư tư nhân (bảo hiểm nhân thọ…) mua trái phiếu → Rút tiền khỏi các kênh đầu tư khác → Mỗi đồng nhà nước bơm vào, một đồng tư nhân rút ra. <em>Tổng cộng: zero.</em>
+        </div>
+        <div class="flow-wrap">
+          <div class="flow-row">
+            <div class="fbox fbox-red">Chính phủ phát hành trái phiếu</div>
+            <span class="farr">→</span>
+            <div class="fbox fbox-gold">Nhà đầu tư tư nhân mua</div>
+            <span class="farr">→</span>
+            <div class="fbox fbox-red">Rút tiền từ kênh đầu tư khác</div>
+          </div>
+          <div class="flow-row">
+            <div class="fbox fbox-red">Chi tiêu chính phủ +X</div>
+            <span class="farr">≈</span>
+            <div class="fbox fbox-red">Đầu tư tư nhân −X</div>
+            <span class="farr">→</span>
+            <div class="fbox fbox-red">GDP tăng thêm ≈ 0</div>
+          </div>
+        </div>
+        <p class="body-text">Werner dẫn số liệu thực tế Nhật Bản: <strong>mỗi ¥1 chính phủ chi thêm, cầu tư nhân co lại đúng ¥1</strong>. Chính sách tài khóa thuần túy (không đi kèm tạo tín dụng mới) chỉ phân phối lại chiếc bánh — không làm chiếc bánh to hơn.</p>
+        <div class="callout">
+          Kết luận: <strong>Tín dụng tạo ra chiếc bánh. Tài khóa chỉ chia bánh.</strong> Muốn chiếc bánh to hơn, phải tạo thêm tín dụng — không phải chi tiêu chính phủ bằng tiền vay từ chính tư nhân.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Bẫy "Structural Reform" — Giải thích sai nguyên nhân <span class="tag tag-blue">Diagnosis Error</span></div>
+        <p class="body-text">Khi cả hai công cụ thất bại, giới kinh tế học quay sang đổ lỗi cho <em>"cấu trúc kinh tế Nhật Bản"</em>: quan hệ chính-doanh nghiệp quá thân, ngân hàng theo kiểu "main bank", hệ thống công ty gia đình kiểu Nhật… Đột nhiên những gì từng được ca ngợi bị gọi là tham nhũng, bất minh bạch.</p>
+        <p class="body-text">Mỹ dùng ưu thế của hội nghị G7 (1996+) để thúc ép cả khu vực châu Á phải cải cách theo mô hình Mỹ — tư nhân hóa, tự do hóa, bãi bỏ quy định. Werner chỉ ra mâu thuẫn cơ bản:</p>
+        <div class="callout blue">
+          <strong>Chỉ một thập kỷ trước (1991), Mỹ cũng đang suy thoái vì nợ xấu BĐS</strong> và nhiều chuyên gia Mỹ đề nghị Mỹ học theo Nhật! Thứ được gọi là "mô hình tốt" hoàn toàn phụ thuộc vào pha chu kỳ kinh doanh — không phải bản chất thực. Cả bùng nổ lẫn suy thoái đều phản ánh chu kỳ tín dụng, không phải chất lượng hệ thống kinh tế.
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: SOLUTION -->
+    <div id="tab-solution" class="tab-panel">
+      <div class="section-title"><span class="sicon sicon-green">💡</span>Giải pháp — In Tiền Trực Tiếp</div>
+
+      <div class="card">
+        <div class="card-title">Điều kiện đủ và cần để hồi phục <span class="tag tag-green">Werner's Solution</span></div>
+        <p class="body-text">Werner đưa ra lập luận rõ ràng: muốn có nhiều giao dịch kinh tế hơn, cần có thêm <strong>purchasing power (sức mua)</strong>. Sức mua chỉ được tạo ra bởi ngân hàng thương mại hoặc ngân hàng trung ương. Cả hai cách này đều khả thi và BoJ hoàn toàn có thể làm từ năm 1992 hay 1993.</p>
+        <div class="flow-wrap">
+          <div class="flow-row">
+            <div class="fbox fbox-green">BoJ mua tài sản tư nhân</div>
+            <span class="farr">→</span>
+            <div class="fbox fbox-green">Trả bằng tiền mới tạo ra</div>
+            <span class="farr">→</span>
+            <div class="fbox fbox-green">Người bán có tiền mới</div>
+          </div>
+          <div class="flow-row">
+            <div class="fbox fbox-green">Người bán chi tiêu</div>
+            <span class="farr">→</span>
+            <div class="fbox fbox-green">Người nhận tiếp tục chi tiêu</div>
+            <span class="farr">→</span>
+            <div class="fbox fbox-green">GDP tăng toàn nền kinh tế</div>
+          </div>
+        </div>
+        <div class="callout">
+          Điểm mấu chốt: BoJ mua <em>bất kỳ thứ gì</em> từ khu vực tư nhân — nhà đất, thương phiếu, trái phiếu công ty, thậm chí "cà vạt và kem đánh răng" như Werner viết. Điều quan trọng không phải <em>mua gì</em> mà là <em>tiền mới được tạo ra</em> và bơm vào nền kinh tế.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Tại sao in tiền không gây lạm phát trong trường hợp Nhật? <span class="tag tag-blue">Anti-Inflation</span></div>
+        <p class="body-text">Lo ngại phổ biến nhất: in tiền sẽ gây lạm phát. Werner bác bỏ trong ngữ cảnh Nhật thập niên 1990:</p>
+        <ul class="insight-list">
+          <li>
+            <span class="in in-green">1</span>
+            <div><strong>Lạm phát xảy ra khi nền kinh tế hoạt động hết công suất.</strong> Nhật 1990s có thất nghiệp cao, nhà máy trống, tài sản giảm giá — còn nhiều "dư địa" để hấp thụ tiền mới mà không đẩy giá lên.</div>
+          </li>
+          <li>
+            <span class="in in-green">2</span>
+            <div><strong>Ngược lại, Nhật đang giảm phát.</strong> In tiền trong bối cảnh giảm phát sẽ đưa giá về mức bình thường — điều đó là tốt, không phải đáng sợ.</div>
+          </li>
+          <li>
+            <span class="in in-green">3</span>
+            <div><strong>Tiền cần đi vào GDP, không phải tài sản.</strong> Nếu tiền mới được dùng cho hàng hóa/dịch vụ thực (GDP), nó kích thích sản xuất. Chỉ khi tiền đổ vào thị trường tài sản cố định mới tạo "lạm phát tài sản".</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Ví dụ thực tế: In tiền mua công viên cho Tokyo <span class="tag tag-green">Ví dụ sáng tạo</span></div>
+        <p class="body-text">Werner đưa ra đề xuất minh họa táo bạo:</p>
+        <div class="stat-grid">
+          <div class="stat-box neutral">
+            <span class="stat-number num-blue">5.3 m²</span>
+            <span class="stat-label">Diện tích công viên đầu người tại Tokyo — thấp nhất thế giới</span>
+          </div>
+          <div class="stat-box neutral">
+            <span class="stat-number num-blue">29.3 m²</span>
+            <span class="stat-label">New York</span>
+          </div>
+          <div class="stat-box neutral">
+            <span class="stat-number num-blue">26.9 m²</span>
+            <span class="stat-label">London</span>
+          </div>
+          <div class="stat-box good">
+            <span class="stat-number num-green">¥70T</span>
+            <span class="stat-label">Tổng tiền cần in để nâng Tokyo lên mức Paris — bằng với ước lượng nợ xấu!</span>
+          </div>
+        </div>
+        <p class="body-text">BoJ có thể in ¥70 nghìn tỷ, mua đất khắp Tokyo và biến thành công viên công cộng — vừa kích thích kinh tế, vừa giải quyết nợ xấu BĐS, vừa nâng cao chất lượng sống. Không gây lạm phát do giảm phát. Không gánh nặng thuế vì tiền được tạo từ không khí.</p>
+        <div class="callout">
+          Đề xuất này — dù nghe có vẻ "điên rồ" — thực chất chính xác hơn về mặt kinh tế so với hàng chục gói kích thích tài khóa thất bại mà Nhật đã thực hiện, theo lập luận của Werner.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Giải quyết nợ xấu ngân hàng: Bài toán đơn giản hơn tưởng <span class="tag tag-green">Bank Fix</span></div>
+        <p class="body-text">Werner giải thích rằng bài toán nợ xấu của ngân hàng Nhật thực ra rất đơn giản về kỹ thuật:</p>
+        <div class="flow-wrap">
+          <div class="flow-row">
+            <div class="fbox fbox-red">Ngân hàng có nợ xấu (asset xấu)</div>
+            <span class="farr">→</span>
+            <div class="fbox fbox-red">Xóa sổ nợ xấu → Asset giảm</div>
+            <span class="farr">→</span>
+            <div class="fbox fbox-red">Mất khả năng thanh toán</div>
+          </div>
+          <div class="flow-row">
+            <div class="fbox fbox-green">BoJ in tiền</div>
+            <span class="farr">→</span>
+            <div class="fbox fbox-green">Mua toàn bộ nợ xấu theo mệnh giá gốc</div>
+            <span class="farr">→</span>
+            <div class="fbox fbox-green">Ngân hàng nhận tiền mặt → sạch nợ</div>
+          </div>
+        </div>
+        <table class="cmp-table" style="margin-top:0.8rem;">
+          <tr><th>Phương án</th><th>Chi phí thực sự</th><th>Hiệu quả</th></tr>
+          <tr class="highlight"><td>BoJ in tiền mua nợ xấu</td><td>Zero (tiền tạo từ máy tính)</td><td>Cao — giải quyết ngay, không lạm phát do deflation</td></tr>
+          <tr class="highlight-bad"><td>Dùng ngân sách nhà nước (thuế)</td><td>Cao — người dân gánh nợ tương lai</td><td>Vừa tốn kém vừa chậm</td></tr>
+          <tr class="highlight-bad"><td>Không làm gì (thực tế 1990s)</td><td>Cực cao — mất hàng chục năm tăng trưởng</td><td>Thảm họa — suy thoái kéo dài</td></tr>
+        </table>
+        <div class="callout">
+          Kết luận: BoJ có thể giải quyết <em>toàn bộ</em> nợ xấu ngân hàng trong <strong>một buổi sáng</strong> bằng cách mua toàn bộ nợ xấu theo mệnh giá gốc, trả bằng tiền số điện tử tạo ra trực tiếp. Chi phí thực với xã hội: bằng không. Chi phí thực với BoJ: bằng không. Mọi thứ đều có thể thực hiện ngay từ 1992.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Lịch sử chứng minh: In tiền hiệu quả <span class="tag tag-blue">Historical Evidence</span></div>
+        <ul class="insight-list">
+          <li>
+            <span class="in in-blue">1</span>
+            <div><strong>Nhật sau 1945:</strong> Kinh tế bị bom đạn tàn phá, ngân hàng tệ hơn nhiều 1990s. BoJ dưới thống đốc Ichimada in tiền trực tiếp → phục hồi thành công trong vài năm.</div>
+          </li>
+          <li>
+            <span class="in in-blue">2</span>
+            <div><strong>Đại Khủng hoảng 1930s:</strong> Đức và Nhật là hai nước đầu tiên thoát khỏi Đại Khủng hoảng — vì ngân hàng trung ương hai nước in tiền sớm hơn. Mỹ để nhiều ngân hàng phá sản, phục hồi muộn hơn.</div>
+          </li>
+          <li>
+            <span class="in in-blue">3</span>
+            <div><strong>Quy luật phổ quát:</strong> Không có một ví dụ nào trong lịch sử về một quốc gia in tiền mạnh mà không kích thích được cầu trong giai đoạn deflation và tài nguyên dư thừa.</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- TAB 4: BOJ -->
+    <div id="tab-boj" class="tab-panel">
+      <div class="section-title"><span class="sicon sicon-gold">🔍</span>BoJ thực sự đã làm gì trong thập niên 1990?</div>
+
+      <div class="card">
+        <div class="card-title">Phân tích tạo tín dụng thực tế của BoJ <span class="tag tag-gold">Data Analysis</span></div>
+        <p class="body-text">Werner đo lường <em>tạo tín dụng ròng thực sự của BoJ</em> — không phải chỉ "short-term money market operations" mà BoJ thường công bố, mà là <strong>tổng hợp tất cả giao dịch</strong> trên mọi thị trường. Kết quả từ Figure 10.1 cho thấy một bức tranh đáng sốc:</p>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-year">1986 trở đi</div>
+            <div class="tl-text">BoJ <strong>tăng mạnh tạo tín dụng</strong> — thổi phồng bong bóng khi đã quá nóng.</div>
+          </div>
+          <div class="tl-item red">
+            <div class="tl-year">1992</div>
+            <div class="tl-text">Chỉ số rơi vào <strong>âm</strong>: BoJ không chỉ ngừng bơm mà còn <em>rút tiền ra khỏi</em> nền kinh tế đang suy thoái — phản chu kỳ sai chiều.</div>
+          </div>
+          <div class="tl-item red">
+            <div class="tl-year">1993–1994</div>
+            <div class="tl-text">Tín dụng tối thiểu. Tháng 3/1995 lại <strong>âm mạnh</strong> — GDP danh nghĩa âm lần đầu tiên từ 1931.</div>
+          </div>
+          <div class="tl-item gold">
+            <div class="tl-year">5/1995 → đầu 1997</div>
+            <div class="tl-text">Tín dụng tăng → kinh tế hồi phục 1996. Nhưng BoJ lại rút cuối 1997.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">3/1998</div>
+            <div class="tl-text">BoJ bơm mạnh nhất kể từ 1974 → phục hồi mạnh 1999, Nikkei +50%+.</div>
+          </div>
+          <div class="tl-item red">
+            <div class="tl-year">1999</div>
+            <div class="tl-text">BoJ <strong>rút tiền mạnh</strong> gần như ngay sau đó → hủy phục hồi. Kinh tế sụt lại 2000–2001.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">6/2001</div>
+            <div class="tl-text">Lại bơm mạnh → hỗ trợ phục hồi 2002.</div>
+          </div>
+        </div>
+        <div class="callout red">
+          <strong>Kết luận từ dữ liệu:</strong> BoJ đã <em>làm ngược</em> với vai trò ổn định kinh tế: bơm tiền khi đã quá nhiều (1986–1989), rút tiền khi đang quá ít (1992–1993, 1995, 1997, 1999). Đây không phải vô tình. Đây là mô hình có hệ thống.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Câu hỏi mà Chương 10 đặt ra nhưng chưa trả lời <span class="tag tag-red">Cliffhanger</span></div>
+        <p class="body-text">Werner kết thúc chương với câu hỏi then chốt được đặt ra một cách có chủ ý:</p>
+        <div class="verdict-box">
+          <div class="verdict-label">Câu hỏi treo lơ lửng</div>
+          <div class="verdict-text">
+            "Chúng ta vẫn chưa xác lập được tại sao các ngân hàng lại cho vay tích cực đến vậy trong thập niên 1980. Và tại sao BoJ lại theo đuổi chính sách như vậy trong suốt thập niên 1990?"<br/><br/>
+            — Đây chính là câu hỏi mà phần còn lại của cuốn sách sẽ trả lời.
+          </div>
+        </div>
+        <p class="body-text">Đây không phải sự vô năng hay sai lầm. Nếu BoJ biết in tiền có thể cứu nền kinh tế, biết rõ tất cả cơ chế — tại sao họ không làm? Werner gợi ý: vì có ai đó <em>muốn</em> suy thoái xảy ra và kéo dài.</p>
+      </div>
+    </div>
+
+    <!-- TAB 5: VERDICT -->
+    <div id="tab-verdict" class="tab-panel">
+      <div class="section-title"><span class="sicon sicon-red">⚖️</span>Phán quyết — "Moral Hazard" và Trách nhiệm</div>
+
+      <div class="card">
+        <div class="card-title">Ai là thủ phạm thực sự? <span class="tag tag-red">Accountability</span></div>
+        <p class="body-text">Chương 10 đặt câu hỏi đạo đức quan trọng: nếu BoJ có thể tạo ra phục hồi từ 1992 mà không làm — thì ai chịu trách nhiệm cho 10 năm thất nghiệp và khốn khó của người dân Nhật?</p>
+        <ul class="insight-list">
+          <li>
+            <span class="in in-red">!</span>
+            <div><strong>Không phải "cấu trúc kinh tế Nhật"</strong> — vì cấu trúc đó đã tạo ra phép màu kinh tế suốt 40 năm trước đó.</div>
+          </li>
+          <li>
+            <span class="in in-red">!</span>
+            <div><strong>Không phải ngân hàng thương mại</strong> — họ chỉ phản ứng theo tín hiệu từ window guidance của BoJ. Câu hỏi thực sự là: tại sao BoJ hướng dẫn họ cho vay quá nhiều trong 1980s?</div>
+          </li>
+          <li>
+            <span class="in in-red">!</span>
+            <div><strong>Không phải thị trường</strong> — thị trường phản ứng với lượng tín dụng được tạo ra, không tạo ra tín dụng.</div>
+          </li>
+          <li>
+            <span class="in in-red">⟶</span>
+            <div><strong>Kẻ tình nghi duy nhất: BoJ</strong> — đã tạo bong bóng bằng cách bơm tín dụng 1986–1989, rồi rút đột ngột, rồi không chịu in tiền phục hồi dù hoàn toàn có thể.</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Về Moral Hazard — Lập luận bảo ngân hàng cần bị trừng phạt <span class="tag tag-blue">Debate</span></div>
+        <p class="body-text">Một số nhà kinh tế phản đối cứu trợ ngân hàng vì lo ngại "moral hazard": nếu cứu, lần sau ngân hàng lại cho vay liều lĩnh hơn. Werner chấp nhận nguyên tắc này nhưng bác bỏ ứng dụng sai ngữ cảnh:</p>
+        <table class="cmp-table">
+          <tr><th>Lập luận "Moral Hazard"</th><th>Phản biện của Werner</th></tr>
+          <tr><td>Cứu ngân hàng tạo tiền lệ xấu</td><td>Nên lo ngại điều này vào đầu 1980s — khi ngân hàng đang cho vay liều lĩnh. Đã quá muộn vào giữa 1990s.</td></tr>
+          <tr><td>Người dân không nên trả tiền cho sai lầm của ngân hàng</td><td>Đồng ý — vì vậy BoJ (không phải thuế) mới nên in tiền cứu. Không tốn một đồng thuế nào.</td></tr>
+          <tr><td>Ngân hàng cần bị trừng phạt</td><td>Vấn đề là: ngân hàng cho vay nhiều vì BoJ qua window guidance <em>ép</em> họ làm vậy. Trừng phạt kẻ thừa lệnh, tha kẻ ra lệnh?</td></tr>
+        </table>
+        <div class="callout blue">
+          Sau khi cứu, Werner đề nghị thực hiện <strong>thay đổi thể chế thực sự</strong> để ngăn tái diễn — tức là phải kiểm soát và minh bạch hóa cơ chế window guidance của BoJ. Nhưng điều đó đòi hỏi phải hiểu rõ BoJ thực sự đang làm gì — nội dung của các chương tiếp theo.
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: INSIGHTS -->
+    <div id="tab-insights" class="tab-panel">
+      <div class="section-title"><span class="sicon sicon-green">💡</span>Luận điểm chính & Kết nối toàn sách</div>
+
+      <div class="card">
+        <div class="card-title">6 Luận điểm cốt lõi Chương 10</div>
+        <ul class="insight-list">
+          <li>
+            <span class="in in-green">1</span>
+            <div><strong>Cả chính sách lãi suất lẫn tài khóa đều vô hiệu nếu không đi kèm tạo tín dụng mới.</strong> Lãi suất 0% không tự tạo ra tín dụng. Chi tiêu chính phủ bằng trái phiếu không tạo thêm sức mua — chỉ chuyển dịch từ túi tư nhân sang tay nhà nước.</div>
+          </li>
+          <li>
+            <span class="in in-green">2</span>
+            <div><strong>Điều kiện đủ cho hồi phục là đơn giản và trong tầm tay BoJ.</strong> In tiền, mua tài sản từ khu vực tư nhân, bơm sức mua mới. Có thể làm từ 1992. Không gây lạm phát trong bối cảnh giảm phát và dư thừa tài nguyên.</div>
+          </li>
+          <li>
+            <span class="in in-green">3</span>
+            <div><strong>Vấn đề nợ xấu ngân hàng có thể giải quyết trong một buổi sáng.</strong> BoJ mua toàn bộ nợ xấu theo mệnh giá bằng tiền số điện tử — chi phí thực tế bằng không, hiệu quả tức thì.</div>
+          </li>
+          <li>
+            <span class="in in-red">4</span>
+            <div><strong>BoJ làm ngược với nhiệm vụ ổn định kinh tế.</strong> Bơm tiền khi đã quá nhiều (1980s), rút tiền khi đang suy thoái (1992, 1995, 1997, 1999). Mô hình này nhất quán và lặp lại — không thể là vô tình.</div>
+          </li>
+          <li>
+            <span class="in in-red">5</span>
+            <div><strong>"Cải cách cấu trúc" là chẩn đoán sai.</strong> Đổ lỗi cho "hệ thống kinh tế Nhật" là lý luận dựa trên pha chu kỳ — không phải phân tích thực chất. Cùng cấu trúc đó đã tạo ra phép màu kinh tế suốt 40 năm trước đó.</div>
+          </li>
+          <li>
+            <span class="in in-gold">6</span>
+            <div><strong>Câu hỏi chưa được trả lời, dẫn vào trọng tâm cuốn sách:</strong> Tại sao BoJ tạo bong bóng rồi không chịu phục hồi? Ai ra lệnh? Vì mục đích gì? Đây chính là cốt lõi của "Princes of the Yen".</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Vị trí Chương 10 trong kiến trúc toàn sách <span class="tag tag-blue">Book Architecture</span></div>
+        <table class="cmp-table">
+          <tr><th>Chương</th><th>Luận điểm</th></tr>
+          <tr><td>8 — Mysterious Money</td><td>Mô tả bí ẩn: dòng vốn không thể giải thích</td></tr>
+          <tr><td>9 — Great Yen Illusion</td><td>Giải thích bằng tín dụng: bong bóng và sụp đổ</td></tr>
+          <tr class="highlight"><td>10 — How to Prolong</td><td>Chứng minh BoJ <em>có thể</em> nhưng <em>không chịu</em> tạo phục hồi — đặt câu hỏi về động cơ</td></tr>
+          <tr><td>11+ — The Princes</td><td>Trả lời: ai là "Hoàng tử của đồng Yên" và họ muốn gì</td></tr>
+        </table>
+        <div class="callout gold">
+          Chương 10 là bản lề. Nó đóng nắp hộp giải thích kinh tế học và mở ra hộp chính trị học: không phải câu hỏi <em>"tại sao chính sách thất bại?"</em> mà là <em>"chính sách thất bại vì ai muốn nó thất bại?"</em>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main-content -->
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- KEY TERMS -->
+    <div>
+      <div class="sidebar-section-title">Thuật ngữ trọng yếu</div>
+      <div class="term-item">
+        <div class="term-name">Purchasing Power (Sức mua)</div>
+        <div class="term-def">Lượng tiền/tín dụng có sẵn để thực hiện giao dịch. Chỉ ngân hàng thương mại và ngân hàng trung ương mới <em>tạo ra</em> sức mua mới. Tài khóa chỉ <em>phân phối lại</em> sức mua đã có.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">Quantitative Crowding Out</div>
+        <div class="term-def">Chính phủ vay từ khu vực tư nhân (phát hành trái phiếu) → hút tiền ra khỏi các đầu tư tư nhân khác → tư nhân thu hẹp → tổng cầu không đổi. Khác với "crowding out lãi suất" truyền thống.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">Reflation (Tái lạm phát)</div>
+        <div class="term-def">Chính sách bơm tiền/tín dụng để đưa nền kinh tế thoát khỏi giảm phát và tăng trưởng trở lại, không nhất thiết gây lạm phát quá mức nếu còn dư địa trong nền kinh tế.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">Countercyclical Policy</div>
+        <div class="term-def">Chính sách phản chu kỳ: bơm tiền khi kinh tế suy, rút tiền khi kinh tế quá nóng. Werner chứng minh BoJ đã làm <em>ngược lại</em> — procyclical (thuận chu kỳ).</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">Moral Hazard</div>
+        <div class="term-def">Rủi ro đạo đức: nếu ai đó được bảo vệ khỏi hậu quả hành động của mình, họ sẽ liều lĩnh hơn. Thường dùng để phản đối cứu trợ ngân hàng — Werner phân tích bối cảnh áp dụng.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">Window Guidance</div>
+        <div class="term-def">Cơ chế BoJ trực tiếp chỉ định hạn mức tín dụng cho từng ngân hàng — công cụ quyền lực thực sự. Werner sẽ chứng minh đây là "vũ khí bí mật" của các Princes of the Yen.</div>
+      </div>
+    </div>
+
+    <!-- QUICK STATS -->
+    <div>
+      <div class="sidebar-section-title">Số liệu nhanh</div>
+      <div class="qs-grid">
+        <div class="qs-box">
+          <span class="qs-num" style="color:var(--accent2)">10×</span>
+          <div class="qs-lbl">Lần hạ lãi suất 1990s — vô hiệu</div>
+        </div>
+        <div class="qs-box">
+          <span class="qs-num" style="color:var(--accent2)">¥145T</span>
+          <div class="qs-lbl">Tổng kích thích tài khóa 1990s</div>
+        </div>
+        <div class="qs-box">
+          <span class="qs-num" style="color:var(--accent)">+4%</span>
+          <div class="qs-lbl">GDP phục hồi 1996 (BoJ bơm 1995)</div>
+        </div>
+        <div class="qs-box">
+          <span class="qs-num" style="color:var(--accent)">+50%</span>
+          <div class="qs-lbl">Nikkei tăng 1999 (BoJ bơm 1998)</div>
+        </div>
+        <div class="qs-box">
+          <span class="qs-num" style="color:var(--gold)">¥70T</span>
+          <div class="qs-lbl">Cần in để nâng công viên Tokyo lên mức Paris</div>
+        </div>
+        <div class="qs-box">
+          <span class="qs-num" style="color:var(--blue)">0.001%</span>
+          <div class="qs-lbl">Lãi suất cuối cùng — gần như 0 tuyệt đối</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div>
+      <div class="sidebar-section-title">Ghi chú cá nhân</div>
+      <div class="notes-panel">
+        <div class="notes-header">
+          <span class="notes-header-title">📝 My Notes — Chương 10</span>
+          <span class="save-status">
+            <span class="save-dot" id="saveDot"></span>
+            <span id="saveText">chưa có ghi chú</span>
+          </span>
+        </div>
+        <div class="notes-toolbar">
+          <button class="tool-btn" title="Bôi đậm" onclick="execCmd('bold')"><b>B</b></button>
+          <button class="tool-btn" title="In nghiêng" onclick="execCmd('italic')"><i>I</i></button>
+          <button class="tool-btn" title="Gạch chân" onclick="execCmd('underline')"><u>U</u></button>
+          <div class="tool-sep"></div>
+          <button class="tool-btn" title="Bullet list" onclick="execCmd('insertUnorderedList')">• –</button>
+          <button class="tool-btn" title="Numbered list" onclick="execCmd('insertOrderedList')">1.</button>
+          <div class="tool-sep"></div>
+          <button class="tool-btn" title="Undo" onclick="execCmd('undo')">↩</button>
+          <button class="tool-btn" title="Redo" onclick="execCmd('redo')">↪</button>
+        </div>
+        <div class="notes-area" id="notesArea" contenteditable="true" spellcheck="true" oninput="onNotesInput()"></div>
+        <div class="notes-footer">
+          <span class="save-status">
+            <span class="save-dot" id="saveDot2"></span>
+            <span id="saveText2">Tự động lưu</span>
+          </span>
+          <button class="clear-btn" onclick="clearNotes()">Xoá</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /sidebar -->
+</div><!-- /layout -->
+
+<script>
+  function switchTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function execCmd(cmd) {
+    document.getElementById('notesArea').focus();
+    document.execCommand(cmd, false, null);
+    onNotesInput();
+  }
+
+  const STORAGE_KEY = 'ch10_princes_yen_notes';
+  let saveTimer = null;
+
+  function setStatus(state) {
+    ['saveDot','saveDot2'].forEach(id => {
+      document.getElementById(id).className = 'save-dot ' + (state || '');
+    });
+    const msgs = { saved: 'Đã lưu', dirty: 'Chưa lưu…', '': 'Chưa có ghi chú' };
+    const msg = msgs[state] || 'Tự động lưu';
+    document.getElementById('saveText').textContent = msg;
+    document.getElementById('saveText2').textContent = msg;
+  }
+
+  function onNotesInput() {
+    setStatus('dirty');
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveNotes, 1200);
+  }
+
+  function saveNotes() {
+    try {
+      localStorage.setItem(STORAGE_KEY, document.getElementById('notesArea').innerHTML);
+      setStatus('saved');
+    } catch(e) {}
+  }
+
+  function loadNotes() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved && saved.trim()) {
+        document.getElementById('notesArea').innerHTML = saved;
+        setStatus('saved');
+      }
+    } catch(e) {}
+  }
+
+  function clearNotes() {
+    if (!confirm('Xoá toàn bộ ghi chú Chương 10?')) return;
+    document.getElementById('notesArea').innerHTML = '';
+    try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+    setStatus('');
+  }
+
+  window.addEventListener('DOMContentLoaded', loadNotes);
+  window.addEventListener('beforeunload', saveNotes);
+</script>
+</body>
+</html>

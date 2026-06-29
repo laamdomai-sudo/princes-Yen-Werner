@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Princes of the Yen — Thư Viện Chương</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=JetBrains+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg:      #0a0b10;
+  --bg2:     #101218;
+  --bg3:     #16181f;
+  --bg4:     #1c1e28;
+  --red:     #c01828;
+  --red-lo:  rgba(192,24,40,.11);
+  --gold:    #c49028;
+  --gold-lo: rgba(196,144,40,.10);
+  --blue:    #4a70c0;
+  --green:   #2a9060;
+  --cream:   #dfd8c8;
+  --cream2:  #ede8dc;
+  --dim:     #6a6050;
+  --dim2:    #4a4438;
+  --hair:    rgba(255,255,255,.06);
+  --bdr:     rgba(192,24,40,.18);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--cream);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* TOPBAR */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  height: 44px;
+  background: rgba(10,11,16,.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--bdr);
+  display: flex; align-items: center;
+  padding: 0 28px; gap: 12px;
+}
+.tb-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px; font-weight: 700;
+  color: var(--cream2); letter-spacing: -.01em;
+}
+.tb-sep { color: var(--dim2); font-size: 13px; }
+.tb-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: .12em;
+  color: var(--dim); text-transform: uppercase;
+}
+.tb-pill {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: .10em;
+  color: var(--red); border: 1px solid var(--bdr);
+  background: var(--red-lo); border-radius: 2px;
+  padding: 3px 9px; text-transform: uppercase;
+}
+
+/* HERO */
+.hero-wrap {
+  border-bottom: 1px solid var(--bdr);
+  position: relative; overflow: hidden;
+}
+.hero-wrap::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 65% 80% at 85% 50%, rgba(192,24,40,.055) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 60% at 5% 90%, rgba(196,144,40,.04) 0%, transparent 65%);
+}
+.hero {
+  max-width: 1100px; margin: 0 auto;
+  padding: 68px 28px 56px 56px;
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  left: 28px; top: 0; bottom: 0; width: 2px;
+  background: linear-gradient(to bottom, transparent 0%, var(--red) 15%, var(--red) 85%, transparent 100%);
+  opacity: .65;
+}
+.hero-kanji {
+  position: absolute;
+  right: 20px; top: 50%; transform: translateY(-50%);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(130px, 18vw, 210px);
+  font-weight: 900; line-height: 1;
+  color: rgba(192,24,40,.035);
+  pointer-events: none; user-select: none;
+}
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: .24em;
+  text-transform: uppercase; color: var(--red);
+  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 10px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block; width: 18px; height: 1px;
+  background: var(--red); opacity: .7; flex-shrink: 0;
+}
+h1.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 5.5vw, 60px);
+  font-weight: 900; line-height: 1.04;
+  letter-spacing: -.025em; color: var(--cream2);
+  margin-bottom: 4px;
+}
+.hero-vi {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(14px, 2vw, 18px);
+  font-style: italic; color: var(--gold);
+  letter-spacing: .04em; margin-bottom: 22px;
+}
+.hero-desc {
+  font-size: 13px; color: var(--dim);
+  line-height: 1.8; max-width: 500px; margin-bottom: 28px;
+}
+.hero-stats {
+  display: flex; gap: 0; flex-wrap: wrap;
+  border: 1px solid var(--bdr); border-radius: 4px;
+  overflow: hidden; width: fit-content;
+}
+.hero-stat {
+  padding: 10px 20px; text-align: center;
+  border-right: 1px solid var(--bdr);
+  background: var(--red-lo);
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat .n {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 700;
+  color: var(--cream2); line-height: 1; display: block;
+}
+.hero-stat .l {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px; letter-spacing: .10em;
+  color: var(--dim); text-transform: uppercase;
+  display: block; margin-top: 4px;
+}
+
+/* MAIN */
+.main {
+  max-width: 1100px; margin: 0 auto;
+  padding: 52px 28px 80px;
+}
+
+/* PART */
+.part { margin-bottom: 48px; }
+.part-head {
+  display: flex; align-items: flex-start;
+  gap: 18px; margin-bottom: 18px;
+}
+.part-badge-wrap { flex-shrink: 0; }
+.part-num-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px; letter-spacing: .15em;
+  color: var(--dim2); text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.part-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--pc, var(--red));
+  border: 1px solid var(--pc, var(--red));
+  border-radius: 2px; padding: 4px 11px;
+  white-space: nowrap; display: inline-block;
+}
+.part-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 700;
+  color: var(--cream2); line-height: 1.2;
+  letter-spacing: -.01em; margin-bottom: 5px;
+}
+.part-desc { font-size: 12px; color: var(--dim); line-height: 1.65; }
+.part-rule {
+  height: 1px;
+  background: linear-gradient(to right, var(--pc, var(--bdr)) 0%, transparent 70%);
+  margin-bottom: 18px; opacity: .4;
+}
+
+/* GRID */
+.ch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(295px, 1fr));
+  gap: 13px;
+}
+.ch-grid.solo { grid-template-columns: 1fr; max-width: 480px; }
+
+/* CARD */
+.ch-card {
+  display: block; text-decoration: none;
+  background: var(--bg3);
+  border: 1px solid var(--hair);
+  border-radius: 6px;
+  padding: 20px 22px 18px;
+  position: relative; overflow: hidden;
+  transition: background .18s, border-color .18s, transform .18s, box-shadow .18s;
+}
+.ch-card::after {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+  background: var(--cc, var(--red));
+  opacity: 0; transition: opacity .18s;
+}
+.ch-card:hover {
+  background: var(--bg4);
+  border-color: rgba(255,255,255,.10);
+  transform: translateX(4px);
+  box-shadow: -4px 0 0 var(--cc, var(--red)), 0 6px 28px rgba(0,0,0,.45);
+}
+.ch-card:hover::after { opacity: 1; }
+
+/* HANKO */
+.hanko {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1.5px solid var(--cc, var(--red));
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 15px; position: relative;
+  transition: background .18s;
+}
+.hanko::before {
+  content: '';
+  position: absolute; inset: 4px; border-radius: 50%;
+  border: .5px solid var(--cc, var(--red));
+  opacity: .28;
+}
+.hanko-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px; font-weight: 500;
+  color: var(--cc, var(--red));
+  position: relative; z-index: 1;
+  text-align: center; line-height: 1.2;
+  transition: color .18s;
+}
+.ch-card:hover .hanko { background: var(--cc, var(--red)); }
+.ch-card:hover .hanko .hanko-text { color: #fff; }
+
+.ch-kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--dim);
+  margin-bottom: 7px;
+}
+.ch-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 15.5px; font-weight: 600;
+  color: var(--cream2); line-height: 1.3;
+  letter-spacing: -.01em; margin-bottom: 8px;
+}
+.ch-sub {
+  font-size: 12px; color: var(--dim);
+  line-height: 1.65; margin-bottom: 15px;
+}
+.ch-foot {
+  display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
+}
+.ch-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px; letter-spacing: .07em; color: var(--dim2);
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--hair);
+  border-radius: 2px; padding: 2px 7px;
+}
+.ch-arrow {
+  margin-left: auto; color: var(--cc, var(--red));
+  opacity: .35; font-size: 15px;
+  transition: opacity .18s, transform .18s;
+}
+.ch-card:hover .ch-arrow { opacity: 1; transform: translateX(4px); }
+.ch-ver {
+  position: absolute; top: 13px; right: 13px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px; letter-spacing: .12em; color: var(--gold);
+  background: var(--gold-lo);
+  border: 1px solid rgba(196,144,40,.22);
+  border-radius: 2px; padding: 2px 7px;
+}
+
+/* FOOTER */
+footer {
+  background: var(--bg2);
+  border-top: 1px solid var(--bdr);
+  padding: 22px 28px; text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px; letter-spacing: .07em; color: var(--dim2);
+}
+footer strong { color: var(--red); font-weight: 400; }
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+  .hero { padding: 52px 20px 44px 44px; }
+  .hero-kanji { display: none; }
+  .hero-stats { flex-direction: column; border: none; }
+  .hero-stat { border-right: none; border-bottom: 1px solid var(--bdr); border-radius: 3px; }
+  .ch-grid { grid-template-columns: 1fr; }
+  .main { padding: 36px 18px 60px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <span class="tb-brand">Princes of the Yen</span>
+  <span class="tb-sep">/</span>
+  <span class="tb-sub">Richard Werner · 2003</span>
+  <span class="tb-pill">Tiếng Việt</span>
+</nav>
+
+<div class="hero-wrap">
+  <div class="hero">
+    <div class="hero-kanji">円</div>
+    <div class="hero-eyebrow">Thư Viện Chương · Phiên Bản Tiếng Việt</div>
+    <h1 class="hero-title">Princes of the Yen</h1>
+    <div class="hero-vi">Những Hoàng Tử của Đồng Yên</div>
+    <p class="hero-desc">Richard Werner giải mã cách Ngân hàng Nhật Bản — không phải chính phủ — mới là kiến trúc sư thực sự đằng sau bong bóng tài sản thập niên 1980, cuộc suy thoái dai dẳng thập niên 1990, và chương trình cải cách cơ cấu theo mô hình Anglo‑Saxon áp đặt lên nền kinh tế Nhật.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="n">11</span><span class="l">Chương</span></div>
+      <div class="hero-stat"><span class="n">4</span><span class="l">Phần</span></div>
+      <div class="hero-stat"><span class="n">20 năm</span><span class="l">1980 – 2003</span></div>
+      <div class="hero-stat"><span class="n">BOJ</span><span class="l">Trọng Tâm</span></div>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- PHẦN I -->
+  <section class="part">
+    <div class="part-head">
+      <div class="part-badge-wrap">
+        <div class="part-num-label">Phần</div>
+        <div class="part-badge" style="--pc:#c49028;">I</div>
+      </div>
+      <div>
+        <div class="part-title">Quyền Lực Tín Dụng</div>
+        <div class="part-desc">Bộ tổng tham mưu ẩn sau chính sách tín dụng — ai kiểm soát dòng chảy tín dụng, người đó điều hướng toàn bộ nền kinh tế.</div>
+      </div>
+    </div>
+    <div class="part-rule" style="--pc:#c49028;"></div>
+    <div class="ch-grid solo">
+      <a class="ch-card" href="chuong-5-tin-dung.html" target="_blank" style="--cc:#c49028;">
+        <div class="hanko"><span class="hanko-text">05</span></div>
+        <div class="ch-kicker">Chương 5 · Nền Tảng</div>
+        <div class="ch-title">Tín Dụng: Bộ Tổng Tham Mưu Kinh Tế</div>
+        <p class="ch-sub">Cơ chế phân bổ tín dụng như một vũ khí quyền lực: "window guidance" và vai trò ẩn của Ngân hàng Nhật Bản trong việc chỉ định ai được vay, bao nhiêu, và vào mục đích gì.</p>
+        <div class="ch-foot">
+          <span class="ch-tag">Tín dụng</span>
+          <span class="ch-tag">Window Guidance</span>
+          <span class="ch-tag">Light Mode</span>
+          <span class="ch-arrow">→</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- PHẦN II -->
+  <section class="part">
+    <div class="part-head">
+      <div class="part-badge-wrap">
+        <div class="part-num-label">Phần</div>
+        <div class="part-badge" style="--pc:#c01828;">II</div>
+      </div>
+      <div>
+        <div class="part-title">Kỷ Nguyên Bong Bóng</div>
+        <div class="part-desc">Thập niên 1980 — Ngân hàng Nhật Bản bơm tín dụng đầu cơ tạo ra bong bóng tài sản lịch sử, trong khi đồng yên leo thang vì những lý do ít ai thực sự hiểu.</div>
+      </div>
+    </div>
+    <div class="part-rule" style="--pc:#c01828;"></div>
+    <div class="ch-grid">
+      <a class="ch-card" href="chuong-7-bong-bong-dau-tien.html" target="_blank" style="--cc:#c01828;">
+        <div class="hanko"><span class="hanko-text">07</span></div>
+        <div class="ch-kicker">Chương 7 · Bong Bóng</div>
+        <div class="ch-title">Bong Bóng Đầu Tiên của Nhật Bản</div>
+        <p class="ch-sub">Cơ chế hình thành bong bóng bất động sản và cổ phiếu — tín dụng đầu cơ tràn lan, giá tài sản tăng theo cấp số nhân trong thập niên 1985–1990.</p>
+        <div class="ch-foot">
+          <span class="ch-tag">1985–1990</span>
+          <span class="ch-tag">Bất động sản</span>
+          <span class="ch-tag">Cổ phiếu</span>
+          <span class="ch-arrow">→</span>
+        </div>
+      </a>
+      <a class="ch-card" href="chuong-8-tien-te-bi-an.html" target="_blank" style="--cc:#c01828;">
+        <div class="hanko"><span class="hanko-text">08</span></div>
+        <div class="ch-kicker">Chương 8 · Bí Ẩn</div>
+        <div class="ch-title">Tiền Tệ Bí Ẩn</div>
+        <p class="ch-sub">Những dòng tín dụng không ghi trong sổ sách — quyền năng vô hình và các kênh phân bổ tín dụng ngoài luồng chính thức của Ngân hàng Nhật Bản.</p>
+        <div class="ch-foot">
+          <span class="ch-tag">BOJ</span>
+          <span class="ch-tag">Tín dụng ngầm</span>
+          <span class="ch-arrow">→</span>
+        </div>
+      </a>
+      <a class="ch-card" href="chuong-9-ao-tuong-dong-yen-vi-dai.html" target="_blank" style="--cc:#c01828;">
+        <div class="hanko"><span class="hanko-text">09</span></div>
+        <div class="ch-kicker">Chương 9 · Ảo Tưởng</div>
+        <div class="ch-title">Ảo Tưởng Đồng Yên Vĩ Đại</div>
+        <p class="ch-sub">Hào quang tự mãn sau Hiệp ước Plaza — sự lên giá của đồng yên và những ảo tưởng về sức mạnh kinh tế Nhật Bản trước thềm sụp đổ.</p>
+        <div class="ch-foot">
+          <span class="ch-tag">Plaza Accord</span>
+          <span class="ch-tag">Tỷ giá</span>
+          <span class="ch-tag">1985</span>
+          <span class="ch-arrow">→</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- PHẦN III -->
+  <section class="part">
+    <div class="part-head">
+      <div class="part-badge-wrap">
+        <div class="part-num-label">Phần</div>
+        <div class="part-badge" style="--pc:#4a70c0;">III</div>
+      </div>
+      <div>
+        <div class="part-title">Thập Kỷ Mất Mát</div>
+        <div class="part-desc">Thập niên 1990 — Bong bóng vỡ không phải do tình cờ. Ngân hàng Nhật Bản cố tình siết tín dụng, kéo dài suy thoái để tái định hình cấu trúc quyền lực kinh tế.</div>
+      </div>
+    </div>
+    <div class="part-rule" style="--pc:#4a70c0;"></div>
+    <div class="ch-grid">
+      <a class="ch-card" href="chuong-10-cach-keo-dai-cuoc-suy-thoai.html" target="_blank" style="--cc:#4a70c0;">
+        <div class="hanko"><span class="hanko-text">10</span></div>
+        <div class="ch-kicker">Chương 10 · Suy Thoái</div>
+        <div class="ch-title">Cách Kéo Dài Cuộc Suy Thoái</div>
+        <p class="ch-sub">Ngân hàng Nhật Bản không hành động để cứu nền kinh tế — mà để chọn lọc: ai sống sót, ai bị thâu tóm, ai phải tái cơ cấu theo ý chí của các hoàng tử.</p>
+        <div class="ch-foot">
+          <span class="ch-tag">1990–1998</span>
+          <span class="ch-tag">Suy thoái</span>
+          <span class="ch-tag">Tín dụng</span>
+          <span class="ch-arrow">→</span>
+        </div>
+      </a>
+      <a class="ch-card" href="chuong-11-cuoc-chien-dong-yen.html" target="_blank" style="--cc:#4a70c0;">
+        <div class="hanko"><span class="hanko-text">11</span></div>
+        <div class="ch-kicker">Chương 11 · Đối Đầu</div>
+        <div class="ch-title">Cuộc Chiến Đồng Yên</div>
+        <p class="ch-sub">Trận chiến tỷ giá giữa Bộ Tài Chính và Ngân hàng Nhật Bản — mặt nổi của cuộc đấu tranh quyền lực ngầm trong lòng guồng máy kinh tế Nhật.</p>
+        <div class="ch-foot">
+          <span class="ch-tag">Tỷ giá</span>
+          <span class="ch-tag">BOJ vs MOF</span>
+          <span class="ch-tag">Chính sách</span>
+          <span class="ch-arrow">→</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- PHẦN IV -->
+  <section class="part">
+    <div class="part-head">
+      <div class="part-badge-wrap">
+        <div class="part-num-label">Phần</div>
+        <div class="part-badge" style="--pc:#2a9060;">IV</div>
+      </div>
+      <div>
+        <div class="part-title">Cuộc Đối Đầu &amp; Tái Cơ Cấu</div>
+        <div class="part-desc">Thập niên 2000 — Luật độc lập trao thêm quyền lực cho các hoàng tử, mô hình Anglo‑Saxon được áp đặt lên Nhật Bản, và Ngân hàng Trung Ương tái sinh dưới hình hài mới.</div>
+      </div>
+    </div>
+    <div class="part-rule" style="--pc:#2a9060;"></div>
+    <div class="ch-grid">
+      <a class="ch-card" href="chuong-15-quay-ve-tuong-lai-ver1.html" target="_blank" style="--cc:#2a9060;">
+        <div class="ch-ver">V1</div>
+        <div class="hanko"><span class="hanko-text">15</span></div>
+        <div class="ch-kicker">Chương 15 · Cải Cách</div>
+        <div class="ch-title">Trở Về Tương Lai: Chủ Nghĩa Tư Bản Kiểu Mỹ</div>
+        <p class="ch-sub">Chương trình tái cơ cấu kinh tế Nhật theo khuôn mẫu Anglo‑Saxon — phiên bản thiết kế sáng, bố cục báo chí đa cột.</p>
+        <div class="ch-foot">
+          <span class="ch-tag">Cải cách</span>
+          <span class="ch-tag">Mô hình Mỹ</span>
+          <span class="ch-tag">Light Mode</span>
+          <span class="ch-arrow">→</span>
+        </div>
+      </a>
+      <a class="ch-card" href="chuong-15-quay-ve-tuong-lai-ver2.html" target="_blank" style="--cc:#2a9060;">
+        <div class="ch-ver">V2</div>
+        <div class="hanko"><span class="hanko-text">15</span></div>
+        <div class="ch-kicker">Chương 15 · Cải Cách</div>
+        <div class="ch-title">Trở Về Tương Lai: Chủ Nghĩa Tư Bản Kiểu Mỹ</div>
+        <p class="ch-sub">Cùng nội dung chương 15 — phiên bản thiết kế tối, nhất quán với tông màu các chương còn lại trong thư viện.</p>
+        <div class="ch-foot">
+          <span class="ch-tag">Cải cách</span>
+          <span class="ch-tag">Mô hình Mỹ</span>
+          <span class="ch-tag">Dark Mode</span>
+          <span class="ch-arrow">→</span>
+        </div>
+      </a>
+      <a class="ch-card" href="chuong-18-trao-them-quyen-luc-cho-cac-hoang-tu.html" target="_blank" style="--cc:#c49028;">
+        <div class="hanko"><span class="hanko-text">18</span></div>
+        <div class="ch-kicker">Chương 18 · Quyền Lực</div>
+        <div class="ch-title">Trao Thêm Quyền Lực Cho Các Hoàng Tử</div>
+        <p class="ch-sub">Đạo luật Độc lập Ngân hàng Nhật Bản 1998 — nghịch lý của "độc lập": trên thực tế là trao nhiều quyền hơn cho những hoàng tử đồng yên, không phải ít hơn.</p>
+        <div class="ch-foot">
+          <span class="ch-tag">BOJ 1998</span>
+          <span class="ch-tag">Độc lập</span>
+          <span class="ch-tag">Quyền lực</span>
+          <span class="ch-arrow">→</span>
+        </div>
+      </a>
+      <a class="ch-card" href="chuong-19-su-phuc-sinh-cua-R-bank.html" target="_blank" style="--cc:#c49028;">
+        <div class="hanko"><span class="hanko-text">19</span></div>
+        <div class="ch-kicker">Chương 19 · Phục Sinh</div>
+        <div class="ch-title">Sự Phục Sinh của R-Bank</div>
+        <p class="ch-sub">Hồi sinh của ngân hàng khu vực theo mô hình tái thiết — và câu hỏi mở: ai thực sự điều hành nền kinh tế Nhật Bản trong thế kỷ 21?</p>
+        <div class="ch-foot">
+          <span class="ch-tag">R-Bank</span>
+          <span class="ch-tag">Tái cơ cấu</span>
+          <span class="ch-tag">Kết luận</span>
+          <span class="ch-arrow">→</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- PHỤ LỤC -->
+  <section class="part">
+    <div class="part-head">
+      <div class="part-badge-wrap">
+        <div class="part-num-label">Thêm</div>
+        <div class="part-badge" style="--pc:#5a5448; font-size:8px; letter-spacing:.10em;">PHỤ LỤC</div>
+      </div>
+      <div>
+        <div class="part-title">Tài Liệu Tham Chiếu</div>
+        <div class="part-desc">Dữ liệu bổ sung, chú giải thuật ngữ và nguồn tài liệu gốc hỗ trợ toàn bộ luận điểm của Richard Werner.</div>
+      </div>
+    </div>
+    <div class="part-rule" style="--pc:#5a5448;"></div>
+    <div class="ch-grid solo">
+      <a class="ch-card" href="phu-luc.html" target="_blank" style="--cc:#706860;">
+        <div class="hanko"><span class="hanko-text" style="font-size:8px;line-height:1.3;">PHỤ<br>LỤC</span></div>
+        <div class="ch-kicker">Appendix · Tài Liệu Nguồn</div>
+        <div class="ch-title">Phụ Lục — Princes of the Yen</div>
+        <p class="ch-sub">Biểu đồ tham chiếu, dữ liệu kinh tế và chú thích học thuật hỗ trợ các luận điểm trong toàn bộ cuốn sách.</p>
+        <div class="ch-foot">
+          <span class="ch-tag">Dữ liệu</span>
+          <span class="ch-tag">Tham chiếu</span>
+          <span class="ch-tag">Appendix</span>
+          <span class="ch-arrow">→</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <strong>Princes of the Yen</strong> · Richard Werner · 2003 · Phiên bản tiếng Việt — Tài liệu nội bộ
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chương 7 — Bong Bóng Đầu Tiên của Nhật Bản</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --bg2: #13161e;
+    --bg3: #1a1e28;
+    --border: #252a38;
+    --gold: #c9a84c;
+    --gold2: #e8c96a;
+    --amber: #d4823a;
+    --red: #c0392b;
+    --green: #27ae60;
+    --blue: #2980b9;
+    --text: #d4cfc4;
+    --text2: #8a8070;
+    --text3: #5a5448;
+    --accent: #c9a84c;
+    --sidebar-w: 260px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.75;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: var(--sidebar-w);
+    min-height: 100vh;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  .sidebar-header {
+    padding: 24px 18px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-book {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text3);
+    margin-bottom: 6px;
+  }
+
+  .sidebar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1.3;
+  }
+
+  .sidebar-ch {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--amber);
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+
+  .sidebar-nav { padding: 12px 0; flex: 1; }
+
+  .nav-group-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text3);
+    padding: 8px 18px 4px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 7px 18px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .nav-item:hover { background: var(--bg3); }
+  .nav-item.active {
+    background: rgba(201,168,76,0.08);
+    border-left-color: var(--gold);
+  }
+
+  .nav-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    padding-top: 2px;
+    flex-shrink: 0;
+    width: 18px;
+  }
+
+  .nav-item.active .nav-num { color: var(--gold); }
+
+  .nav-label {
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--text2);
+  }
+
+  .nav-item.active .nav-label { color: var(--text); }
+
+  .nav-notes-btn {
+    margin: 8px 12px 16px;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold);
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .nav-notes-btn:hover { background: rgba(201,168,76,0.2); }
+  .nav-notes-btn.active { background: rgba(201,168,76,0.25); border-color: var(--gold); }
+
+  /* ── MAIN ── */
+  #main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    padding: 0 0 80px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #0d0f14 0%, #1a1523 40%, #0d1220 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 64px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '第7章';
+    position: absolute;
+    right: 48px;
+    top: 24px;
+    font-family: 'Playfair Display', serif;
+    font-size: 96px;
+    color: rgba(201,168,76,0.04);
+    font-weight: 900;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--amber);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-eyebrow::after {
+    content: '';
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: var(--amber);
+    opacity: 0.4;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--gold2);
+    line-height: 1.15;
+    margin-bottom: 16px;
+    max-width: 680px;
+  }
+
+  .hero-subtitle {
+    font-style: italic;
+    color: var(--text2);
+    font-size: 16px;
+    max-width: 600px;
+    margin-bottom: 32px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text3);
+    margin-top: 2px;
+  }
+
+  /* ── CONTENT AREA ── */
+  #content { padding: 0 64px; }
+
+  .section {
+    padding: 56px 0 16px;
+    border-bottom: 1px solid var(--border);
+    display: none;
+    animation: fadeUp 0.3s ease;
+  }
+
+  .section.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 4px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold2);
+    line-height: 1.2;
+  }
+
+  /* ── PROSE ── */
+  .prose p {
+    color: var(--text);
+    margin-bottom: 16px;
+    font-size: 15px;
+    line-height: 1.8;
+    max-width: 760px;
+  }
+
+  .prose strong { color: var(--gold2); font-weight: 600; }
+  .prose em { color: var(--amber); font-style: italic; }
+
+  /* ── KEY INSIGHT CARD ── */
+  .insight-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0;
+    max-width: 760px;
+  }
+
+  .insight-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .insight-card p {
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* ── WARNING CARD ── */
+  .warning-card {
+    background: rgba(192,57,43,0.07);
+    border: 1px solid rgba(192,57,43,0.25);
+    border-left: 3px solid var(--red);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0;
+    max-width: 760px;
+  }
+
+  .warning-card .insight-label { color: var(--red); }
+
+  /* ── DATA BOX ── */
+  .data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+    max-width: 760px;
+  }
+
+  .data-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .data-box-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .data-box-val.red { color: var(--red); }
+  .data-box-val.green { color: var(--green); }
+
+  .data-box-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .data-box-sub {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    max-width: 760px;
+    margin: 24px 0;
+    position: relative;
+    padding-left: 24px;
+    border-left: 2px solid var(--border);
+  }
+
+  .tl-item {
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -31px;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--bg);
+  }
+
+  .tl-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--amber);
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .tl-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .tl-text strong { color: var(--gold2); }
+
+  /* ── PERSON CARD ── */
+  .person-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+    max-width: 760px;
+  }
+
+  .person-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+  }
+
+  .person-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold2);
+    margin-bottom: 4px;
+  }
+
+  .person-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .person-desc {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  /* ── MECHANISM BOX ── */
+  .mechanism {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin: 24px 0;
+    max-width: 760px;
+  }
+
+  .mechanism-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .flow-chain {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .flow-node {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .flow-node.gold { border-color: rgba(201,168,76,0.4); color: var(--gold2); }
+  .flow-node.red  { border-color: rgba(192,57,43,0.4); color: #e74c3c; }
+  .flow-node.green{ border-color: rgba(39,174,96,0.4); color: #2ecc71; }
+
+  .flow-arrow {
+    color: var(--text3);
+    font-size: 16px;
+  }
+
+  /* ── QUOTE ── */
+  .quote-block {
+    border-left: 3px solid var(--amber);
+    padding: 16px 20px;
+    margin: 24px 0;
+    max-width: 680px;
+    background: rgba(212,130,58,0.05);
+    border-radius: 0 8px 8px 0;
+  }
+
+  .quote-block p {
+    font-style: italic;
+    color: var(--text2);
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 0 0 8px;
+  }
+
+  .quote-src {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+  }
+
+  /* ── COMPARISON ── */
+  .compare-table {
+    width: 100%;
+    max-width: 760px;
+    border-collapse: collapse;
+    margin: 24px 0;
+  }
+
+  .compare-table th {
+    background: var(--bg3);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 10px 16px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+
+  .compare-table td {
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+    vertical-align: top;
+  }
+
+  .compare-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* ── NOTES PANEL ── */
+  #notes-panel {
+    position: fixed;
+    top: 0;
+    right: -520px;
+    width: 480px;
+    height: 100vh;
+    background: var(--bg2);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+    transition: right 0.3s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: -8px 0 32px rgba(0,0,0,0.4);
+  }
+
+  #notes-panel.open { right: 0; }
+
+  .notes-header {
+    padding: 20px 20px 0;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .notes-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .notes-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .notes-close {
+    background: none;
+    border: none;
+    color: var(--text3);
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    padding: 4px;
+    transition: color 0.2s;
+  }
+
+  .notes-close:hover { color: var(--text); }
+
+  .notes-toolbar {
+    display: flex;
+    gap: 4px;
+    padding-bottom: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .toolbar-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.15s;
+    font-family: inherit;
+    line-height: 1;
+  }
+
+  .toolbar-btn:hover { background: var(--border); color: var(--text); }
+  .toolbar-btn.active { background: rgba(201,168,76,0.15); border-color: var(--gold); color: var(--gold); }
+
+  .toolbar-btn b { font-weight: 800; }
+  .toolbar-sep { width: 1px; height: 24px; background: var(--border); margin: 0 2px; }
+
+  .notes-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    margin-left: auto;
+    padding: 2px 0;
+  }
+
+  .notes-status.saved { color: var(--green); }
+  .notes-status.saving { color: var(--amber); }
+
+  .notes-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    margin-top: 2px;
+    overflow-x: auto;
+  }
+
+  .notes-tab {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 8px 14px;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    color: var(--text3);
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+
+  .notes-tab:hover { color: var(--text2); }
+  .notes-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  .notes-body {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .notes-editor-wrap {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+  }
+
+  .notes-editor {
+    min-height: 100%;
+    outline: none;
+    color: var(--text);
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+    line-height: 1.8;
+    caret-color: var(--gold);
+  }
+
+  .notes-editor:empty::before {
+    content: 'Bắt đầu ghi chú tại đây… Dùng thanh công cụ để định dạng văn bản.';
+    color: var(--text3);
+    font-style: italic;
+    pointer-events: none;
+  }
+
+  .notes-editor ul { padding-left: 20px; }
+  .notes-editor li { margin-bottom: 4px; }
+  .notes-editor b { color: var(--gold2); }
+  .notes-editor i { color: var(--text2); }
+  .notes-editor u { text-decoration-color: var(--amber); }
+
+  .notes-footer {
+    padding: 10px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .btn-clear {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text3);
+    padding: 6px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    transition: all 0.15s;
+  }
+
+  .btn-clear:hover { border-color: var(--red); color: var(--red); }
+
+  .btn-export {
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold);
+    padding: 6px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    transition: all 0.15s;
+    margin-left: auto;
+  }
+
+  .btn-export:hover { background: rgba(201,168,76,0.2); }
+
+  /* ── OVERVIEW CARDS ── */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+    max-width: 760px;
+  }
+
+  .ov-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .ov-card:hover { border-color: rgba(201,168,76,0.3); transform: translateY(-2px); }
+
+  .ov-card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    margin-bottom: 8px;
+  }
+
+  .ov-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gold2);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .ov-card-summary {
+    font-size: 12.5px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  /* ── TAG ── */
+  .tag {
+    display: inline-block;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.2);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  .tag.red { background: rgba(192,57,43,0.1); border-color: rgba(192,57,43,0.3); color: #e74c3c; }
+  .tag.green { background: rgba(39,174,96,0.1); border-color: rgba(39,174,96,0.3); color: #2ecc71; }
+  .tag.blue { background: rgba(41,128,185,0.1); border-color: rgba(41,128,185,0.3); color: #3498db; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+  /* ── OVERLAY ── */
+  #overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 150;
+    backdrop-filter: blur(2px);
+  }
+
+  #overlay.show { display: block; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-book">Princes of the Yen · R. Werner</div>
+    <div class="sidebar-title">Bong Bóng Kinh Tế Đầu Tiên của Nhật Bản</div>
+    <div class="sidebar-ch">Chương 7 · Dashboard</div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-group-label">Nội dung chương</div>
+
+    <div class="nav-item active" onclick="showSection('overview')">
+      <span class="nav-num">00</span>
+      <span class="nav-label">Tổng quan chương</span>
+    </div>
+    <div class="nav-item" onclick="showSection('s1')">
+      <span class="nav-num">01</span>
+      <span class="nav-label">Chiến thắng của Kinh tế Chiến tranh</span>
+    </div>
+    <div class="nav-item" onclick="showSection('s2')">
+      <span class="nav-num">02</span>
+      <span class="nav-label">Tái định giá đồng Yen</span>
+    </div>
+    <div class="nav-item" onclick="showSection('s3')">
+      <span class="nav-num">03</span>
+      <span class="nav-label">Sụp đổ Bretton Woods</span>
+    </div>
+    <div class="nav-item" onclick="showSection('s4')">
+      <span class="nav-num">04</span>
+      <span class="nav-label">Bong bóng đầu tiên (1972–73)</span>
+    </div>
+    <div class="nav-item" onclick="showSection('s5')">
+      <span class="nav-num">05</span>
+      <span class="nav-label">Vỡ bong bóng & Suy thoái</span>
+    </div>
+    <div class="nav-item" onclick="showSection('s6')">
+      <span class="nav-num">06</span>
+      <span class="nav-label">Mieno & Maekawa xuất hiện</span>
+    </div>
+    <div class="nav-item" onclick="showSection('s7')">
+      <span class="nav-num">07</span>
+      <span class="nav-label">Phê phán hệ thống chiến tranh</span>
+    </div>
+    <div class="nav-item" onclick="showSection('s8')">
+      <span class="nav-num">08</span>
+      <span class="nav-label">Debút Sakakibara</span>
+    </div>
+    <div class="nav-item" onclick="showSection('s9')">
+      <span class="nav-num">09</span>
+      <span class="nav-label">Kiểm soát tín dụng & Dư luận</span>
+    </div>
+    <div class="nav-item" onclick="showSection('s10')">
+      <span class="nav-num">10</span>
+      <span class="nav-label">BoJ thắng vòng 2 vs MoF</span>
+    </div>
+
+    <div class="nav-group-label" style="margin-top:12px;">Công cụ</div>
+  </div>
+
+  <button class="nav-notes-btn" id="notesToggleBtn" onclick="toggleNotes()">
+    📝 Ghi chú của tôi
+  </button>
+</nav>
+
+<!-- OVERLAY -->
+<div id="overlay" onclick="toggleNotes()"></div>
+
+<!-- NOTES PANEL -->
+<div id="notes-panel">
+  <div class="notes-header">
+    <div class="notes-header-top">
+      <span class="notes-title">📝 Ghi chú</span>
+      <button class="notes-close" onclick="toggleNotes()">✕</button>
+    </div>
+
+    <div class="notes-toolbar">
+      <button class="toolbar-btn" onclick="formatDoc('bold')" title="Chữ đậm (Ctrl+B)"><b>B</b></button>
+      <button class="toolbar-btn" onclick="formatDoc('italic')" title="In nghiêng (Ctrl+I)"><i>I</i></button>
+      <button class="toolbar-btn" onclick="formatDoc('underline')" title="Gạch chân (Ctrl+U)"><u>U</u></button>
+      <div class="toolbar-sep"></div>
+      <button class="toolbar-btn" onclick="insertBullet()" title="Bullet point">• List</button>
+      <button class="toolbar-btn" onclick="formatDoc('insertOrderedList')" title="Danh sách số">1. List</button>
+      <div class="toolbar-sep"></div>
+      <button class="toolbar-btn" onclick="formatDoc('removeFormat')" title="Xóa định dạng">✕ Format</button>
+      <span class="notes-status" id="saveStatus">—</span>
+    </div>
+
+    <div class="notes-tabs">
+      <div class="notes-tab active" onclick="switchTab(0)">Ghi chú tổng</div>
+      <div class="notes-tab" onclick="switchTab(1)">Bong bóng 1972</div>
+      <div class="notes-tab" onclick="switchTab(2)">Vỡ bong bóng</div>
+      <div class="notes-tab" onclick="switchTab(3)">Nhân vật</div>
+    </div>
+  </div>
+
+  <div class="notes-body">
+    <div class="notes-editor-wrap">
+      <div class="notes-editor" id="notesEditor" contenteditable="true"
+           oninput="scheduleAutoSave()" onkeydown="handleKeyDown(event)">
+      </div>
+    </div>
+  </div>
+
+  <div class="notes-footer">
+    <button class="btn-clear" onclick="clearNotes()">🗑 Xóa ghi chú</button>
+    <button class="btn-export" onclick="exportNotes()">⬇ Xuất .txt</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Chương 7</div>
+    <h1>Bong Bóng Kinh Tế Đầu Tiên của Nhật Bản</h1>
+    <p class="hero-subtitle">
+      Từ thần kỳ tăng trưởng đến bong bóng đầu cơ đất đai — và cú vỡ thảm khốc đầu tiên do chính sách <em>window guidance</em> của BoJ tạo ra.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-val">2.6×</div>
+        <div class="stat-label">GDP tăng 1960–70</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">+50%</div>
+        <div class="stat-label">Giá đất 1972–74</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">26%</div>
+        <div class="stat-label">Lạm phát CPI 1974</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">–84%</div>
+        <div class="stat-label">Lợi nhuận doanh nghiệp 1975</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">–19%</div>
+        <div class="stat-label">Sản xuất CN 1973–75</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="content">
+
+    <!-- OVERVIEW -->
+    <div class="section active" id="overview">
+      <div class="section-header">
+        <span class="section-num">00</span>
+        <h2>Tổng quan Chương 7</h2>
+      </div>
+
+      <div class="prose">
+        <p>Chương 7 là bản <strong>tổng phổ đầu tiên</strong> về cơ chế mà Ngân hàng Nhật Bản (BoJ) sử dụng để tạo ra và phá vỡ một chu kỳ bong bóng tín dụng — một thử nghiệm quy mô nhỏ trước những sự kiện lớn hơn nhiều của thập niên 1980–90. Werner lập luận rằng <em>toàn bộ chu kỳ bùng nổ – sụp đổ của 1972–1975 là kết quả trực tiếp từ chính sách window guidance của BoJ</em>, không phải từ cú sốc dầu mỏ hay chính sách tài khóa của Thủ tướng Tanaka.</p>
+        <p>Đây cũng là chương mà các nhân vật lịch sử quan trọng — <strong>Yasushi Mieno</strong>, <strong>Haruo Maekawa</strong>, và <strong>Eisuke Sakakibara</strong> — xuất hiện lần đầu, mỗi người đóng vai trò định hình tương lai của Nhật Bản theo những cách khác nhau.</p>
+      </div>
+
+      <div class="overview-grid">
+        <div class="ov-card" onclick="showSection('s1')">
+          <div class="ov-card-num">01 — Bối cảnh</div>
+          <div class="ov-card-title">Chiến thắng của Kinh tế Chiến tranh</div>
+          <div class="ov-card-summary">Nhật Bản tăng trưởng hai chữ số liên tục 20 năm. Mâu thuẫn thương mại với Mỹ leo thang. "Bán phá giá mang tính hệ thống" là nguồn gốc thực sự của sức mạnh cạnh tranh.</div>
+        </div>
+        <div class="ov-card" onclick="showSection('s2')">
+          <div class="ov-card-num">02 — Áp lực quốc tế</div>
+          <div class="ov-card-title">Tái định giá đồng Yen</div>
+          <div class="ov-card-summary">Mỹ gây áp lực, MoF cân nhắc tái định giá nhưng các nhóm lợi ích cản trở. Cuộc khủng hoảng 1970s chỉ là "thử nghiệm" cho cải cách lớn hơn.</div>
+        </div>
+        <div class="ov-card" onclick="showSection('s3')">
+          <div class="ov-card-num">03 — Nixon Shock 1971</div>
+          <div class="ov-card-title">Sụp đổ Bretton Woods</div>
+          <div class="ov-card-summary">Mỹ đình chỉ đổi đô la sang vàng. BoJ in tiền ồ ạt giữ yen yếu, sau đó bơm tín dụng khổng lồ — tạo nền tảng cho bong bóng.</div>
+        </div>
+        <div class="ov-card" onclick="showSection('s4')">
+          <div class="ov-card-num">04 — Bong bóng 1972–73</div>
+          <div class="ov-card-title">Tín dụng dư thừa → Đầu cơ</div>
+          <div class="ov-card-summary">Window guidance quá tay: ngân hàng gần như cầu xin doanh nghiệp vay tiền. Vốn đổ vào đất đai, chứng khoán, câu lạc bộ golf, đồ cổ…</div>
+        </div>
+        <div class="ov-card" onclick="showSection('s5')">
+          <div class="ov-card-num">05 — Vỡ bong bóng 1973–75</div>
+          <div class="ov-card-title">BoJ siết window guidance → Suy thoái</div>
+          <div class="ov-card-summary">Hạn mức tín dụng giảm 65% trong Q1/1974. Lợi nhuận DN giảm 84%, sản xuất công nghiệp giảm 19%. Nhật Bản rơi vào suy thoái lớn nhất thời hậu chiến.</div>
+        </div>
+        <div class="ov-card" onclick="showSection('s8')">
+          <div class="ov-card-num">08 — Bài báo 1977</div>
+          <div class="ov-card-title">Sakakibara & Noguchi "vạch mặt"</div>
+          <div class="ov-card-summary">Hai quan chức trẻ MoF đặt tên cho "hệ thống huy động kinh tế thời chiến" — lần đầu tiên trong lịch sử, bản chất thật được công khai nhận diện.</div>
+        </div>
+      </div>
+
+      <div class="insight-card">
+        <div class="insight-label">🔑 Luận điểm trung tâm của Werner</div>
+        <p>Bong bóng 1972–73 và sự sụp đổ sau đó <strong>không phải do cú sốc dầu mỏ hay chính sách tài khóa của Tanaka</strong>. Bằng chứng: Kích thích tài khóa thập niên 1990 còn lớn hơn nhiều, nhưng lại tạo ra <em>giảm phát</em> thay vì lạm phát. Biến số quyết định duy nhất là <strong>chính sách tín dụng định lượng của BoJ</strong> thông qua window guidance.</p>
+      </div>
+    </div>
+
+    <!-- S1 -->
+    <div class="section" id="s1">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2>Chiến thắng của Nền Kinh tế Chiến tranh</h2>
+      </div>
+      <div style="margin-bottom:12px;">
+        <span class="tag">1950s–1970s</span>
+        <span class="tag green">Tăng trưởng thần kỳ</span>
+        <span class="tag red">Mâu thuẫn thương mại</span>
+      </div>
+
+      <div class="prose">
+        <p>Nền kinh tế thời bình — nhưng được vận hành theo mô hình chiến tranh — đã tạo ra thành tích ngoạn mục. Trong thập niên 1950 và 1960, Nhật Bản tăng trưởng gần như liên tục với tốc độ hai chữ số. Năm 1959, GDP thực tế mở rộng <strong>17%</strong> trong khi lạm phát vẫn ở mức khiêm tốn.</p>
+        <p>Từ 1960 đến 1970, GDP thực của Nhật tăng từ <strong>71,6 nghìn tỷ yen</strong> lên <strong>188,3 nghìn tỷ yen</strong> — tức gấp 2,6 lần. Đến năm 1970, Nhật Bản đã vượt qua Tây Đức để trở thành <em>nền kinh tế lớn thứ hai thế giới</em>.</p>
+      </div>
+
+      <div class="data-grid">
+        <div class="data-box">
+          <div class="data-box-val green">+17%</div>
+          <div class="data-box-label">Tăng trưởng GDP thực 1959</div>
+        </div>
+        <div class="data-box">
+          <div class="data-box-val green">2.6×</div>
+          <div class="data-box-label">GDP tăng 1960–1970</div>
+        </div>
+        <div class="data-box">
+          <div class="data-box-val">$1.6B</div>
+          <div class="data-box-label">Thâm hụt thương mại Mỹ–Nhật 1969</div>
+        </div>
+        <div class="data-box">
+          <div class="data-box-val">$5.8B</div>
+          <div class="data-box-label">Thặng dư của Nhật / $7.4B tổng OECD (1971)</div>
+        </div>
+      </div>
+
+      <div class="insight-card">
+        <div class="insight-label">⚙️ Cơ chế "bán phá giá hệ thống"</div>
+        <p>Werner chỉ ra rằng sức cạnh tranh của Nhật Bản <strong>không phải</strong> đến từ dumping giá của từng công ty riêng lẻ. Đó là <em>dumping mang tính quốc gia toàn hệ thống</em> (social dumping): toàn bộ nền kinh tế được thiết kế để tối đa hóa xuất khẩu và loại bỏ đối thủ nước ngoài. Một quốc gia cạnh tranh như một tập đoàn độc nhất.</p>
+      </div>
+
+      <div class="prose">
+        <p>Mỹ đã chấp nhận duy trì nền kinh tế chiến tranh kiểu Nhật vì lý do <strong>Chiến tranh Lạnh và ngăn chặn chủ nghĩa cộng sản ở châu Á</strong>. Nhưng cái giá phải trả là cao: lần lượt từ dệt may, thép, đóng tàu, điện tử tiêu dùng — các ngành công nghiệp Mỹ và châu Âu bị cỗ máy kinh tế Nhật Bản nghiền nát.</p>
+        <p>Hãng điện tử Mỹ Zenith ngừng sản xuất radio năm 1982 và hiện thuộc sở hữu của tập đoàn LG Hàn Quốc — một biểu tượng của sự suy tàn công nghiệp Mỹ trước làn sóng châu Á.</p>
+      </div>
+
+      <div class="warning-card">
+        <div class="insight-label">⚠️ Nghịch lý lịch sử</div>
+        <p>Cả Nhật Bản lẫn Mỹ đều không thể công khai thừa nhận thực tế: Nhật Bản phê phán chủ nghĩa bảo hộ Mỹ trong khi toàn bộ hệ thống kinh tế của họ chính là <em>pháo đài chống nhập khẩu hàng chế tạo</em>. Mỹ kêu gọi tự do thương mại trong khi chính họ đã trỗi dậy nhờ bảo hộ. Kinh tế thị trường tự do là công cụ của quyền lực thống trị để tiếp cận thị trường kẻ khác.</p>
+      </div>
+    </div>
+
+    <!-- S2 -->
+    <div class="section" id="s2">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2>Tái định giá Đồng Yen & Bài Học từ Khủng hoảng</h2>
+      </div>
+      <div style="margin-bottom:12px;">
+        <span class="tag">1970s</span>
+        <span class="tag blue">Cải cách cơ cấu</span>
+        <span class="tag">Lợi ích nhóm</span>
+      </div>
+
+      <div class="prose">
+        <p>Trước áp lực thương mại ngày càng tăng, Bộ Tài chính Nhật (MoF) âm thầm xem xét việc tái định giá đồng yen. Nhưng một nhóm quan chức và trí thức có tầm nhìn quốc tế nhận ra rằng <strong>bản thân hệ thống kinh tế chiến tranh phải được thay đổi</strong> nếu Mỹ muốn đạt được mục tiêu.</p>
+        <p>Những người cải cách này là thiểu số. Một hệ thống được tạo ra từ thời chiến và ăn sâu vào thành công suốt mấy thập kỷ không dễ bị giải thể. Các nhóm lợi ích đã được tạo ra trong bộ máy quan liêu thịnh vượng nhờ hệ thống cấp phép, các doanh nghiệp kiếm lợi nhuận độc quyền từ thị trường nội địa đóng cửa, và các chính trị gia được hậu thuẫn từ các nhóm lợi ích này.</p>
+      </div>
+
+      <div class="insight-card">
+        <div class="insight-label">🔍 Chức năng kép của khủng hoảng</div>
+        <p>Werner quan sát rằng các cuộc khủng hoảng trong nền kinh tế chiến tranh Nhật Bản phục vụ hai mục đích: <strong>(1)</strong> Tạo ra áp lực cải cách hệ thống từ dư luận, <strong>(2)</strong> Cung cấp cơ hội học hỏi và thử nghiệm cho các quan chức BoJ về cơ học của chu kỳ bùng nổ–sụp đổ. Cuộc khủng hoảng 1970s là <em>"thử nghiệm"</em> cho những sự kiện lớn hơn nhiều ở thập niên 1980–90.</p>
+      </div>
+    </div>
+
+    <!-- S3 -->
+    <div class="section" id="s3">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2>Sụp đổ Bretton Woods — Nixon Shock 1971</h2>
+      </div>
+      <div style="margin-bottom:12px;">
+        <span class="tag">1971</span>
+        <span class="tag red">Nixon Shock</span>
+        <span class="tag">BoJ in tiền</span>
+      </div>
+
+      <div class="prose">
+        <p>Từ đầu thời hậu chiến đến 1971, các đồng tiền lớn được neo với đô la Mỹ theo hệ thống Bretton Woods. Với Nhật Bản, tỷ giá là <strong>360 yen/đô la</strong> — một mức định giá thấp nhân tạo mang lại lợi thế xuất khẩu khổng lồ trong suốt hai thập kỷ.</p>
+        <p>Trong thập niên 1960, Fed khuyến khích các ngân hàng Mỹ tăng cường tạo tín dụng, đô la tràn ra nước ngoài dưới dạng đầu tư, mua lại các tập đoàn châu Âu — hiện tượng mà người Pháp gọi là <em>"le défi Américain"</em> (thách thức Mỹ).</p>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-date">Tháng 8 / 1971</div>
+          <div class="tl-text">Pháp mang đô la đến Mỹ đòi đổi vàng. <strong>Nixon tuyên bố đình chỉ khả năng chuyển đổi đô la thành vàng</strong> — Bretton Woods sụp đổ.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Tháng 8 / 1971</div>
+          <div class="tl-text">BoJ chờ 10 ngày trước khi từ bỏ tỷ giá cố định. Trong thời gian đó, <strong>in tiền mạnh tay</strong> mua đô la để giữ yen yếu. Dự trữ ngoại hối tăng vọt 5 tỷ USD chỉ trong 1 tháng.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Tháng 12 / 1971</div>
+          <div class="tl-text">Hiệp định Smithsonian ấn định tỷ giá mới: <strong>308 yen/đô la</strong> — yen tăng giá đáng kể.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1972</div>
+          <div class="tl-text">BoJ tiếp tục mua trái phiếu nội địa tạo thanh khoản VÀ <strong>nâng cao mạnh hạn ngạch window guidance</strong> để kích thích nhu cầu nội địa bù đắp cho xuất khẩu sụt giảm. Thanh khoản kỷ lục được bơm vào nền kinh tế.</div>
+        </div>
+      </div>
+
+      <div class="mechanism">
+        <div class="mechanism-title">Cơ chế tạo bong bóng từ Nixon Shock</div>
+        <div class="flow-chain">
+          <div class="flow-node gold">Yen tăng giá<br>sau Nixon Shock</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node">BoJ sợ xuất khẩu<br>sụt giảm</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node gold">In tiền + Nâng<br>Window Guidance</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node red">Thanh khoản<br>dư thừa</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node red">Đầu cơ<br>đất đai & cổ phiếu</div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>Trong thực tế, xuất khẩu không bị tổn hại nặng như lo ngại vì yen đã bị định giá thấp trong quá lâu. Hơn nữa, cơ cấu kinh tế Nhật vẫn đóng cửa với hàng chế tạo nhập khẩu, còn hàng nhập khẩu chủ yếu là nguyên liệu thô được hưởng lợi từ yen mạnh. <strong>Kết quả: gói kích thích tiền tệ của BoJ trở nên quá mức cần thiết</strong> — nền tảng cho bong bóng đầu tiên.</p>
+      </div>
+    </div>
+
+    <!-- S4 -->
+    <div class="section" id="s4">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2>Bong Bóng Kinh tế Đầu Tiên (1972–1973)</h2>
+      </div>
+      <div style="margin-bottom:12px;">
+        <span class="tag">1972–1973</span>
+        <span class="tag red">Đầu cơ đất đai</span>
+        <span class="tag red">Bong bóng chứng khoán</span>
+      </div>
+
+      <div class="prose">
+        <p>Hóa ra kích thích tiền tệ của BoJ đã <strong>quá mức cần thiết</strong>. Các ngân hàng, phải đáp ứng hạn ngạch cho vay window guidance cao ngất, <em>gần như cầu xin các doanh nghiệp vay tiền</em>. Các doanh nghiệp đã dư dả thanh khoản và đã đầu tư đầy đủ vào các dự án sản xuất; họ dùng các khoản vay ngân hàng để tài trợ cho <strong>hoạt động phi sản xuất: mua đất đai đầu cơ</strong>.</p>
+        <p>Kế hoạch "Xây dựng lại Quần đảo" của Thủ tướng Kakuei Tanaka và Luật Thúc đẩy Di dời Công nghiệp khuyến khích xây dựng — kết hợp với thanh khoản dường như vô hạn từ ngân hàng, nhiều công ty tham gia cuộc đua đất đai. Khi giá trị đất đai làm tài sản thế chấp tăng, ngân hàng càng hăng hái tài trợ cho đầu cơ đất đai.</p>
+      </div>
+
+      <div class="data-grid">
+        <div class="data-box">
+          <div class="data-box-val green">¥3.000</div>
+          <div class="data-box-label">Nikkei 225, tháng 3/1972</div>
+        </div>
+        <div class="data-box">
+          <div class="data-box-val green">¥5.000</div>
+          <div class="data-box-label">Nikkei 225, cuối 1972</div>
+        </div>
+        <div class="data-box">
+          <div class="data-box-val red">¥15 nghìn tỷ</div>
+          <div class="data-box-label">Lợi nhuận vốn từ đất đai (1972)</div>
+        </div>
+        <div class="data-box">
+          <div class="data-box-val red">¥5 nghìn tỷ</div>
+          <div class="data-box-label">Lợi nhuận vốn từ cổ phiếu (1972)</div>
+        </div>
+      </div>
+
+      <div class="mechanism">
+        <div class="mechanism-title">Vòng xoáy bong bóng 1972–73</div>
+        <div class="flow-chain">
+          <div class="flow-node gold">Window Guidance<br>quá cao</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node gold">Ngân hàng ép<br>DN vay tiền</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node red">Vốn đổ vào<br>đất đai & cổ phiếu</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node red">Giá tài sản<br>tăng vọt</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node red">Thế chấp tăng →<br>NH càng sẵn sàng cho vay</div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>Tín dụng dư thừa do BoJ tạo ra <strong>lớn đến mức bắt đầu tràn từ thị trường tài sản vào nền kinh tế thực</strong>. Khi đầu tư và nhu cầu tiêu dùng tăng, giá tiêu dùng và giá bán buôn bắt đầu tăng vọt. Cơn say đầu cơ lan rộng sang cả <em>thẻ thành viên câu lạc bộ golf, nghệ thuật, đồ cổ, trang sức và tiền xu hiếm</em>.</p>
+        <p>Tất cả điều này xảy ra <strong>trước cú sốc dầu mỏ tháng 11/1973</strong>. Cú sốc dầu không phải nguyên nhân gốc rễ — nó chỉ kích hoạt thêm sức mua quá mức đang tích lũy sẵn. Cuộc chạy đua mua giấy vệ sinh huyền thoại ở Osaka năm 1974 là ví dụ điển hình về tâm lý hoảng loạn đầu cơ.</p>
+      </div>
+
+      <div class="warning-card">
+        <div class="insight-label">⚠️ Bài học về tín dụng dùng cho đầu cơ</div>
+        <p>Werner nhấn mạnh: <strong>Tín dụng tạo ra cho đầu cơ không thể được hoàn trả</strong>. Chỉ có tín dụng được dùng cho mục đích sản xuất mới có thể hoàn trả từ thu nhập tạo ra bởi dự án. Tín dụng dùng cho đầu cơ <em>tất yếu</em> trở thành nợ xấu — đây là quy luật sắt của kinh tế học tín dụng mà BoJ biết rõ.</p>
+      </div>
+    </div>
+
+    <!-- S5 -->
+    <div class="section" id="s5">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2>Vỡ Bong Bóng & Suy Thoái Lớn (1973–1975)</h2>
+      </div>
+      <div style="margin-bottom:12px;">
+        <span class="tag red">Suy thoái</span>
+        <span class="tag red">Nợ xấu</span>
+        <span class="tag">Window Guidance siết</span>
+      </div>
+
+      <div class="prose">
+        <p>Đến năm 1973, đã rõ ràng rằng tín dụng dư thừa chỉ được dùng cho giao dịch đầu cơ đất đai và tài sản. Giá đất đô thị nhảy vọt <strong>hơn 50%</strong> từ 1972 đến 1974. Các khoản vay này sẽ không thể hoàn trả, nợ xấu tích lũy sẽ làm tổn thương ngân hàng, dẫn đến cắt giảm cho vay và suy thoái kinh tế.</p>
+        <p>Một lần nữa, chính <strong>Bank of Japan đóng vai trò là chất xúc tác</strong> cho sự đảo chiều chu kỳ kinh doanh — thông qua công cụ chính sách then chốt của mình: window guidance. Từ quý I/1973, BoJ áp đặt trần tăng trưởng tín dụng chặt chẽ.</p>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-date">Q1 / 1973</div>
+          <div class="tl-text">BoJ giảm tăng trưởng tín dụng xuống <strong>12,7% YoY</strong> — bắt đầu siết chặt</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Q2 / 1973</div>
+          <div class="tl-text">Hạn ngạch tín dụng giảm <strong>16%</strong> so với cùng kỳ năm trước</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Q3 / 1973</div>
+          <div class="tl-text">Hạn ngạch giảm <strong>24% YoY</strong></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Q4 / 1973</div>
+          <div class="tl-text">Hạn ngạch giảm <strong>41% YoY</strong></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Q1 / 1974</div>
+          <div class="tl-text"><strong>Giảm thảm hại 65,4% YoY</strong> — kiểm soát tín dụng chặt nhất trong lịch sử</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1975</div>
+          <div class="tl-text">Kiểm soát tín dụng chặt chẽ kéo dài <strong>đủ 2 năm</strong>. Nợ xấu tích lũy. Các hợp tác xã tín dụng đối mặt với rút tiền hàng loạt. MoF và BoJ phải cử quan chức đến Tỉnh Aichi để trấn an người gửi tiền.</div>
+        </div>
+      </div>
+
+      <div class="data-grid">
+        <div class="data-box">
+          <div class="data-box-val red">–84%</div>
+          <div class="data-box-label">Lợi nhuận doanh nghiệp 1975</div>
+        </div>
+        <div class="data-box">
+          <div class="data-box-val red">–19%</div>
+          <div class="data-box-label">Sản xuất công nghiệp 1973–75</div>
+        </div>
+        <div class="data-box">
+          <div class="data-box-val red">–25%</div>
+          <div class="data-box-label">Công suất sử dụng (1975 vs 1973)</div>
+        </div>
+        <div class="data-box">
+          <div class="data-box-val red">26%</div>
+          <div class="data-box-label">Lạm phát CPI 1974</div>
+        </div>
+        <div class="data-box">
+          <div class="data-box-val red">37%</div>
+          <div class="data-box-label">Lạm phát WPI 1974</div>
+        </div>
+        <div class="data-box">
+          <div class="data-box-val red">≈0%</div>
+          <div class="data-box-label">Tăng trưởng GDP thực 1974</div>
+        </div>
+      </div>
+
+      <div class="insight-card">
+        <div class="insight-label">💡 Vai trò nhân quả của BoJ vs Cú sốc dầu</div>
+        <p>Werner đưa ra bằng chứng phản biện quan điểm truyền thống: Nếu cú sốc dầu là nguyên nhân, thì tại sao thập niên 1990 — khi giá dầu gần như tăng gấp ba (12/1998–1/2000) và kích thích tài khóa còn lớn hơn nhiều so với 1970s — lại tạo ra <strong>giảm phát lớn nhất từ thập niên 1930</strong>? Biến số khác biệt duy nhất là: <em>chính sách tín dụng định lượng của BoJ</em>.</p>
+      </div>
+    </div>
+
+    <!-- S6 -->
+    <div class="section" id="s6">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2>Debút của Mieno & Maekawa</h2>
+      </div>
+      <div style="margin-bottom:12px;">
+        <span class="tag">1975–1978</span>
+        <span class="tag blue">Nhân vật lịch sử</span>
+      </div>
+
+      <div class="prose">
+        <p>Suy thoái kéo dài hơn và nghiêm trọng hơn dự báo. Dù có nhiều gói kích thích tài khóa (tháng 2, 3, 6/1975) và liên tục cắt giảm lãi suất, nền kinh tế không phục hồi. Tăng chi tiêu công và bơm tín dụng qua Tổ chức Cho vay nhà ở công cộng năm 1976 chỉ làm thâm hụt tài khóa tăng thêm.</p>
+        <p>Điều kiện cần thiết và đủ cho phục hồi kinh tế là <strong>tăng trưởng tín dụng</strong>. Cuối 1975 và đầu 1976, BoJ tăng trần tăng trưởng tín dụng window guidance — và kinh tế hồi phục theo.</p>
+      </div>
+
+      <div class="person-grid">
+        <div class="person-card">
+          <div class="person-name">Haruo Maekawa</div>
+          <div class="person-role">Phó Thống đốc BoJ</div>
+          <div class="person-desc">Phó Thống đốc BoJ trong giai đoạn này. Sau này tên ông gắn với "Báo cáo Maekawa" (1986) — kêu gọi Nhật Bản cải cách cơ cấu và mở cửa thị trường.</div>
+        </div>
+        <div class="person-card">
+          <div class="person-name">Yasushi Mieno</div>
+          <div class="person-role">Trưởng Ban Ngân hàng BoJ (1975–78)</div>
+          <div class="person-desc">Người trực tiếp vận hành window guidance từ tháng 4/1975 đến tháng 2/1978. Sau này trở thành Thống đốc BoJ và là người siết chặt tín dụng để vỡ bong bóng thập niên 1980.</div>
+        </div>
+      </div>
+
+      <div class="insight-card">
+        <div class="insight-label">🎓 Bài học lịch sử quan trọng</div>
+        <p>Chính trong vai trò Trưởng Ban Ngân hàng BoJ (1975–78), <strong>Mieno đã học được bài học sâu sắc</strong> về cơ chế vận hành của window guidance — cách tạo ra bong bóng và cách phá vỡ nó. Kiến thức này sẽ được áp dụng có chủ đích hai thập kỷ sau, khi ông trở thành Thống đốc BoJ và chủ động vỡ bong bóng lớn của thập niên 1980.</p>
+      </div>
+    </div>
+
+    <!-- S7 -->
+    <div class="section" id="s7">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2>Khủng hoảng kích thích Tư duy lại Hệ thống</h2>
+      </div>
+      <div style="margin-bottom:12px;">
+        <span class="tag">1974–1980s</span>
+        <span class="tag blue">Cải cách cơ cấu</span>
+        <span class="tag">Phê bình hệ thống</span>
+      </div>
+
+      <div class="prose">
+        <p>Khi tăng trưởng GDP thực — sau 20 năm gần như liên tục tăng trưởng hai chữ số — đột ngột co lại, điều này không thể không kích thích nhiều suy ngẫm. Sự suy thoái sâu và kéo dài dẫn đến nhiều nghiên cứu tại các viện nghiên cứu, bao gồm tại MITI, kết luận rằng Nhật Bản sẽ không thể duy trì tốc độ tăng trưởng kinh tế cao trước đây dựa trên định hướng xuất khẩu.</p>
+        <p>Các <strong>ngành công nghiệp suy thoái</strong> cần tái cơ cấu: vận tải biển, hóa dầu, lò điện, soda, bìa cứng, chưng cất đường. MITI khuyến nghị chuyển các ngành này ra nước ngoài, sang các nước châu Á — Nhật Bản nên trở thành <em>"quốc gia đầu não"</em>, giám sát các nhà máy ở nhiều quốc gia.</p>
+      </div>
+
+      <div class="quote-block">
+        <p>"Không thể phủ nhận rằng sự tồn tại của các tập đoàn công cộng kém hiệu quả và thường độc đoán, việc mở rộng trợ cấp nông nghiệp do các chính sách bảo hộ quá mức, hệ thống y tế quốc gia kém hiệu quả, sự can thiệp hành chính quá mức của chính phủ vào doanh nghiệp tư nhân... đã kết hợp để tạo ra ngân sách tài chính phình to và bộ máy chính phủ khổng lồ."</p>
+        <div class="quote-src">— Nhà kinh tế Nhật đương thời, đầu thập niên 1980</div>
+      </div>
+
+      <div class="prose">
+        <p>Lời kêu gọi Nhật Bản chuyển từ định hướng xuất khẩu sang mở rộng nhu cầu nội địa ngày càng tăng. Để thúc đẩy tiêu dùng, cần thay đổi những cản trở cơ cấu đã củng cố xu hướng tiết kiệm và môi trường chống tiêu dùng. Chính trong giai đoạn này, lời phê bình người Nhật là <em>"những con nghiện công việc sống trong chuồng thỏ"</em> được nghe thấy ở nước ngoài.</p>
+      </div>
+    </div>
+
+    <!-- S8 -->
+    <div class="section" id="s8">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2>Debút Sakakibara — "Hệ thống Huy động Thời Chiến"</h2>
+      </div>
+      <div style="margin-bottom:12px;">
+        <span class="tag">1977</span>
+        <span class="tag blue">Bài báo lịch sử</span>
+        <span class="tag">Nhận diện hệ thống</span>
+      </div>
+
+      <div class="person-grid">
+        <div class="person-card">
+          <div class="person-name">Yukio Noguchi</div>
+          <div class="person-role">Quan chức MoF → Học giả</div>
+          <div class="person-desc">Rời MoF sang học thuật. Đồng tác giả bài báo 1977 và tiếp tục nghiên cứu học thuật. Là người đầu tiên công khai đặt tên cho bản chất thực của hệ thống kinh tế Nhật Bản.</div>
+        </div>
+        <div class="person-card">
+          <div class="person-name">Eisuke Sakakibara</div>
+          <div class="person-role">MoF → Thứ trưởng Tài chính (1997)</div>
+          <div class="person-desc">Trở lại MoF sau thời gian học thuật, leo lên vị trí Thứ trưởng năm 1997. Được mệnh danh là "Mr. Yen" vì vai trò quản lý tỷ giá hối đoái. Sự nghiệp là ví dụ về cách phê bình hệ thống vẫn có thể dung hòa với việc phục vụ hệ thống đó.</div>
+        </div>
+      </div>
+
+      <div class="insight-card">
+        <div class="insight-label">📜 Bài báo lịch sử 1977</div>
+        <p>Trong tạp chí cao cấp <em>Chūō Kōron</em>, Noguchi và Sakakibara là <strong>những quan chức công cộng đầu tiên và duy nhất</strong> công khai nhận diện bản chất thực của hệ thống kinh tế Nhật Bản. Họ đặt tên nó là <em>"hệ thống huy động kinh tế toàn diện thời chiến" (wartime system for total economic mobilization)</em> — và lập luận rằng hệ thống này đang sắp sụp đổ.</p>
+      </div>
+
+      <div class="compare-table">
+        <tr>
+          <th>Nhận định của Noguchi & Sakakibara (1977)</th>
+          <th>Thực tế xảy ra</th>
+        </tr>
+        <tr>
+          <td>Kinh tế Nhật thập niên 1920 có định hướng thị trường hơn nhiều</td>
+          <td>✓ Được Werner và nghiên cứu sau này xác nhận</td>
+        </tr>
+        <tr>
+          <td>Quan liêu kiểm soát đã áp đặt hệ thống chiến tranh trong thế chiến</td>
+          <td>✓ Là luận điểm trung tâm của Werner</td>
+        </tr>
+        <tr>
+          <td>Hệ thống này không thể tiếp tục với môi trường quốc tế hiện tại</td>
+          <td>✓ Đúng — nhưng hệ thống kéo dài thêm 20 năm</td>
+        </tr>
+        <tr>
+          <td>"Hệ thống thời chiến đang sắp sụp đổ" (1977)</td>
+          <td>✗ Hệ thống quá thành công để dễ bị từ bỏ — Noguchi phải lặp lại "lời chia tay" gần 20 năm sau</td>
+        </tr>
+        <tr>
+          <td>Kêu gọi cải cách toàn diện theo mô hình Mỹ</td>
+          <td>? — Điều này xảy ra, nhưng với hậu quả phức tạp (chủ đề của các chương sau)</td>
+        </tr>
+      </div>
+
+      <div class="prose">
+        <p>Thực tế là hệ thống này quá thành công để có thể bị từ bỏ dễ dàng. Nó đã tạo ra nhiều nhóm thụ hưởng: các tập đoàn kinh doanh, quan liêu quyền lực, chính trị gia trung gian — và cả đại đa số dân Nhật, những người có mức sống tăng lên nhanh chóng. Cuối cùng, cú sốc của thập niên 1970 vẫn không đủ mạnh để nói lời từ biệt với nền kinh tế chiến tranh.</p>
+      </div>
+    </div>
+
+    <!-- S9 -->
+    <div class="section" id="s9">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2>Kiểm soát Tín dụng cũng Thao túng Dư luận</h2>
+      </div>
+      <div style="margin-bottom:12px;">
+        <span class="tag red">Màn khói BoJ</span>
+        <span class="tag">Neoclassical → Monetarism</span>
+        <span class="tag blue">Quyền lực thông tin</span>
+      </div>
+
+      <div class="prose">
+        <p>Các lãnh đạo BoJ biết rõ rằng BoJ là tác nhân duy nhất có thể tạo ra phục hồi: Chính sách MoF nhằm thúc đẩy kinh tế — hạ lãi suất chiết khấu hay kích thích tài khóa — đều <strong>không thể hoạt động chừng nào BoJ không mở rộng tạo tín dụng</strong>. Miễn là BoJ không làm điều này, suy thoái sẽ tiếp tục.</p>
+        <p>Đến thập niên 1970, màn khói của BoJ về kiểm soát tín dụng đã hoạt động suốt một thập kỷ. Ngay cả tại MoF, ít người biết về nguyên nhân gốc rễ thực sự và vai trò then chốt của window guidance. Kinh tế học tân cổ điển đang bắt đầu thâm nhập vào Nhật Bản — và bộ phận kinh tế BoJ liên tục cho ra các bài viết thể hiện rằng <em>lãi suất là công cụ chính sách tiền tệ then chốt</em>.</p>
+      </div>
+
+      <div class="mechanism">
+        <div class="mechanism-title">Chiến lược thông tin của BoJ</div>
+        <div class="flow-chain">
+          <div class="flow-node gold">Window Guidance<br>= công cụ thực</div>
+          <div class="flow-arrow">→ ẩn giấu</div>
+          <div class="flow-node">BoJ quảng bá<br>lãi suất là công cụ chính</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node">Kinh tế tân cổ điển<br>+ Monetarism</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node red">Công chúng đổ lỗi<br>cho MoF & cơ cấu</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node green">BoJ được bảo vệ<br>khỏi truy cứu</div>
+        </div>
+      </div>
+
+      <div class="warning-card">
+        <div class="insight-label">⚠️ Quyền lực thực sự là quyền lực thông tin</div>
+        <p>Werner chỉ ra một điểm tinh tế và đáng lo ngại: Bằng cách kiểm soát <em>câu chuyện kinh tế</em> — quảng bá học thuyết lãi suất trong khi thực tế dùng window guidance — BoJ đã <strong>vô hiệu hóa khả năng giám sát của cả MoF lẫn công chúng</strong>. Đây không chỉ là chính sách tiền tệ; đây là chính sách thông tin phục vụ tích lũy quyền lực thể chế.</p>
+      </div>
+    </div>
+
+    <!-- S10 -->
+    <div class="section" id="s10">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2>BoJ Thắng Vòng Hai — Cuộc chiến Quyền lực với MoF</h2>
+      </div>
+      <div style="margin-bottom:12px;">
+        <span class="tag">1976</span>
+        <span class="tag red">BoJ vs MoF</span>
+        <span class="tag blue">Quyền lực thể chế</span>
+      </div>
+
+      <div class="prose">
+        <p>Các elite hiển thị chỉ có thể duy trì quyền lực chừng nào họ còn <em>mang lại kết quả</em>. Trong khi kinh tế Nhật tăng trưởng hai chữ số, người dân không phản đối sự kiểm soát chặt chẽ của các quan chức chính phủ và đặc biệt là Bộ Tài chính. Cuộc suy thoái lớn đầu tiên thời hậu chiến ngay lập tức kích hoạt phê bình sâu rộng về hệ thống kinh tế huy động, bao gồm cả bộ máy quan liêu quyền lực nhất về mặt pháp lý — Bộ Tài chính.</p>
+      </div>
+
+      <div class="insight-card">
+        <div class="insight-label">🎯 Phân tích quyền lực của Werner</div>
+        <p>Werner đặt câu hỏi: <strong>Vô tình hay có chủ ý?</strong> Dù là cách nào, các nhà ra quyết định tại BoJ đã <em>thắng trận thứ hai</em> trước MoF. Khi BoJ cuối cùng để nền kinh tế phục hồi năm 1976, MoF vẫn đang liếm vết thương. Nhưng các sự kiện thập niên 1970 chỉ là <strong>thử nghiệm quy mô nhỏ</strong>. Không thể phủ nhận rằng BoJ đã có kinh nghiệm quý báu trong cơ học của việc tạo ra và lan truyền một vụ bùng nổ tín dụng dựa trên bất động sản — và vụ sụp đổ tất yếu theo sau.</p>
+      </div>
+
+      <div class="compare-table">
+        <tr>
+          <th>Giai đoạn</th>
+          <th>Bong bóng 1970s (Chương 7)</th>
+          <th>Bong bóng 1980s (Chương 9+)</th>
+        </tr>
+        <tr>
+          <td><strong>Quy mô</strong></td>
+          <td>Nhỏ — thử nghiệm</td>
+          <td>Khổng lồ — lịch sử</td>
+        </tr>
+        <tr>
+          <td><strong>Cơ chế</strong></td>
+          <td>Window guidance nới lỏng quá mức, sau đó siết chặt đột ngột</td>
+          <td>Tương tự, nhưng quy mô và thời gian dài hơn nhiều</td>
+        </tr>
+        <tr>
+          <td><strong>Hậu quả</strong></td>
+          <td>Suy thoái 1974–75, kết thúc thời kỳ tăng trưởng cao</td>
+          <td>Suy thoái 1990s kéo dài hơn 10 năm — "Thập kỷ mất mát"</td>
+        </tr>
+        <tr>
+          <td><strong>Nhân vật BoJ</strong></td>
+          <td>Mieno học nghề (Trưởng Ban Ngân hàng)</td>
+          <td>Mieno áp dụng bài học (Thống đốc BoJ)</td>
+        </tr>
+        <tr>
+          <td><strong>Bài học được rút ra</strong></td>
+          <td>BoJ học cơ chế bong bóng; MoF mất uy tín</td>
+          <td>BoJ áp dụng có chủ đích để cơ cấu lại nền kinh tế</td>
+        </tr>
+      </div>
+
+      <div class="warning-card">
+        <div class="insight-label">⚠️ Hàm ý tối tăm của lịch sử</div>
+        <p>Nếu Werner đúng, thì các sự kiện 1972–1975 không phải là tai nạn hay sai lầm chính sách vô tình. Chúng là <strong>bằng chứng thực nghiệm và cơ sở học tập</strong> cho điều mà BoJ sẽ thực hiện một cách có ý thức hơn trong thập niên 1980. Điều này đặt ra câu hỏi sâu sắc về bản chất thực sự của "độc lập ngân hàng trung ương" và ai thực sự kiểm soát vận mệnh kinh tế của một quốc gia.</p>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+// ── NAVIGATION ──
+const sections = ['overview','s1','s2','s3','s4','s5','s6','s7','s8','s9','s10'];
+const navItems = document.querySelectorAll('.nav-item');
+
+function showSection(id) {
+  sections.forEach(s => {
+    const el = document.getElementById(s);
+    if (el) el.classList.remove('active');
+  });
+  const target = document.getElementById(id);
+  if (target) target.classList.add('active');
+
+  navItems.forEach(ni => {
+    const onclick = ni.getAttribute('onclick') || '';
+    if (onclick.includes("'" + id + "'")) ni.classList.add('active');
+    else ni.classList.remove('active');
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── NOTES PANEL ──
+let notesOpen = false;
+let currentTab = 0;
+let saveTimer = null;
+const STORAGE_KEYS = [
+  'princes7_notes_general',
+  'princes7_notes_bubble',
+  'princes7_notes_bust',
+  'princes7_notes_people'
+];
+
+function toggleNotes() {
+  notesOpen = !notesOpen;
+  document.getElementById('notes-panel').classList.toggle('open', notesOpen);
+  document.getElementById('overlay').classList.toggle('show', notesOpen);
+  document.getElementById('notesToggleBtn').classList.toggle('active', notesOpen);
+  if (notesOpen) loadNotes();
+}
+
+function switchTab(idx) {
+  // save current
+  saveCurrentNotes();
+  currentTab = idx;
+  document.querySelectorAll('.notes-tab').forEach((t, i) => {
+    t.classList.toggle('active', i === idx);
+  });
+  loadNotes();
+}
+
+function loadNotes() {
+  const editor = document.getElementById('notesEditor');
+  const saved = localStorage.getItem(STORAGE_KEYS[currentTab]);
+  editor.innerHTML = saved || '';
+  updateStatus('—', '');
+}
+
+function saveCurrentNotes() {
+  const editor = document.getElementById('notesEditor');
+  localStorage.setItem(STORAGE_KEYS[currentTab], editor.innerHTML);
+}
+
+function scheduleAutoSave() {
+  updateStatus('Đang lưu...', 'saving');
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    saveCurrentNotes();
+    updateStatus('Đã lưu ✓', 'saved');
+    setTimeout(() => updateStatus('—', ''), 2000);
+  }, 800);
+}
+
+function updateStatus(text, cls) {
+  const el = document.getElementById('saveStatus');
+  el.textContent = text;
+  el.className = 'notes-status ' + cls;
+}
+
+function formatDoc(cmd) {
+  document.getElementById('notesEditor').focus();
+  document.execCommand(cmd, false, null);
+  scheduleAutoSave();
+}
+
+function insertBullet() {
+  document.getElementById('notesEditor').focus();
+  document.execCommand('insertUnorderedList', false, null);
+  scheduleAutoSave();
+}
+
+function handleKeyDown(e) {
+  if (e.ctrlKey || e.metaKey) {
+    if (e.key === 'b') { e.preventDefault(); formatDoc('bold'); }
+    if (e.key === 'i') { e.preventDefault(); formatDoc('italic'); }
+    if (e.key === 'u') { e.preventDefault(); formatDoc('underline'); }
+  }
+}
+
+function clearNotes() {
+  if (confirm('Xóa toàn bộ ghi chú của tab này?')) {
+    document.getElementById('notesEditor').innerHTML = '';
+    saveCurrentNotes();
+    updateStatus('Đã xóa', 'saving');
+    setTimeout(() => updateStatus('—', ''), 1500);
+  }
+}
+
+function exportNotes() {
+  const tabs = ['Tổng', 'Bong_bóng_1972', 'Vỡ_bong_bóng', 'Nhân_vật'];
+  let allText = '=== GHI CHÚ CHƯƠNG 7 — PRINCES OF THE YEN ===\n\n';
+  STORAGE_KEYS.forEach((key, i) => {
+    const content = localStorage.getItem(key) || '';
+    // Strip HTML
+    const div = document.createElement('div');
+    div.innerHTML = content;
+    const text = div.textContent || div.innerText || '';
+    if (text.trim()) {
+      allText += `--- ${tabs[i]} ---\n${text.trim()}\n\n`;
+    }
+  });
+
+  const blob = new Blob([allText], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ghi_chu_chuong7_princes_of_the_yen.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Load notes on open
+window.addEventListener('load', () => {
+  // Optional: pre-check if any notes exist
+});
+</script>
+</body>
+</html>

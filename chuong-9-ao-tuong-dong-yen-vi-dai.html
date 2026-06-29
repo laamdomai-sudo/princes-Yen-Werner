@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chương 9 — Princes of the Yen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --cream: #faf8f3;
+    --paper: #f4f0e8;
+    --bone: #ede8dc;
+    --ink: #1a1714;
+    --ink-light: #3d3830;
+    --ink-muted: #7a7165;
+    --accent: #1b5e8a;        /* blue — chương này về bong bóng tín dụng */
+    --accent-light: #2477ae;
+    --accent-pale: #e6f0f8;
+    --accent2: #b5340a;       /* đỏ — crash/bust */
+    --accent2-pale: #f5e8e2;
+    --gold: #c9922a;
+    --gold-pale: #fdf4e0;
+    --green: #2d6a4f;
+    --green-pale: #e8f4ee;
+    --border: #d9d3c7;
+    --shadow: rgba(26,23,20,0.08);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: #0f2d45;
+    color: var(--cream);
+    padding: 2.2rem 3rem 1.8rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 80% 50%, rgba(27,94,138,0.25) 0%, transparent 70%),
+      repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(255,255,255,0.025) 60px);
+  }
+  .header-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.18em;
+    color: #7eb8e0; text-transform: uppercase;
+    margin-bottom: 0.5rem; position: relative;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; line-height: 1.2;
+    position: relative;
+  }
+  .header-sub {
+    font-family: 'Playfair Display', serif;
+    font-style: italic; font-size: 1.1rem;
+    color: #a8c8e0; margin-top: 0.3rem; position: relative;
+  }
+  .header-meta {
+    margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;
+    position: relative;
+  }
+  .meta-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.1em;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #a8c8e0; padding: 0.3rem 0.8rem; border-radius: 2px;
+  }
+  .header-phase {
+    position: relative;
+    display: flex; gap: 0; margin-top: 1.2rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px; overflow: hidden;
+    width: fit-content;
+  }
+  .phase-item {
+    padding: 0.4rem 1.1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.63rem; letter-spacing: 0.1em; text-transform: uppercase;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .phase-item:last-child { border-right: none; }
+  .phase-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .dot-green { background: #4caf8a; }
+  .dot-yellow { background: #e6b84a; }
+  .dot-red { background: #e05a3a; }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 0;
+    min-height: calc(100vh - 140px);
+  }
+
+  /* ── MAIN ── */
+  .main-content { padding: 2rem 2.5rem; border-right: 1px solid var(--border); }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex; flex-wrap: wrap; gap: 0;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .tab-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.07em; text-transform: uppercase;
+    background: none; border: none;
+    border-bottom: 3px solid transparent; margin-bottom: -2px;
+    padding: 0.65rem 1rem; cursor: pointer;
+    color: var(--ink-muted); transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--ink); background: var(--bone); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--accent-pale); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 700;
+    color: var(--ink); margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .section-icon {
+    font-size: 1rem; background: var(--accent-pale); color: var(--accent);
+    width: 28px; height: 28px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 4px; flex-shrink: 0;
+  }
+  .section-icon.red { background: var(--accent2-pale); color: var(--accent2); }
+
+  /* ── CARD ── */
+  .card {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 6px; padding: 1.4rem; margin-bottom: 1.4rem;
+    box-shadow: 0 1px 4px var(--shadow);
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700; color: var(--ink);
+    margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+  }
+  .tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.15rem 0.5rem; border-radius: 2px; font-weight: 500;
+  }
+  .tag-blue { background: var(--accent-pale); color: var(--accent); }
+  .tag-red  { background: var(--accent2-pale); color: var(--accent2); }
+  .tag-gold { background: var(--gold-pale); color: var(--gold); }
+  .tag-green { background: var(--green-pale); color: var(--green); }
+
+  p.body-text {
+    color: var(--ink-light); font-size: 0.93rem;
+    line-height: 1.75; margin-bottom: 0.7rem;
+  }
+  p.body-text:last-child { margin-bottom: 0; }
+
+  /* ── STAT GRID ── */
+  .stat-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.8rem; margin: 1rem 0;
+  }
+  .stat-box {
+    background: var(--paper); border: 1px solid var(--border);
+    border-radius: 5px; padding: 0.9rem; text-align: center;
+  }
+  .stat-box.danger { border-color: #e0a090; background: #fff5f2; }
+  .stat-box.good  { border-color: #90c8a8; background: #f0faf4; }
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700; color: var(--accent);
+    line-height: 1; display: block; margin-bottom: 0.3rem;
+  }
+  .stat-number.red { color: var(--accent2); }
+  .stat-number.gold { color: var(--gold); }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-muted); line-height: 1.3;
+  }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-pale);
+    padding: 1rem 1.2rem; margin: 1.1rem 0;
+    border-radius: 0 5px 5px 0;
+    font-size: 0.9rem; color: var(--ink-light);
+    font-style: italic; line-height: 1.65;
+  }
+  .callout.red  { border-left-color: var(--accent2); background: var(--accent2-pale); }
+  .callout.gold { border-left-color: var(--gold); background: var(--gold-pale); font-style: normal; }
+  .callout.dark { border-left-color: #555; background: #f4f2ef; font-style: normal; }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 1.8rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 0.5rem; top: 0.4rem; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .tl-item { position: relative; margin-bottom: 1.2rem; }
+  .tl-item::before {
+    content: ''; position: absolute;
+    left: -1.35rem; top: 0.35rem;
+    width: 9px; height: 9px;
+    background: var(--accent); border-radius: 50%;
+    border: 2px solid var(--cream); outline: 1px solid var(--accent);
+  }
+  .tl-item.red::before { background: var(--accent2); outline-color: var(--accent2); }
+  .tl-year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; font-weight: 500; color: var(--accent);
+    letter-spacing: 0.08em; margin-bottom: 0.2rem;
+  }
+  .tl-item.red .tl-year { color: var(--accent2); }
+  .tl-text { font-size: 0.9rem; color: var(--ink-light); line-height: 1.6; }
+
+  /* ── INSIGHT LIST ── */
+  .insight-list { list-style: none; }
+  .insight-list li {
+    display: flex; gap: 0.8rem;
+    padding: 0.7rem 0; border-bottom: 1px solid var(--bone);
+    font-size: 0.91rem; color: var(--ink-light); line-height: 1.6;
+    align-items: flex-start;
+  }
+  .insight-list li:last-child { border-bottom: none; }
+  .insight-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; font-weight: 500; color: #fff;
+    background: var(--accent); border-radius: 50%;
+    width: 20px; height: 20px;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 0.15rem;
+  }
+  .insight-num.red { background: var(--accent2); }
+
+  /* ── CYCLE BOXES ── */
+  .cycle-row {
+    display: flex; align-items: center; gap: 0.35rem;
+    flex-wrap: wrap; margin: 0.5rem 0;
+  }
+  .cyc-box {
+    padding: 0.4rem 0.75rem; border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem; font-weight: 500;
+    border: 1px solid; white-space: nowrap;
+  }
+  .cyc-blue  { background: var(--accent-pale); border-color: #91bcd8; color: var(--accent); }
+  .cyc-green { background: var(--green-pale); border-color: #90c8a8; color: var(--green); }
+  .cyc-gold  { background: var(--gold-pale); border-color: #d4b060; color: #7a5800; }
+  .cyc-red   { background: var(--accent2-pale); border-color: #e0a090; color: var(--accent2); }
+  .cyc-arr   { color: var(--ink-muted); font-size: 1.1rem; }
+
+  /* ── COMPARISON TABLE ── */
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .cmp-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--paper); padding: 0.6rem 0.9rem;
+    text-align: left; color: var(--ink-muted);
+    border-bottom: 2px solid var(--border);
+  }
+  .cmp-table td {
+    padding: 0.65rem 0.9rem; border-bottom: 1px solid var(--bone);
+    color: var(--ink-light); vertical-align: top; line-height: 1.5;
+  }
+  .cmp-table tr:last-child td { border-bottom: none; }
+  .cmp-table td:first-child { font-weight: 600; color: var(--ink); width: 36%; }
+
+  /* ── SIDEBAR ── */
+  .sidebar { background: var(--paper); padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+  .sidebar-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--ink-muted); margin-bottom: 0.8rem;
+    padding-bottom: 0.4rem; border-bottom: 1px solid var(--border);
+  }
+
+  /* ── TERMS ── */
+  .term-item { margin-bottom: 0.9rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--bone); }
+  .term-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .term-name { font-family: 'Playfair Display', serif; font-size: 0.88rem; font-weight: 700; color: var(--ink); margin-bottom: 0.2rem; }
+  .term-def  { font-size: 0.8rem; color: var(--ink-muted); line-height: 1.5; }
+
+  /* ── NOTES ── */
+  .notes-panel { background: #fff; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; box-shadow: 0 1px 4px var(--shadow); }
+  .notes-header { background: #0f2d45; color: var(--cream); padding: 0.7rem 1rem; display: flex; align-items: center; justify-content: space-between; }
+  .notes-header-title { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; }
+  .notes-toolbar { display: flex; gap: 2px; padding: 0.4rem 0.7rem; background: var(--bone); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .tool-btn {
+    background: #fff; border: 1px solid var(--border); border-radius: 3px;
+    padding: 0.25rem 0.5rem; cursor: pointer; font-size: 0.78rem;
+    color: var(--ink-light); transition: all 0.15s; font-weight: 600;
+    line-height: 1; display: flex; align-items: center; justify-content: center;
+    min-width: 26px; height: 26px;
+  }
+  .tool-btn:hover { background: var(--accent-pale); color: var(--accent); border-color: var(--accent); }
+  .tool-sep { width: 1px; background: var(--border); margin: 0 3px; align-self: stretch; }
+  .notes-area {
+    min-height: 260px; max-height: 380px;
+    padding: 0.9rem 1rem; overflow-y: auto; outline: none;
+    font-family: 'Source Serif 4', serif; font-size: 0.88rem;
+    color: var(--ink); line-height: 1.75; caret-color: var(--accent);
+  }
+  .notes-area:empty::before { content: 'Ghi chú Chương 9…'; color: var(--ink-muted); pointer-events: none; font-style: italic; }
+  .notes-area ul { padding-left: 1.3rem; }
+  .notes-area li { margin-bottom: 0.2rem; }
+  .notes-footer { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.9rem; background: var(--paper); border-top: 1px solid var(--border); }
+  .save-status { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; color: var(--ink-muted); display: flex; align-items: center; gap: 0.35rem; }
+  .save-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-muted); transition: background 0.3s; }
+  .save-dot.saved { background: var(--green); }
+  .save-dot.dirty { background: var(--gold); }
+  .clear-btn { background: none; border: none; font-size: 0.7rem; color: var(--ink-muted); cursor: pointer; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; padding: 0.2rem 0.4rem; border-radius: 3px; transition: all 0.15s; }
+  .clear-btn:hover { color: var(--accent2); background: var(--accent2-pale); }
+
+  /* ── QUICK STATS ── */
+  .quick-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+  .qs-box { background: #fff; border: 1px solid var(--border); border-radius: 5px; padding: 0.8rem; text-align: center; }
+  .qs-num { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; line-height: 1; display: block; margin-bottom: 0.25rem; }
+  .qs-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-muted); line-height: 1.3; }
+
+  /* ── METER BAR ── */
+  .meter-row { margin-bottom: 0.7rem; }
+  .meter-label { font-size: 0.8rem; color: var(--ink-light); margin-bottom: 0.25rem; display: flex; justify-content: space-between; }
+  .meter-label span { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--ink-muted); }
+  .meter-bar { height: 6px; background: var(--bone); border-radius: 3px; overflow: hidden; }
+  .meter-fill { height: 100%; border-radius: 3px; }
+  .fill-blue  { background: var(--accent); }
+  .fill-red   { background: var(--accent2); }
+  .fill-gold  { background: var(--gold); }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { border-top: 1px solid var(--border); }
+    header { padding: 1.5rem; }
+    .main-content { padding: 1.5rem; }
+  }
+
+  strong { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-eyebrow">Princes of the Yen · Chương 9</div>
+  <div class="header-title">The Great Yen Illusion</div>
+  <div class="header-sub">Credit Bubble and Bust — Bong Bóng Tín Dụng & Sụp Đổ</div>
+  <div class="header-meta">
+    <span class="meta-badge">📅 Giai đoạn: 1985–1993</span>
+    <span class="meta-badge">🏦 Tín dụng ngân hàng</span>
+    <span class="meta-badge">🏘️ Bong bóng bất động sản</span>
+    <span class="meta-badge">💥 Credit Crunch</span>
+  </div>
+  <div class="header-phase">
+    <div class="phase-item"><span class="phase-dot dot-green"></span>Boom 1985–1989</div>
+    <div class="phase-item"><span class="phase-dot dot-yellow"></span>Đỉnh 1989–1990</div>
+    <div class="phase-item"><span class="phase-dot dot-red"></span>Bust 1990–1993</div>
+  </div>
+</header>
+
+<div class="layout">
+  <div class="main-content">
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('overview', this)">Tổng quan</button>
+      <button class="tab-btn" onclick="switchTab('bubble', this)">Bong bóng</button>
+      <button class="tab-btn" onclick="switchTab('credit', this)">Cơ chế tín dụng</button>
+      <button class="tab-btn" onclick="switchTab('bust', this)">Sụp đổ</button>
+      <button class="tab-btn" onclick="switchTab('illusion', this)">Yen Illusion</button>
+      <button class="tab-btn" onclick="switchTab('insights', this)">Luận điểm chính</button>
+    </div>
+
+    <!-- TAB 1: OVERVIEW -->
+    <div id="tab-overview" class="tab-panel active">
+      <div class="section-title"><span class="section-icon">📌</span>Bức tranh toàn cảnh Chương 9</div>
+
+      <div class="stat-grid">
+        <div class="stat-box good">
+          <span class="stat-number">+240%</span>
+          <span class="stat-label">Cổ phiếu (Nikkei) 1985–1989</span>
+        </div>
+        <div class="stat-box good">
+          <span class="stat-number">+245%</span>
+          <span class="stat-label">Giá đất 1985–1989</span>
+        </div>
+        <div class="stat-box danger">
+          <span class="stat-number red">−32%</span>
+          <span class="stat-label">Nikkei sụt năm 1990</span>
+        </div>
+        <div class="stat-box danger">
+          <span class="stat-number red">¥99T</span>
+          <span class="stat-label">Tổng "bubble loans" cuối 1989</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Luận điểm trung tâm của Chương 9 <span class="tag tag-blue">Thesis</span></div>
+        <p class="body-text">Werner đưa ra câu trả lời cho toàn bộ các bí ẩn của Chương 8: <strong>Tín dụng ngân hàng — chứ không phải lãi suất, không phải M1/M2 — mới là biến số thực sự giải thích toàn bộ chu kỳ bùng nổ và sụp đổ</strong> của kinh tế Nhật Bản thập niên 1980–1990.</p>
+        <p class="body-text">Các mô hình kinh tế học chuẩn (Keynesian, tiền tệ, cổ điển) đều thất bại vì chúng bỏ qua vai trò của việc tạo tín dụng. Khi ngân hàng tạo ra tiền và bơm vào thị trường bất động sản và chứng khoán, giá tài sản tăng — không phản ánh giá trị thực mà chỉ phản ánh lượng tiền mới được bơm vào. Và khi ngừng bơm, bong bóng vỡ.</p>
+        <div class="callout gold">
+          <strong>Công thức của Werner:</strong> Tín dụng cho GDP = tăng trưởng thực + ổn định giá cả. Tín dụng cho phi-GDP (bất động sản, chứng khoán) = lạm phát tài sản = bong bóng. Đây là phân biệt cốt lõi mà tất cả các cơ quan kinh tế chính thống đã bỏ qua.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">3 Bí ẩn mà Chương 9 giải quyết <span class="tag tag-blue">Giải đáp</span></div>
+        <ul class="insight-list">
+          <li>
+            <span class="insight-num">1</span>
+            <div><strong>Tại sao giá đất/cổ phiếu Nhật tăng phi lý?</strong> → Không phải năng suất đất cao, không phải khan hiếm đất, mà vì ngân hàng đổ tín dụng thặng dư vào thị trường tài sản. Cung tiền mới + cung đất cố định = giá đất tăng.</div>
+          </li>
+          <li>
+            <span class="insight-num">2</span>
+            <div><strong>Tại sao mô hình tiền tệ (M1/M2 vs. GDP) sụp đổ?</strong> → Vì tiền mới tạo ra ngày càng nhiều được dùng cho giao dịch tài sản (không thuộc GDP), nên M2 tăng trong khi GDP-based credit growth lại bị tách biệt. Chỉ phần tín dụng dùng cho GDP mới dự báo được tăng trưởng.</div>
+          </li>
+          <li>
+            <span class="insight-num">3</span>
+            <div><strong>Tại sao dòng vốn Nhật bùng nổ rồi đột ngột đảo chiều 1991?</strong> → Tín dụng bất động sản trong nước tương quan chặt chẽ với dòng vốn nước ngoài. Khi ngân hàng ngừng bơm tín dụng bất động sản → tiền tươi không còn → không còn vốn để mua tài sản nước ngoài.</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- TAB 2: BUBBLE -->
+    <div id="tab-bubble" class="tab-panel">
+      <div class="section-title"><span class="section-icon">📈</span>Hình thành bong bóng 1985–1989</div>
+
+      <div class="card">
+        <div class="card-title">Giá đất — Nghịch lý và Vô lý <span class="tag tag-red">Anomaly</span></div>
+        <p class="body-text">Từ giữa thập niên 1980, giá đất và cổ phiếu Nhật tăng ở mức không tưởng:</p>
+        <div class="stat-grid">
+          <div class="stat-box">
+            <span class="stat-number gold">5.2×</span>
+            <span class="stat-label">Tỷ lệ Giá đất / GDP Nhật (1989) — Mỹ chỉ 0.7×</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number gold">100×</span>
+            <span class="stat-label">Giá đất ở Tokyo so với New York (thuê nhà chỉ gấp 4×)</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number gold">4×</span>
+            <span class="stat-label">Tổng giá trị đất Nhật so với Mỹ dù diện tích chỉ 1/26</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number gold">70</span>
+            <span class="stat-label">P/E ratio Nikkei đỉnh 1989 (từ mức 35 năm 1984)</span>
+          </div>
+        </div>
+        <div class="callout">
+          Giá trị khu vườn Hoàng Cung Tokyo bằng toàn bộ bang California. Một quận trung tâm Tokyo (Chiyoda) đắt hơn toàn bộ Canada. Các nhà kinh tế bào chữa: "khan hiếm đất", "năng suất cao". Nhưng tỷ lệ thuê/giá đất hoàn toàn bác bỏ cả hai lý giải đó.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Zai-tech — Khi nhà sản xuất trở thành nhà đầu cơ <span class="tag tag-gold">Zai-tech</span></div>
+        <p class="body-text">Hiện tượng <strong>zai-tech</strong> (財テク — financial technology) lan tràn: các tập đoàn sản xuất lớn lập bộ phận tài chính riêng để đầu cơ chứng khoán và bất động sản thay vì tập trung vào sản xuất cốt lõi.</p>
+        <ul class="insight-list">
+          <li><span class="insight-num">•</span>Nissan và nhiều nhà sản xuất lớn kiếm <strong>nhiều lợi nhuận hơn từ đầu cơ tài chính</strong> so với kinh doanh sản xuất chính.</li>
+          <li><span class="insight-num">•</span>Tokkin accounts: các môi giới chứng khoán quản lý tiền đầu cơ tự quyết định thay mặt doanh nghiệp.</li>
+          <li><span class="insight-num">•</span>Ngân hàng lập công ty tài chính phi ngân hàng (nonbank) để cho vay bất động sản — tránh quy định trực tiếp.</li>
+          <li><span class="insight-num">•</span>Cá nhân thế chấp đất để vay tiền đánh chứng khoán và mua thêm đất.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Bùng nổ kinh tế thực: Đầu tư ồ ạt <span class="tag tag-blue">Economic Boom</span></div>
+        <p class="body-text">Không phải toàn bộ tín dụng đổ vào đầu cơ. Một phần đáng kể tài trợ cho đầu tư thực, tạo ra bùng nổ kinh tế thực sự:</p>
+        <div class="stat-grid">
+          <div class="stat-box good">
+            <span class="stat-number">¥303T</span>
+            <span class="stat-label">Tổng đầu tư vốn 1985–1989</span>
+          </div>
+          <div class="stat-box good">
+            <span class="stat-number">5.5%</span>
+            <span class="stat-label">Tăng trưởng GDP danh nghĩa TB 1986–1990</span>
+          </div>
+          <div class="stat-box good">
+            <span class="stat-number">2%</span>
+            <span class="stat-label">Tỷ lệ thất nghiệp kỷ lục thấp (3/1990)</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number gold">1.3%</span>
+            <span class="stat-label">CPI bình quân nửa sau 1980s — lạm phát rất thấp!</span>
+          </div>
+        </div>
+        <div class="callout dark">
+          Đây là "bí ẩn thứ tư": Tăng trưởng cao + thị trường lao động căng thẳng + lạm phát gần như bằng 0. Theo lý thuyết Phillips, điều này không thể xảy ra. Giải thích: tiền thặng dư không vào hàng tiêu dùng mà vào tài sản — CPI ổn định nhưng "asset price inflation" thì bùng nổ.
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: CREDIT MECHANISM -->
+    <div id="tab-credit" class="tab-panel">
+      <div class="section-title"><span class="section-icon">🏦</span>Cơ chế Tín dụng — Trái tim của bong bóng</div>
+
+      <div class="card">
+        <div class="card-title">Hệ thống thế chấp đất (Land Collateral) <span class="tag tag-blue">Cơ chế cốt lõi</span></div>
+        <p class="body-text">Kể từ khủng hoảng ngân hàng 1927, hệ thống ngân hàng Nhật dựa trên <strong>thế chấp bằng đất</strong> — không phải dòng tiền dự phóng. Quy trình chuẩn:</p>
+        <div class="cycle-row">
+          <div class="cyc-box cyc-blue">Rosenka (giá đất chính thức)</div>
+          <span class="cyc-arr">→</span>
+          <div class="cyc-box cyc-green">Ngân hàng cho vay tối đa 70%</div>
+          <span class="cyc-arr">→</span>
+          <div class="cyc-box cyc-gold">MoF quy định tỷ lệ 70% như "biên an toàn"</div>
+        </div>
+        <div class="cycle-row" style="margin-top:0.7rem;">
+          <div class="cyc-box cyc-gold">Giá đất tăng</div>
+          <span class="cyc-arr">→</span>
+          <div class="cyc-box cyc-blue">Tài sản thế chấp tăng giá trị</div>
+          <span class="cyc-arr">→</span>
+          <div class="cyc-box cyc-green">Ngân hàng sẵn sàng cho vay thêm</div>
+          <span class="cyc-arr">→</span>
+          <div class="cyc-box cyc-gold">Giá đất tiếp tục tăng</div>
+        </div>
+        <p class="body-text" style="margin-top:0.9rem;">Mô hình cash-flow phổ biến ở Mỹ bị coi là "quá rủi ro" vì không thể dự đoán doanh thu. Hệ quả: loan officer không hỏi tiền vay làm gì, chỉ nhìn vào giá trị đất thế chấp.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Falacy of Composition — Sai lầm tập thể <span class="tag tag-red">Systemic Risk</span></div>
+        <p class="body-text">Mỗi ngân hàng coi giá đất là "biến ngoại sinh" — thứ nó không thể ảnh hưởng. Nhưng khi <em>tất cả các ngân hàng</em> đồng loạt tăng cho vay bất động sản:</p>
+
+        <div class="cycle-row">
+          <div class="cyc-box cyc-blue">Từng ngân hàng thấy đất là "tài sản an toàn"</div>
+          <span class="cyc-arr">→</span>
+          <div class="cyc-box cyc-gold">Tất cả cùng tăng cho vay BĐS</div>
+          <span class="cyc-arr">→</span>
+          <div class="cyc-box cyc-red">Giá đất bị đẩy lên bởi chính tín dụng</div>
+          <span class="cyc-arr">→</span>
+          <div class="cyc-box cyc-blue">Vẫn nghĩ mình đang an toàn</div>
+        </div>
+
+        <div class="callout red">
+          <strong>Kết quả:</strong> Ngân hàng <em>hệ thống hóa việc đánh giá thấp rủi ro tín dụng</em>. Mỗi ngân hàng nghĩ rủi ro của mình là thấp, nhưng chính hành động tập thể của họ đang tạo ra rủi ro hệ thống cực lớn — rủi ro chỉ hiện ra khi tín dụng dừng lại và giá đất sụt.
+        </div>
+
+        <p class="body-text">Werner cho thấy đây là cùng một cơ chế đã tạo ra: bong bóng cổ phiếu Mỹ thập niên 1920, bùng nổ bất động sản Scandinavia 1980s, khủng hoảng Đông Á 1997, và khủng hoảng thế chấp Mỹ 2008.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Ngân hàng săn đuổi người vay — "Kane Amari" <span class="tag tag-gold">Easy Money</span></div>
+        <p class="body-text">Từ 1987, vai trò đảo ngược hoàn toàn: <strong>ngân hàng chạy theo khách hàng</strong> để ép tiền vào tay họ. Câu chuyện điển hình:</p>
+        <div class="callout dark">
+          Giám đốc chi nhánh một ngân hàng lớn tự đến gặp chủ công ty bất động sản nhỏ — người chưa bao giờ giao dịch với ngân hàng này — và khẩn cầu: <em>"Hãy vay tiền của chúng tôi đi, đừng lo lãi suất hay lịch trả nợ."</em> Ngân hàng tự vẽ ra dự án đất trị giá ¥600M và lập hợp đồng mua bán giả ¥1,1 tỷ, để cho vay ¥770M — thực tế là cho vay 128% giá trị thật trong khi vẫn ghi trên sổ sách là "70%".
+        </div>
+        <p class="body-text">Người dân gọi hiện tượng này là <strong>"kane amari"</strong> (tiền thừa). Các chuyên gia kinh tế phủ nhận: "Quý vị không hiểu công nghệ tài chính tinh vi." Cuối cùng người thường lại đúng, chuyên gia lại sai.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Quy mô tín dụng bong bóng cuối 1989 <span class="tag tag-red">Dữ liệu</span></div>
+        <div class="meter-row">
+          <div class="meter-label">Cho vay bất động sản<span>12% tổng dư nợ</span></div>
+          <div class="meter-bar"><div class="meter-fill fill-red" style="width:44%"></div></div>
+        </div>
+        <div class="meter-row">
+          <div class="meter-label">Cho vay xây dựng (thực chất BĐS)<span>5.4%</span></div>
+          <div class="meter-bar"><div class="meter-fill fill-red" style="width:20%"></div></div>
+        </div>
+        <div class="meter-row">
+          <div class="meter-label">Cho vay qua nonbanks vào BĐS<span>~10%</span></div>
+          <div class="meter-bar"><div class="meter-fill fill-red" style="width:37%"></div></div>
+        </div>
+        <div class="meter-row">
+          <div class="meter-label" style="font-weight:700; color:var(--accent2)">TỔNG "BUBBLE LOANS"<span style="color:var(--accent2)">~27% tổng dư nợ</span></div>
+          <div class="meter-bar" style="height:8px"><div class="meter-fill fill-red" style="width:100%"></div></div>
+        </div>
+        <p class="body-text" style="margin-top:0.8rem; font-size:0.85rem;">Tương đương <strong>¥98,9 nghìn tỷ = 25% GDP danh nghĩa 1989</strong>. Chưa tính các khoản vay "dịch vụ" và "sản xuất" bị dùng cho zai-tech. Thực tế hơn 1/3 tổng tín dụng là lãng phí, không tạo ra giá trị thực.</p>
+      </div>
+    </div>
+
+    <!-- TAB 4: BUST -->
+    <div id="tab-bust" class="tab-panel">
+      <div class="section-title"><span class="section-icon red">💥</span>Sụp đổ 1990–1993</div>
+
+      <div class="card">
+        <div class="card-title">Chuỗi phản ứng dây chuyền <span class="tag tag-red">Domino Effect</span></div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-year">Giữa 1989</div>
+            <div class="tl-text"><strong>Ngân hàng đột ngột hạn chế tăng trưởng cho vay.</strong> Không có thêm tiền mới chảy vào thị trường tài sản.</div>
+          </div>
+          <div class="tl-item red">
+            <div class="tl-year">Cuối 1989</div>
+            <div class="tl-text">Nikkei 225 đạt đỉnh mọi thời đại: <strong>¥38.915</strong> (29/12/1989).</div>
+          </div>
+          <div class="tl-item red">
+            <div class="tl-year">1990</div>
+            <div class="tl-text">Nikkei <strong>sụt 32%</strong> chỉ trong một năm. Giá đất bắt đầu giảm. Các lô đất đầu cơ ở quận thương mại mất tới <strong>80%</strong> "giá trị thị trường". Nhà đầu tư Nhật bán tháo tài sản nước ngoài ồ ạt.</div>
+          </div>
+          <div class="tl-item red">
+            <div class="tl-year">1991–1992</div>
+            <div class="tl-text">Phá sản doanh nghiệp và cá nhân tăng lên mức kỷ lục thời hậu chiến. Một số ngân hàng và công ty chứng khoán mất khả năng thanh toán. Ngân hàng không chỉ ngừng cho vay BĐS mà còn <strong>cắt cả tín dụng với doanh nghiệp sản xuất</strong> không liên quan đến bong bóng.</div>
+          </div>
+          <div class="tl-item red">
+            <div class="tl-year">1992</div>
+            <div class="tl-text">Khủng hoảng tín dụng (credit crunch) tới các doanh nghiệp vừa và nhỏ — nhóm chiếm <strong>70% việc làm</strong> toàn quốc. Thất nghiệp thực sự bắt đầu tăng, thu nhập khả dụng giảm.</div>
+          </div>
+          <div class="tl-item red">
+            <div class="tl-year">1993+</div>
+            <div class="tl-text">Nhật Bản rơi vào <strong>suy thoái dài nhất, sâu nhất từ thập niên 1930</strong>. Ước tính hơn 5 triệu người mất việc. Phần lớn chuyên gia kinh tế không dự báo được và tiếp tục kê đơn sai.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Tại sao lãi suất thấp không cứu được nền kinh tế? <span class="tag tag-red">Sai lầm chính sách</span></div>
+        <p class="body-text">BoJ hạ lãi suất 9 lần liên tiếp từ 1991. Phần lớn nhà kinh tế dự đoán hồi phục. Thực tế: không có hồi phục. Werner cảnh báo từ cuối 1991 rằng sẽ có khủng hoảng tín dụng lớn và suy thoái nặng — bị giới chuyên gia bác bỏ.</p>
+        <div class="callout red">
+          <strong>Lý do lãi suất thất bại:</strong> Tăng trưởng kinh tế chỉ xảy ra khi có <em>thêm tín dụng được tạo ra</em>. Lãi suất thấp không tự động tạo ra tín dụng khi ngân hàng đang ngập trong nợ xấu và sợ rủi ro. Đến 1993–1994, đại bộ phận chuyên gia ở Tokyo vẫn phủ nhận có credit crunch — vì lý thuyết của họ không có chỗ cho khái niệm "tạo tín dụng".
+        </div>
+        <table class="cmp-table" style="margin-top:0.8rem;">
+          <tr><th>Chỉ số</th><th>Dự đoán chuẩn</th><th>Thực tế</th></tr>
+          <tr><td>Lãi suất giảm → tăng trưởng</td><td>Phục hồi kinh tế</td><td>Suy thoái tiếp tục</td></tr>
+          <tr><td>Nguyên nhân suy thoái</td><td>"Cấu trúc kinh tế Nhật"</td><td>Credit crunch do nợ xấu ngân hàng</td></tr>
+          <tr><td>Giải pháp được đề xuất</td><td>Cải cách cấu trúc</td><td>Thực ra cần bơm tín dụng trực tiếp</td></tr>
+          <tr><td>Thất nghiệp</td><td>Tạm thời, tự điều chỉnh</td><td>>5 triệu người mất việc dài hạn</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 5: YEN ILLUSION -->
+    <div id="tab-illusion" class="tab-panel">
+      <div class="section-title"><span class="section-icon">🌐</span>Great Yen Illusion — Nhật In Tiền Mua Thế Giới</div>
+
+      <div class="card">
+        <div class="card-title">Giải thích dứt điểm bí ẩn Chương 8 <span class="tag tag-blue">Resolution</span></div>
+        <p class="body-text">Werner trình bày bằng chứng đồ thị (Figure 9.3): tín dụng ngân hàng vào bất động sản trong nước và dòng vốn đầu tư nước ngoài <strong>tương quan chặt chẽ một cách bất thường</strong> đối với dữ liệu tài chính vốn đã biến động cao.</p>
+
+        <div class="callout gold">
+          <strong>Cơ chế:</strong> Tín dụng bất động sản bùng nổ → tài sản của công ty bảo hiểm nhân thọ và định chế tài chính phình to → họ cần đầu tư thêm → portfolio diversification → mua tài sản nước ngoài (T-bonds Mỹ, bất động sản Hawaii, California…). Ngoài ra, nhà phát triển BĐS lớn vay trực tiếp từ ngân hàng Nhật rồi mua đất tại Mỹ — tuyến thẳng từ tín dụng trong nước sang mua tài sản nước ngoài.
+        </div>
+
+        <div class="cycle-row">
+          <div class="cyc-box cyc-blue">BoJ bơm tín dụng</div>
+          <span class="cyc-arr">→</span>
+          <div class="cyc-box cyc-gold">Ngân hàng tạo tiền mới</div>
+          <span class="cyc-arr">→</span>
+          <div class="cyc-box cyc-green">BĐS trong nước tăng giá</div>
+          <span class="cyc-arr">→</span>
+          <div class="cyc-box cyc-blue">Tài sản định chế tăng</div>
+          <span class="cyc-arr">→</span>
+          <div class="cyc-box cyc-gold">Mua tài sản nước ngoài</div>
+        </div>
+
+        <div class="cycle-row" style="margin-top:0.5rem;">
+          <div class="cyc-box cyc-red">BoJ siết tín dụng (1989)</div>
+          <span class="cyc-arr">→</span>
+          <div class="cyc-box cyc-red">BĐS sụt giá</div>
+          <span class="cyc-arr">→</span>
+          <div class="cyc-box cyc-red">Tài sản định chế co lại</div>
+          <span class="cyc-arr">→</span>
+          <div class="cyc-box cyc-red">Bán tháo tài sản nước ngoài (1991)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Tại sao đồng Yên không mất giá? <span class="tag tag-blue">Money Illusion</span></div>
+        <p class="body-text">Thông thường: in tiền quá mức → lạm phát → đồng tiền mất giá → thị trường ngoại hối phát hiện. Nhật Bản "qua mặt" được cơ chế này vì:</p>
+        <ul class="insight-list">
+          <li><span class="insight-num">1</span><strong>CPI ổn định:</strong> Tiền thừa không chảy vào hàng tiêu dùng → CPI không tăng → không có tín hiệu lạm phát.</li>
+          <li><span class="insight-num">2</span><strong>WPI giảm:</strong> Nhập khẩu rẻ hơn (giá dầu, hàng hóa) → chỉ số giá bán buôn thực tế âm bình quân −2,7%/năm.</li>
+          <li><span class="insight-num">3</span><strong>Thặng dư thương mại lớn:</strong> Nhật xuất khẩu mạnh → cầu mua yên lớn → yên có xu hướng mạnh trên thị trường FX.</li>
+          <li><span class="insight-num">4</span><strong>Yên tăng giá thực sự:</strong> 1985–1987, yên tăng <strong>106%</strong> — hoàn toàn che khuất tín hiệu in tiền quá mức.</li>
+        </ul>
+        <div class="callout">
+          Nhật Bản thực hiện thành công điều mà Mỹ đã làm trong thập niên 1950–1960: dùng đồng đô-la làm "vỏ bọc" để in tiền mua công ty châu Âu. Nhật dùng thặng dư thương mại làm vỏ bọc để in yên mua tài sản toàn cầu. Đó là <em>"Great Yen Illusion" — Ảo giác Yên vĩ đại</em>: cả thế giới không nhận ra Nhật đang in tiền vì CPI ổn định và yên lại còn mạnh.
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: INSIGHTS -->
+    <div id="tab-insights" class="tab-panel">
+      <div class="section-title"><span class="section-icon">💡</span>Luận điểm chính & Ý nghĩa rộng hơn</div>
+
+      <div class="card">
+        <div class="card-title">6 Luận điểm cốt lõi Chương 9</div>
+        <ul class="insight-list">
+          <li>
+            <span class="insight-num">1</span>
+            <div><strong>Tín dụng — không phải lãi suất hay M1/M2 — là biến số quyết định.</strong> Tất cả các trường phái kinh tế chuẩn (Keynesian, tiền tệ, cổ điển) đều thất bại ở Nhật vì bỏ qua phân biệt giữa tín dụng cho GDP và tín dụng cho tài sản tài chính.</div>
+          </li>
+          <li>
+            <span class="insight-num">2</span>
+            <div><strong>Bong bóng tài sản không phải do "lòng tham thị trường" — mà do tín dụng ngân hàng quá mức.</strong> Cơ chế: ngân hàng tạo tiền → tiền chảy vào tài sản cố định supply (đất) → giá tăng → vòng lặp tự phát triển. Không cần "sự điên rồ của đám đông" — chỉ cần tín dụng nhiều hơn thu nhập.</div>
+          </li>
+          <li>
+            <span class="insight-num">3</span>
+            <div><strong>Fallacy of Composition là bẫy hệ thống không tránh khỏi.</strong> Trong môi trường thế chấp đất, khi từng ngân hàng hành động hợp lý cá thể thì kết quả tập thể lại là rủi ro hệ thống cực lớn. Không ai cố tình tạo ra bong bóng nhưng kết quả là tất cả cùng tạo ra.</div>
+          </li>
+          <li>
+            <span class="insight-num">4</span>
+            <div><strong>Suy thoái là tất yếu và có thể dự báo được — nhưng không phải bằng lãi suất.</strong> Werner cảnh báo từ 1991. Quy tắc đơn giản: khi tổng nợ tăng nhanh hơn thu nhập (GDP), thảm họa chỉ là vấn đề thời gian. Không cần mô hình phức tạp.</div>
+          </li>
+          <li>
+            <span class="insight-num">5</span>
+            <div><strong>"Great Yen Illusion": Nhật in tiền mua thế giới mà không ai biết.</strong> Vì tiền không chảy vào CPI mà vào tài sản, và yên lại còn mạnh lên do thặng dư thương mại, nên cả thế giới bị "tiền ảo" qua mặt trong suốt một thập kỷ.</div>
+          </li>
+          <li>
+            <span class="insight-num">6</span>
+            <div><strong>Mô hình tín dụng giải thích tất cả trong một framework thống nhất:</strong> bong bóng tài sản → phồng giá đất → dòng vốn nước ngoài → sụp đổ 1990 → đảo chiều vốn 1991 → credit crunch → suy thoái kéo dài. Cái mà trước đây là 5 bí ẩn riêng biệt nay là một câu chuyện nhất quán.</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Ý nghĩa toàn cầu — Cùng một cơ chế <span class="tag tag-blue">Universal Pattern</span></div>
+        <table class="cmp-table">
+          <tr><th>Quốc gia / Giai đoạn</th><th>Tài sản thế chấp</th><th>Kết quả</th></tr>
+          <tr><td>Mỹ, thập niên 1920</td><td>Cổ phiếu</td><td>Đại Khủng hoảng 1929</td></tr>
+          <tr><td>Nhật Bản, 1985–1990</td><td>Đất đai</td><td>Suy thoái "Thập kỷ mất mát"</td></tr>
+          <tr><td>Scandinavia, 1980s</td><td>Bất động sản</td><td>Khủng hoảng ngân hàng đầu 1990s</td></tr>
+          <tr><td>Đông Á, 1990s</td><td>BĐS + cổ phiếu</td><td>Khủng hoảng châu Á 1997</td></tr>
+          <tr><td>Mỹ + Anh, 2000s</td><td>Nhà ở (subprime)</td><td>Khủng hoảng tài chính toàn cầu 2008</td></tr>
+        </table>
+        <div class="callout gold" style="margin-top:0.9rem;">
+          Werner khẳng định: <em>"What happens after a credit boom is also always the same: a credit bust, a banking or financial crisis with scandals, and a recession."</em> — Đây không phải ngẫu nhiên. Đây là quy luật. Và việc hiểu quy luật này cho phép cả dự báo lẫn phòng tránh — nếu có ai chịu lắng nghe.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main-content -->
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- KEY TERMS -->
+    <div>
+      <div class="sidebar-section-title">Thuật ngữ trọng yếu</div>
+      <div class="term-item">
+        <div class="term-name">Zai-tech (財テク)</div>
+        <div class="term-def">Financial technology — hoạt động đầu cơ tài chính của doanh nghiệp phi tài chính (sản xuất, thương mại), đặc biệt phổ biến tại Nhật cuối 1980s.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">Tokkin Account</div>
+        <div class="term-def">Tài khoản ủy thác đặc biệt, cho phép công ty ủy quyền cho môi giới đầu cơ chứng khoán tự quyết định — không cần công bố kết quả theo giá thị trường.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">Rosenka</div>
+        <div class="term-def">Giá đất chính thức hàng năm do nhà nước Nhật Bản công bố, dùng làm cơ sở để ngân hàng tính toán mức cho vay thế chấp (tối đa 70% rosenka).</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">Fallacy of Composition</div>
+        <div class="term-def">Sai lầm khi cho rằng điều đúng với từng cá thể (ngân hàng) cũng đúng với tổng thể. Ở đây: từng ngân hàng nghĩ đất là "tài sản an toàn" nhưng tập thể ngân hàng lại đang đẩy giá đất lên không bền vững.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">Kane Amari (金余り)</div>
+        <div class="term-def">"Tiền thừa" — cụm từ dân gian Nhật mô tả hiện tượng ngân hàng chạy theo ép tiền vào tay khách hàng. Người dân nói đúng, chuyên gia kinh tế lại bác bỏ.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">Money Illusion / Yen Illusion</div>
+        <div class="term-def">Hiện tượng lạm phát tiền tệ không phản ánh qua CPI (do tiền chảy vào tài sản, không vào hàng tiêu dùng), khiến thị trường và nhà đầu tư quốc tế không nhận ra Nhật đang in tiền quá mức.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">Credit Crunch</div>
+        <div class="term-def">Đóng băng tín dụng: ngân hàng ngừng/hạn chế mạnh cho vay do lo ngại nợ xấu, dù lãi suất thấp. Hậu quả: doanh nghiệp vừa nhỏ mất nguồn vốn, GDP co lại.</div>
+      </div>
+    </div>
+
+    <!-- QUICK STATS -->
+    <div>
+      <div class="sidebar-section-title">Số liệu nhanh</div>
+      <div class="quick-stat-grid">
+        <div class="qs-box">
+          <span class="qs-num" style="color:var(--accent)">¥38,915</span>
+          <div class="qs-label">Nikkei đỉnh 12/1989</div>
+        </div>
+        <div class="qs-box">
+          <span class="qs-num" style="color:var(--accent2)">−80%</span>
+          <div class="qs-label">Đất đầu cơ thương mại mất giá</div>
+        </div>
+        <div class="qs-box">
+          <span class="qs-num" style="color:var(--gold)">27%</span>
+          <div class="qs-label">Bubble loans / tổng dư nợ 1989</div>
+        </div>
+        <div class="qs-box">
+          <span class="qs-num" style="color:var(--accent2)">5M+</span>
+          <div class="qs-label">Người Nhật mất việc làm</div>
+        </div>
+        <div class="qs-box">
+          <span class="qs-num" style="color:var(--accent)">106%</span>
+          <div class="qs-label">Yên tăng giá 1985–1987</div>
+        </div>
+        <div class="qs-box">
+          <span class="qs-num" style="color:var(--gold)">9×</span>
+          <div class="qs-label">BoJ hạ lãi suất từ 1991 — không hiệu quả</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div>
+      <div class="sidebar-section-title">Ghi chú cá nhân</div>
+      <div class="notes-panel">
+        <div class="notes-header">
+          <span class="notes-header-title">📝 My Notes — Chương 9</span>
+          <span class="save-status">
+            <span class="save-dot" id="saveDot"></span>
+            <span id="saveText">chưa có ghi chú</span>
+          </span>
+        </div>
+        <div class="notes-toolbar">
+          <button class="tool-btn" title="Bôi đậm" onclick="execCmd('bold')"><b>B</b></button>
+          <button class="tool-btn" title="In nghiêng" onclick="execCmd('italic')"><i>I</i></button>
+          <button class="tool-btn" title="Gạch chân" onclick="execCmd('underline')"><u>U</u></button>
+          <div class="tool-sep"></div>
+          <button class="tool-btn" title="Bullet list" onclick="execCmd('insertUnorderedList')">• –</button>
+          <button class="tool-btn" title="Numbered list" onclick="execCmd('insertOrderedList')">1.</button>
+          <div class="tool-sep"></div>
+          <button class="tool-btn" title="Undo" onclick="execCmd('undo')">↩</button>
+          <button class="tool-btn" title="Redo" onclick="execCmd('redo')">↪</button>
+        </div>
+        <div class="notes-area" id="notesArea" contenteditable="true" spellcheck="true" oninput="onNotesInput()"></div>
+        <div class="notes-footer">
+          <span class="save-status">
+            <span class="save-dot" id="saveDot2"></span>
+            <span id="saveText2">Tự động lưu</span>
+          </span>
+          <button class="clear-btn" onclick="clearNotes()">Xoá</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /sidebar -->
+</div><!-- /layout -->
+
+<script>
+  function switchTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function execCmd(cmd) {
+    document.getElementById('notesArea').focus();
+    document.execCommand(cmd, false, null);
+    onNotesInput();
+  }
+
+  const STORAGE_KEY = 'ch9_princes_yen_notes';
+  let saveTimer = null;
+
+  function setStatus(state) {
+    ['saveDot','saveDot2'].forEach(id => {
+      const d = document.getElementById(id);
+      d.className = 'save-dot ' + (state || '');
+    });
+    const msgs = { saved:'Đã lưu', dirty:'Chưa lưu…', '':'Chưa có ghi chú' };
+    const msg = msgs[state] || 'Tự động lưu';
+    document.getElementById('saveText').textContent = msg;
+    document.getElementById('saveText2').textContent = msg;
+  }
+
+  function onNotesInput() {
+    setStatus('dirty');
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveNotes, 1200);
+  }
+
+  function saveNotes() {
+    try {
+      localStorage.setItem(STORAGE_KEY, document.getElementById('notesArea').innerHTML);
+      setStatus('saved');
+    } catch(e) {}
+  }
+
+  function loadNotes() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved && saved.trim()) {
+        document.getElementById('notesArea').innerHTML = saved;
+        setStatus('saved');
+      }
+    } catch(e) {}
+  }
+
+  function clearNotes() {
+    if (!confirm('Xoá toàn bộ ghi chú Chương 9?')) return;
+    document.getElementById('notesArea').innerHTML = '';
+    try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+    setStatus('');
+  }
+
+  window.addEventListener('DOMContentLoaded', loadNotes);
+  window.addEventListener('beforeunload', saveNotes);
+</script>
+</body>
+</html>

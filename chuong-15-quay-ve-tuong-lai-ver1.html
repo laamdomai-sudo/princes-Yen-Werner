@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chương 15 — Trở Về Tương Lai: Chủ Nghĩa Tư Bản Kiểu Mỹ</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #f5f2ed;
+    --bg2:      #fffefb;
+    --bg3:      #f0ece4;
+    --bg4:      #e8e2d8;
+    --border:   #d6cfc3;
+    --border2:  #c4bdb0;
+    --ink:      #1c1a17;
+    --ink2:     #4a443c;
+    --ink3:     #8a8278;
+    --ink4:     #b0a898;
+    --rust:     #b5451b;
+    --rust2:    #d4561f;
+    --rust-bg:  #fdf0ea;
+    --rust-bdr: #e8b49a;
+    --olive:    #5a6e2a;
+    --olive2:   #6d8433;
+    --olive-bg: #f2f5e8;
+    --olive-bdr:#bfcd8a;
+    --navy:     #1e3a5f;
+    --navy2:    #2657a0;
+    --navy-bg:  #eaf0f8;
+    --navy-bdr: #9ab8d8;
+    --amber:    #8a5c00;
+    --amber2:   #b07800;
+    --amber-bg: #fdf6e3;
+    --amber-bdr:#e0c870;
+    --sw:       272px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    line-height: 1.75;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ─── SIDEBAR ─── */
+  #sidebar {
+    width: var(--sw);
+    min-height: 100vh;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    position: fixed; top: 0; left: 0;
+    display: flex; flex-direction: column;
+    z-index: 100; overflow-y: auto;
+  }
+  .sb-head {
+    padding: 22px 18px 16px;
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #fff8f4 0%, #fff9f0 100%);
+  }
+  .sb-head::before {
+    content: '15';
+    position: absolute; right: 8px; top: 2px;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 80px; font-weight: 700;
+    color: rgba(181,69,27,0.07);
+    line-height: 1; pointer-events: none;
+  }
+  .sb-book { font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: var(--ink4); margin-bottom: 6px; }
+  .sb-title { font-family: 'Libre Baskerville', serif; font-size: 14.5px; font-weight: 700; color: var(--rust); line-height: 1.35; }
+  .sb-ch { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--amber); margin-top: 5px; }
+  .sb-nav { padding: 10px 0; flex: 1; }
+  .nav-group { font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: var(--ink4); padding: 8px 18px 3px; }
+  .ni { display: flex; align-items: flex-start; gap: 10px; padding: 7px 18px; cursor: pointer; transition: background .15s; border-left: 2px solid transparent; }
+  .ni:hover { background: var(--bg3); }
+  .ni.active { background: var(--rust-bg); border-left-color: var(--rust); }
+  .ni-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink4); padding-top: 2px; flex-shrink: 0; width: 20px; }
+  .ni.active .ni-num { color: var(--rust); }
+  .ni-label { font-size: 12px; line-height: 1.4; color: var(--ink3); }
+  .ni.active .ni-label { color: var(--ink); font-weight: 500; }
+  .sb-notes {
+    margin: 8px 12px 16px;
+    background: var(--rust-bg);
+    border: 1px solid var(--rust-bdr);
+    color: var(--rust);
+    padding: 8px 12px; border-radius: 6px;
+    cursor: pointer; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; text-align: center; transition: all .2s;
+  }
+  .sb-notes:hover { background: #fbe5d8; }
+  .sb-notes.active { background: #fad5c3; border-color: var(--rust); font-weight: 500; }
+
+  /* ─── MAIN ─── */
+  #main { margin-left: var(--sw); flex: 1; padding-bottom: 80px; }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: linear-gradient(135deg, #fff8f4 0%, #fffaf0 50%, #f5f0e8 100%);
+    border-bottom: 2px solid var(--border);
+    padding: 56px 64px 44px;
+    position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 320px; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(181,69,27,0.04));
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; text-transform: uppercase; letter-spacing: 3px;
+    color: var(--rust2); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-eyebrow::after { content:''; flex:1; max-width:64px; height:1px; background:var(--rust-bdr); }
+  .hero h1 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 40px; font-weight: 700;
+    color: var(--ink); line-height: 1.15;
+    margin-bottom: 8px; max-width: 680px;
+  }
+  .hero-sub {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic; font-size: 18px;
+    color: var(--ink3); margin-bottom: 34px;
+  }
+  .hero-stats { display: flex; gap: 28px; flex-wrap: wrap; }
+  .hs { text-align: center; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 20px; }
+  .hs-val { font-family: 'Libre Baskerville', serif; font-size: 26px; font-weight: 700; color: var(--rust); }
+  .hs-val.ol { color: var(--olive); }
+  .hs-val.nv { color: var(--navy); }
+  .hs-val.am { color: var(--amber); }
+  .hs-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; text-transform: uppercase; letter-spacing: 1px; color: var(--ink4); margin-top: 3px; }
+
+  /* ─── CONTENT ─── */
+  #content { padding: 0 64px; }
+  .sec { padding: 50px 0 12px; border-bottom: 1px solid var(--border); display: none; animation: fu .28s ease; }
+  .sec.active { display: block; }
+  @keyframes fu { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .sec-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 26px; }
+  .sec-num {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--rust); background: var(--rust-bg);
+    border: 1px solid var(--rust-bdr); padding: 4px 8px;
+    border-radius: 4px; flex-shrink: 0; margin-top: 5px;
+  }
+  .sec h2 { font-family: 'Libre Baskerville', serif; font-size: 26px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+
+  /* ─── PROSE ─── */
+  .prose p { color: var(--ink2); margin-bottom: 14px; font-size: 14.5px; line-height: 1.82; max-width: 740px; }
+  .prose strong { color: var(--ink); font-weight: 600; }
+  .prose em { color: var(--rust2); font-style: italic; }
+
+  /* ─── CARDS ─── */
+  .card { border-radius: 8px; padding: 18px 22px; margin: 20px 0; max-width: 740px; border: 1px solid; }
+  .card.rust  { background: var(--rust-bg);  border-color: var(--rust-bdr);  border-left: 3px solid var(--rust); }
+  .card.olive { background: var(--olive-bg); border-color: var(--olive-bdr); border-left: 3px solid var(--olive); }
+  .card.navy  { background: var(--navy-bg);  border-color: var(--navy-bdr);  border-left: 3px solid var(--navy); }
+  .card.amber { background: var(--amber-bg); border-color: var(--amber-bdr); border-left: 3px solid var(--amber); }
+  .card-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .card.rust  .card-label { color: var(--rust); }
+  .card.olive .card-label { color: var(--olive); }
+  .card.navy  .card-label { color: var(--navy); }
+  .card.amber .card-label { color: var(--amber); }
+  .card p { font-size: 14px; line-height: 1.75; margin: 0; color: var(--ink2); }
+  .card p + p { margin-top: 8px; }
+  .card strong { color: var(--ink); font-weight: 600; }
+  .card em { font-style: italic; color: var(--rust2); }
+
+  /* ─── DATA GRID ─── */
+  .dg { display: grid; grid-template-columns: repeat(auto-fit,minmax(165px,1fr)); gap: 12px; margin: 20px 0; max-width: 740px; }
+  .db { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; text-align: center; }
+  .db-val { font-family: 'Libre Baskerville', serif; font-size: 24px; font-weight: 700; color: var(--rust); }
+  .db-val.ol { color: var(--olive); }
+  .db-val.nv { color: var(--navy); }
+  .db-val.am { color: var(--amber); }
+  .db-val.ne { color: var(--ink3); }
+  .db-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--ink4); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .db-sub { font-size: 11.5px; color: var(--ink3); margin-top: 3px; }
+
+  /* ─── TIMELINE ─── */
+  .tl { max-width: 740px; margin: 20px 0; padding-left: 22px; border-left: 2px solid var(--border2); }
+  .tl-item { margin-bottom: 20px; position: relative; }
+  .tl-item::before { content:''; position:absolute; left:-29px; top:7px; width:10px; height:10px; border-radius:50%; background:var(--rust); border:2px solid var(--bg); }
+  .tl-date { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--amber2); margin-bottom: 3px; }
+  .tl-text { font-size: 14px; color: var(--ink2); line-height: 1.65; }
+  .tl-text strong { color: var(--ink); font-weight: 600; }
+
+  /* ─── FLOW BOX ─── */
+  .flow-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 22px; margin: 20px 0; max-width: 740px; }
+  .flow-title { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--rust); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; }
+  .flow-chain { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .fn { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; font-size: 12px; color: var(--ink2); line-height: 1.3; text-align: center; }
+  .fn.r  { background:var(--rust-bg);  border-color:var(--rust-bdr);  color:var(--rust); }
+  .fn.ol { background:var(--olive-bg); border-color:var(--olive-bdr); color:var(--olive); }
+  .fn.nv { background:var(--navy-bg);  border-color:var(--navy-bdr);  color:var(--navy); }
+  .fn.am { background:var(--amber-bg); border-color:var(--amber-bdr); color:var(--amber2); }
+  .fa { color: var(--ink4); font-size: 15px; }
+
+  /* ─── QUOTE ─── */
+  .q { border-left: 3px solid var(--border2); padding: 14px 20px; margin: 20px 0; max-width: 660px; background: var(--bg3); border-radius: 0 8px 8px 0; }
+  .q p { font-family: 'Libre Baskerville', serif; font-style: italic; color: var(--ink2); font-size: 15px; line-height: 1.72; margin: 0 0 7px; }
+  .q-src { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink4); }
+
+  /* ─── TABLE ─── */
+  .dt { width: 100%; max-width: 740px; border-collapse: collapse; margin: 20px 0; }
+  .dt th { background: var(--bg3); color: var(--rust); font-family: 'JetBrains Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 1px; padding: 9px 14px; text-align: left; border: 1px solid var(--border); }
+  .dt td { padding: 9px 14px; border: 1px solid var(--border); font-size: 13px; color: var(--ink2); line-height: 1.5; vertical-align: top; }
+  .dt tr:nth-child(even) td { background: var(--bg3); }
+
+  /* ─── COMPARE ─── */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 740px; margin: 20px 0; }
+  .cmp-col { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; }
+  .cmp-head { font-family: 'Libre Baskerville', serif; font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+  .cmp-head.r  { color: var(--rust); }
+  .cmp-head.ol { color: var(--olive); }
+  .cmp-head.nv { color: var(--navy); }
+  .cmp-item { font-size: 13px; color: var(--ink3); padding: 5px 0; border-bottom: 1px solid var(--border); line-height: 1.5; }
+  .cmp-item:last-child { border-bottom: none; }
+  .cmp-item strong { color: var(--ink); }
+
+  /* ─── OV GRID ─── */
+  .og { display: grid; grid-template-columns: repeat(auto-fit,minmax(265px,1fr)); gap: 14px; margin: 20px 0; max-width: 740px; }
+  .oc { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 18px; cursor: pointer; transition: all .2s; }
+  .oc:hover { border-color: var(--rust-bdr); box-shadow: 0 2px 12px rgba(181,69,27,0.08); transform: translateY(-2px); }
+  .oc-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink4); margin-bottom: 7px; }
+  .oc-title { font-family: 'Libre Baskerville', serif; font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 7px; line-height: 1.3; }
+  .oc-sum { font-size: 12.5px; color: var(--ink3); line-height: 1.6; }
+
+  /* ─── TAGS ─── */
+  .tag { display:inline-block; background:var(--rust-bg); border:1px solid var(--rust-bdr); color:var(--rust); font-family:'JetBrains Mono',monospace; font-size:10px; padding:2px 8px; border-radius:20px; margin:2px; letter-spacing:.4px; }
+  .tag.ol { background:var(--olive-bg); border-color:var(--olive-bdr); color:var(--olive); }
+  .tag.nv { background:var(--navy-bg); border-color:var(--navy-bdr); color:var(--navy); }
+  .tag.am { background:var(--amber-bg); border-color:var(--amber-bdr); color:var(--amber2); }
+
+  /* ─── BAR CHART ─── */
+  .bar-wrap { max-width: 740px; margin: 20px 0; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px 22px; }
+  .bar-title { font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--ink4); margin-bottom: 16px; }
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 10px; }
+  .bar-year { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink3); width: 36px; flex-shrink: 0; text-align: right; }
+  .bar-track { flex: 1; height: 18px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding: 0 8px; }
+  .bar-fill-val { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #fff; font-weight: 500; white-space: nowrap; }
+  .bar-fill.rust  { background: linear-gradient(90deg, #c04a20, #d4561f); }
+  .bar-fill.olive { background: linear-gradient(90deg, #5a6e2a, #6d8433); }
+  .bar-fill.navy  { background: linear-gradient(90deg, #1e3a5f, #2657a0); }
+
+  /* ─── DECADE BOX ─── */
+  .decade-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; max-width: 740px; margin: 20px 0; }
+  .decade-card { border-radius: 8px; padding: 16px 18px; border: 1px solid; }
+  .decade-card.a { background:#fff8f4; border-color:var(--rust-bdr); }
+  .decade-card.b { background:#f4f7ee; border-color:var(--olive-bdr); }
+  .decade-card.c { background:#eef4fb; border-color:var(--navy-bdr); }
+  .dc-period { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500; margin-bottom:6px; }
+  .decade-card.a .dc-period { color:var(--rust); }
+  .decade-card.b .dc-period { color:var(--olive); }
+  .decade-card.c .dc-period { color:var(--navy); }
+  .dc-title { font-size:13px; font-weight:600; color:var(--ink); margin-bottom:6px; }
+  .dc-desc { font-size:12.5px; color:var(--ink3); line-height:1.6; }
+
+  /* ─── REFORM PILLARS ─── */
+  .pillars { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 12px; max-width: 740px; margin: 20px 0; }
+  .pillar { background: var(--bg2); border: 1px solid var(--border); border-top: 3px solid; border-radius: 6px; padding: 14px 16px; }
+  .pillar.rust  { border-top-color: var(--rust); }
+  .pillar.olive { border-top-color: var(--olive); }
+  .pillar.navy  { border-top-color: var(--navy); }
+  .pillar.amber { border-top-color: var(--amber2); }
+  .pillar-icon { font-size: 20px; margin-bottom: 8px; }
+  .pillar-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
+  .pillar-desc { font-size: 12px; color: var(--ink3); line-height: 1.6; }
+
+  /* ─── NOTES PANEL ─── */
+  #np { position:fixed; top:0; right:-500px; width:460px; height:100vh; background:var(--bg2); border-left:1px solid var(--border); display:flex; flex-direction:column; z-index:200; transition:right .3s cubic-bezier(.4,0,.2,1); box-shadow:-6px 0 24px rgba(0,0,0,0.1); }
+  #np.open { right:0; }
+  .nh { padding:18px 18px 0; border-bottom:1px solid var(--border); flex-shrink:0; background:var(--bg2); }
+  .nh-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .nt-title { font-family:'Libre Baskerville',serif; font-size:19px; font-weight:700; color:var(--rust); }
+  .nc { background:none; border:1px solid var(--border); color:var(--ink3); cursor:pointer; font-size:16px; padding:4px 8px; border-radius:4px; transition:all .15s; }
+  .nc:hover { background:var(--bg3); color:var(--ink); }
+  .tb { display:flex; gap:4px; padding-bottom:12px; flex-wrap:wrap; align-items:center; }
+  .tbb { background:var(--bg3); border:1px solid var(--border); color:var(--ink2); padding:5px 10px; border-radius:5px; cursor:pointer; font-size:13px; transition:all .15s; font-family:inherit; line-height:1; }
+  .tbb:hover { background:var(--bg4); color:var(--ink); }
+  .tbb.active-btn { background:var(--rust-bg); border-color:var(--rust-bdr); color:var(--rust); }
+  .sep { width:1px; height:22px; background:var(--border); margin:0 2px; }
+  .nst { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--ink4); margin-left:auto; }
+  .nst.saved { color:var(--olive); }
+  .nst.saving { color:var(--amber2); }
+  .ntabs { display:flex; border-bottom:1px solid var(--border); padding:0 18px; overflow-x:auto; }
+  .ntab { font-family:'JetBrains Mono',monospace; font-size:11px; padding:8px 12px; border-bottom:2px solid transparent; cursor:pointer; color:var(--ink4); white-space:nowrap; transition:all .15s; }
+  .ntab:hover { color:var(--ink2); }
+  .ntab.active { color:var(--rust); border-bottom-color:var(--rust); }
+  .nb { flex:1; overflow:hidden; display:flex; flex-direction:column; }
+  .nw { flex:1; overflow-y:auto; padding:14px 18px; }
+  .ne { min-height:100%; outline:none; color:var(--ink); font-family:'Libre Baskerville',serif; font-size:14.5px; line-height:1.8; caret-color:var(--rust); }
+  .ne:empty::before { content:'Ghi chú tại đây… Ctrl+B / I / U, bullet points.'; color:var(--ink4); font-style:italic; pointer-events:none; }
+  .ne ul { padding-left:20px; }
+  .ne li { margin-bottom:4px; }
+  .ne b { color:var(--ink); font-weight:700; }
+  .ne i { color:var(--rust2); }
+  .ne u { text-decoration-color:var(--rust); }
+  .nf { padding:10px 18px; border-top:1px solid var(--border); display:flex; gap:8px; flex-shrink:0; background:var(--bg2); }
+  .bcl { background:none; border:1px solid var(--border); color:var(--ink3); padding:6px 12px; border-radius:5px; cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:11px; transition:all .15s; }
+  .bcl:hover { border-color:var(--rust); color:var(--rust); }
+  .bex { background:var(--rust-bg); border:1px solid var(--rust-bdr); color:var(--rust); padding:6px 12px; border-radius:5px; cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:11px; transition:all .15s; margin-left:auto; }
+  .bex:hover { background:#fbd5c2; }
+
+  ::-webkit-scrollbar { width:5px; }
+  ::-webkit-scrollbar-track { background:var(--bg3); }
+  ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+  ::-webkit-scrollbar-thumb:hover { background:var(--ink4); }
+  #ov { display:none; position:fixed; inset:0; background:rgba(28,26,23,0.25); z-index:150; backdrop-filter:blur(2px); }
+  #ov.show { display:block; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-head">
+    <div class="sb-book">Princes of the Yen · Werner</div>
+    <div class="sb-title">Trở Về Tương Lai: Chủ Nghĩa Tư Bản Kiểu Mỹ</div>
+    <div class="sb-ch">Chương 15 · Dashboard</div>
+  </div>
+  <div class="sb-nav">
+    <div class="nav-group">Nội dung chương</div>
+    <div class="ni active" onclick="show('s0')"><span class="ni-num">00</span><span class="ni-label">Tổng quan chương</span></div>
+    <div class="ni" onclick="show('s1')"><span class="ni-num">01</span><span class="ni-label">MoF sụp đổ — BoJ thắng cuộc chiến</span></div>
+    <div class="ni" onclick="show('s2')"><span class="ni-num">02</span><span class="ni-label">Hai trụ cột tăng trưởng & Khủng hoảng</span></div>
+    <div class="ni" onclick="show('s3')"><span class="ni-num">03</span><span class="ni-label">Suy kiệt nguồn đầu vào — Bẫy tăng trưởng thấp</span></div>
+    <div class="ni" onclick="show('s4')"><span class="ni-num">04</span><span class="ni-label">Endaka & Làn sóng cải cách</span></div>
+    <div class="ni" onclick="show('s5')"><span class="ni-num">05</span><span class="ni-label">Từ tập thể sang cá nhân</span></div>
+    <div class="ni" onclick="show('s6')"><span class="ni-num">06</span><span class="ni-label">10 năm thay đổi Nhật Bản</span></div>
+    <div class="ni" onclick="show('s7')"><span class="ni-num">07</span><span class="ni-label">Mô hình thay thế — Con đường Đức</span></div>
+    <div class="ni" onclick="show('s8')"><span class="ni-num">08</span><span class="ni-label">Không có tranh luận công khai</span></div>
+    <div class="ni" onclick="show('s9')"><span class="ni-num">09</span><span class="ni-label">Phán quyết của Werner</span></div>
+    <div class="nav-group" style="margin-top:10px;">Công cụ</div>
+  </div>
+  <button class="sb-notes" id="nBtn" onclick="toggleNotes()">📝 Ghi chú của tôi</button>
+</nav>
+
+<div id="ov" onclick="toggleNotes()"></div>
+
+<!-- NOTES PANEL -->
+<div id="np">
+  <div class="nh">
+    <div class="nh-top">
+      <span class="nt-title">📝 Ghi chú</span>
+      <button class="nc" onclick="toggleNotes()">✕</button>
+    </div>
+    <div class="tb">
+      <button class="tbb" onclick="fmt('bold')" title="Ctrl+B"><b>B</b></button>
+      <button class="tbb" onclick="fmt('italic')" title="Ctrl+I"><i>I</i></button>
+      <button class="tbb" onclick="fmt('underline')" title="Ctrl+U"><u>U</u></button>
+      <div class="sep"></div>
+      <button class="tbb" onclick="fmt('insertUnorderedList')">• List</button>
+      <button class="tbb" onclick="fmt('insertOrderedList')">1. List</button>
+      <div class="sep"></div>
+      <button class="tbb" onclick="fmt('removeFormat')">✕ Fmt</button>
+      <span class="nst" id="nst">—</span>
+    </div>
+    <div class="ntabs">
+      <div class="ntab active" onclick="switchTab(0)">Tổng quan</div>
+      <div class="ntab" onclick="switchTab(1)">MoF vs BoJ</div>
+      <div class="ntab" onclick="switchTab(2)">Cải cách</div>
+      <div class="ntab" onclick="switchTab(3)">Phán quyết</div>
+    </div>
+  </div>
+  <div class="nb">
+    <div class="nw">
+      <div class="ne" id="ne" contenteditable="true"
+           oninput="scheduleAutoSave()" onkeydown="handleKD(event)"></div>
+    </div>
+  </div>
+  <div class="nf">
+    <button class="bcl" onclick="clearN()">🗑 Xóa tab này</button>
+    <button class="bex" onclick="exportN()">⬇ Xuất .txt</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Chương 15</div>
+    <h1>Trở Về Tương Lai</h1>
+    <div class="hero-sub">Back to the Future — The Return of U.S.-Style Capitalism</div>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-val">1998</div><div class="hs-label">BoJ chính thức độc lập khỏi MoF</div></div>
+      <div class="hs"><div class="hs-val">2001</div><div class="hs-label">Ōkurashō (MoF) bị giải thể</div></div>
+      <div class="hs"><div class="hs-val ol">1.000</div><div class="hs-label">Mục cải cách quy định được công bố 1995</div></div>
+      <div class="hs"><div class="hs-val am">10%→1%</div><div class="hs-label">Tăng trưởng GDP 1960s → 1990s</div></div>
+      <div class="hs"><div class="hs-val nv">26%→64%</div><div class="hs-label">Tỷ trọng hàng CN trong nhập khẩu 1980→2000</div></div>
+    </div>
+  </div>
+
+  <div id="content">
+
+    <!-- S0 OVERVIEW -->
+    <div class="sec active" id="s0">
+      <div class="sec-head"><span class="sec-num">00</span><h2>Tổng quan Chương 15</h2></div>
+      <div class="prose">
+        <p>Chương 15 là điểm hội tụ lịch sử của toàn bộ cuốn sách: <strong>sau một thập kỷ suy thoái có chủ đích, các hoàng tử BoJ đã chiến thắng hoàn toàn</strong>. MoF sụp đổ, bị giải thể năm 2001. BoJ giành độc lập năm 1998. Nền kinh tế chiến tranh được dỡ bỏ. Chủ nghĩa tư bản kiểu Mỹ — với cổ đông là thượng đế, thị trường chứng khoán là trung tâm, và sức sáng tạo cá nhân là động lực — chính thức thay thế hệ thống 60 năm tuổi.</p>
+        <p>Nhưng Werner không dừng ở đó. Ông đặt câu hỏi cay đắng: <em>Liệu điều này có thực sự cần thiết? Liệu có con đường nào khác?</em> Và câu trả lời của ông là có — mô hình <strong>soziale Marktwirtschaft</strong> của Đức là con đường thứ ba mà Nhật Bản đã bỏ lỡ. Không phải vì nó không thể làm được, mà vì không ai được hỏi — các hoàng tử BoJ đã tự quyết định thay cho toàn dân tộc.</p>
+      </div>
+
+      <div class="og">
+        <div class="oc" onclick="show('s1')">
+          <div class="oc-num">01 — Quyền lực thay đổi</div>
+          <div class="oc-title">MoF sụp đổ — BoJ thắng cuộc chiến nửa thế kỷ</div>
+          <div class="oc-sum">Bê bối, bắt bớ, tự tử. MoF bị phong tỏa, rồi giải thể 2001. BoJ độc lập 1998. Big Bang tài chính 1998 xóa bỏ hệ thống cấp phép — quyền lực cuối của MoF.</div>
+        </div>
+        <div class="oc" onclick="show('s2')">
+          <div class="oc-num">02 — Nền tảng thần kỳ</div>
+          <div class="oc-title">Hai trụ cột tăng trưởng & Sự sụp đổ</div>
+          <div class="oc-sum">Trụ 1: Mỹ cho phép Nhật chiếm thị phần toàn cầu. Trụ 2: BoJ phân bổ tín dụng cho ngành giá trị cao. Từ thập niên 1970, cả hai trụ bắt đầu lung lay.</div>
+        </div>
+        <div class="oc" onclick="show('s3')">
+          <div class="oc-num">03 — Bẫy tăng trưởng</div>
+          <div class="oc-title">Suy kiệt yếu tố đầu vào & Tăng trưởng thấp dài hạn</div>
+          <div class="oc-sum">Nhật đạt toàn dụng lao động, đất đai, vốn, và công nghệ. Tăng trưởng tiềm năng giảm không thể đảo ngược. Xã hội già hóa thêm áp lực lên hệ thống hưu trí.</div>
+        </div>
+        <div class="oc" onclick="show('s4')">
+          <div class="oc-num">04 — Endaka & Big Bang</div>
+          <div class="oc-title">Yen mạnh + Mở cửa = Cải cách cấu trúc</div>
+          <div class="oc-sum">Yen ở ¥80/$ buộc cả phe bảo thủ phải chấp nhận cải cách. 1.000 mục quy định được bãi bỏ. Big Bang tài chính 4/1998 — Nhật mở toàn bộ hệ thống tài chính cho thế giới.</div>
+        </div>
+        <div class="oc" onclick="show('s5')">
+          <div class="oc-num">05 — Cách mạng xã hội</div>
+          <div class="oc-title">Từ tập thể sang cá nhân — Xã hội mới hình thành</div>
+          <div class="oc-sum">1.000+ cartel hợp pháp năm 1960 → gần bằng 0 năm 1998. Lương theo thâm niên → lương theo thành tích. Giáo dục từ học thuộc → sáng tạo.</div>
+        </div>
+        <div class="oc" onclick="show('s6')">
+          <div class="oc-num">06 — 10 năm lịch sử</div>
+          <div class="oc-title">Ba di sản của bong bóng và suy thoái</div>
+          <div class="oc-sum">Bong bóng dạy người Nhật thích tiêu dùng. FDI ào ạt ra nước ngoài chuyển nhà máy. Suy thoái dạy người tiêu dùng đòi giá trị — "price destruction" ra đời.</div>
+        </div>
+        <div class="oc" onclick="show('s7')">
+          <div class="oc-num">07 — Con đường không chọn</div>
+          <div class="oc-title">Mô hình Đức — Soziale Marktwirtschaft</div>
+          <div class="oc-sum">Kinh tế thị trường xã hội: giữ ưu điểm hệ thống chiến tranh, thêm cạnh tranh và bảo vệ lao động. Ludwig Erhard đã làm được cho Đức — Nhật Bản bỏ lỡ cơ hội.</div>
+        </div>
+        <div class="oc" onclick="show('s8')">
+          <div class="oc-num">08 — Thiếu dân chủ</div>
+          <div class="oc-title">Không có tranh luận công khai — BoJ quyết định thay dân</div>
+          <div class="oc-sum">Thế hệ tinh hoa Nhật học kinh tế Mỹ, không hiểu hệ thống của chính mình. Mỹ dễ dàng thắng tranh luận công khai. Người dân không bao giờ được hỏi ý kiến.</div>
+        </div>
+        <div class="oc" onclick="show('s9')">
+          <div class="oc-num">09 — Phán quyết</div>
+          <div class="oc-title">Mục đích tốt không biện hộ cho phương tiện sai</div>
+          <div class="oc-sum">Ngay cả nếu cải cách là tốt, chi phí 10 năm suy thoái vượt xa lợi ích. Không công dân Nhật nào bầu cho BoJ thực hiện sứ mệnh này. Đây là lạm dụng quyền lực.</div>
+        </div>
+      </div>
+
+      <div class="card rust">
+        <div class="card-label">🔑 Luận điểm trung tâm của chương</div>
+        <p>Werner thừa nhận: <strong>Các hoàng tử BoJ đã đạt được mục tiêu cải cách cơ cấu</strong>. Nhật Bản thực sự trở nên năng suất hơn, mở cửa hơn, cạnh tranh hơn. Nhưng họ đã làm điều đó bằng cách <em>áp đặt một thập kỷ suy thoái lên toàn xã hội mà không hỏi ý kiến ai</em>. Và họ đã từ chối một giải pháp thay thế tốt hơn — con đường Đức — vì không có cuộc tranh luận dân chủ nào về lựa chọn này từng được cho phép xảy ra.</p>
+      </div>
+    </div>
+
+    <!-- S1 -->
+    <div class="sec" id="s1">
+      <div class="sec-head"><span class="sec-num">01</span><h2>MoF Sụp Đổ — BoJ Thắng Cuộc Chiến Nửa Thế Kỷ</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag">1996–2001</span><span class="tag">Big Bang</span><span class="tag ol">BoJ Độc lập</span></div>
+      <div class="prose">
+        <p>Cuối thập niên 1980, các quan chức MoF là "mồi ngon" cho mọi gia đình muốn gả con gái — danh thiếp Bộ Tài chính khiến người nhận cúi đầu kính cẩn. Nhưng suy thoái và bê bối đã lật ngược tất cả. Công tố viên công cộng lần đầu tiên trong lịch sử <strong>đột kích vào Bộ Tài chính đầu năm 1998</strong>. Nhiều quan chức cấp cao bị bắt. Một số tự tử. Biểu tình liên tiếp nổ ra trước cửa bộ.</p>
+      </div>
+
+      <div class="tl">
+        <div class="tl-item">
+          <div class="tl-date">Cuối 1996</div>
+          <div class="tl-text">MoF thua trận về chính sách quy định — phải chấp nhận <strong>Big Bang: phi quy định hóa toàn bộ khu vực tài chính</strong>. Hệ thống cấp phép — quyền lực cốt lõi của MoF — bị xóa bỏ.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Đầu 1997</div>
+          <div class="tl-text">MoF thua trận về giám sát ngân hàng. Nhiệm vụ chuyển sang <strong>Cơ quan Giám sát Tài chính (FSA) độc lập</strong> từ tháng 6/1998. Cục ngân hàng và cục chứng khoán của MoF bị giải thể — điều không thể tưởng tượng một thập kỷ trước.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Cuối 1997</div>
+          <div class="tl-text">MoF thua trận về sáng kiến chính trị. <strong>Toàn bộ quyết định tài khóa và quy định chuyển sang tay chính trị gia LDP</strong> — lần đầu tiên hậu chiến.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Tháng 6 / 1997</div>
+          <div class="tl-text"><strong>Luật Ngân hàng Nhật Bản mới được thông qua</strong>, có hiệu lực tháng 4/1998. BoJ nhận được điều họ đấu tranh suốt nửa thế kỷ: <em>độc lập hoàn toàn khỏi MoF</em>.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Tháng 6 / 1998</div>
+          <div class="tl-text">FSA mới đóng cửa ngay hai ngân hàng <em>amakudari</em>: <strong>LTCB và NCB</strong> — tín hiệu rõ ràng rằng kỷ nguyên bảo hộ ngân hàng đã chấm dứt.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Tháng 1 / 2001</div>
+          <div class="tl-text"><strong>Ōkurashō (Bộ Tài chính cũ) bị giải thể chính thức</strong>. Phần còn lại trở thành bóng mờ của định chế từng thống trị Nhật Bản hơn nửa thế kỷ.</div>
+        </div>
+      </div>
+
+      <div class="card navy">
+        <div class="card-label">💡 Tại sao Big Bang là cú kết liễu kinh tế chiến tranh?</div>
+        <p>Tháng 4/1998, Big Bang bắt đầu bằng việc phi quy định hóa luật ngoại hối. Werner chỉ ra ý nghĩa tượng trưng sâu sắc: <strong>Chính luật kiểm soát ngoại hối năm 1932–33 đã mở đầu việc xây dựng nền kinh tế chiến tranh</strong>. Vì vậy, việc xóa bỏ luật đó đánh dấu kết thúc chính thức và mang tính biểu tượng của toàn bộ hệ thống kinh tế thời chiến. Bất kỳ ai giờ đây cũng có thể giao dịch ngoại hối. Vốn có thể chảy tự do vào và ra khỏi Nhật Bản. Các rào cản với công ty nước ngoài đã biến mất hoàn toàn.</p>
+      </div>
+
+      <div class="dg">
+        <div class="db"><div class="db-val ol">Merrill Lynch</div><div class="db-label">Tiếp quản Yamaichi Securities phá sản</div></div>
+        <div class="db"><div class="db-val ol">25%</div><div class="db-label">Travelers Group mua Nikko Securities</div></div>
+        <div class="db"><div class="db-val ol">Ripplewood</div><div class="db-label">Quỹ Mỹ mua Long-Term Credit Bank</div></div>
+        <div class="db"><div class="db-val">14.1%</div><div class="db-label">Cổ phần nước ngoài trên TSE (3/1999)</div><div class="db-sub">↑ từ 2.8% năm 1978</div></div>
+      </div>
+    </div>
+
+    <!-- S2 -->
+    <div class="sec" id="s2">
+      <div class="sec-head"><span class="sec-num">02</span><h2>Hai Trụ Cột Tăng Trưởng & Cuộc Khủng Hoảng Mô Hình</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag">Kinh tế thần kỳ</span><span class="tag">Bẫy</span><span class="tag am">Chiến tranh Lạnh</span></div>
+      <div class="prose">
+        <p>Nền kinh tế chiến tranh thời bình không thể tự đứng vững — nó cần tăng trưởng liên tục để duy trì: cổ đông cần giá cổ phiếu tăng thay cho cổ tức, nhân viên cần lương thâm niên tăng mãi, toàn xã hội cần mức sống không ngừng cải thiện. Thần kỳ kinh tế Nhật Bản đứng trên <strong>hai trụ cột</strong>.</p>
+      </div>
+
+      <div class="compare">
+        <div class="cmp-col">
+          <div class="cmp-head r">Trụ 1 — Mỹ "nhắm mắt" cho qua</div>
+          <div class="cmp-item"><strong>Bản chất:</strong> Mỹ cho phép Nhật chiếm thị phần toàn cầu đổi lấy liên minh Chiến tranh Lạnh</div>
+          <div class="cmp-item"><strong>Thời kỳ:</strong> 1950s–1980s — Dệt may → Thép → Đóng tàu → Điện tử → Ô tô</div>
+          <div class="cmp-item"><strong>Dấu hiệu lung lay:</strong> Từ 1980s, chi phí thương mại quá lớn. Chiến tranh Lạnh kết thúc → không còn lý do địa chính trị để nhắm mắt</div>
+          <div class="cmp-item"><strong>Sụp đổ:</strong> Plaza Accord 1985, áp lực mở cửa thị trường Nhật liên tục</div>
+        </div>
+        <div class="cmp-col">
+          <div class="cmp-head nv">Trụ 2 — BoJ phân bổ tín dụng leo thang giá trị</div>
+          <div class="cmp-item"><strong>Bản chất:</strong> MITI xác định ngành tương lai, BoJ phân bổ tín dụng, ngành thấp giá trị bị bỏ đói</div>
+          <div class="cmp-item"><strong>Thời kỳ:</strong> 1950s–1970s — Di chuyển từ thâm dụng lao động lên thâm dụng vốn và công nghệ</div>
+          <div class="cmp-item"><strong>Dấu hiệu lung lay:</strong> Từ thập niên 1970, Nhật đã lên đỉnh tháp sản xuất. Ngành tiếp theo phải là dịch vụ — nhưng hệ thống không được thiết kế cho dịch vụ</div>
+          <div class="cmp-item"><strong>Sụp đổ:</strong> Năng suất sản xuất chạm trần; thêm vốn, lao động không tạo thêm tăng trưởng</div>
+        </div>
+      </div>
+
+      <div class="card amber">
+        <div class="card-label">🏭 Nghịch lý năng suất Nhật Bản</div>
+        <p>Xuất khẩu Nhật nổi tiếng năng suất cao — nhưng <strong>khu vực nội địa và dịch vụ năng suất rất thấp theo tiêu chuẩn quốc tế</strong>. Lý do: hệ thống chiến tranh bảo hộ khu vực nội địa bằng cartel và quy định, loại bỏ cạnh tranh. Khu vực nội địa chiếm phần lớn việc làm — do đó năng suất tổng thể Nhật Bản thấp hơn nhiều so với vẻ ngoài. Đây là <em>cơ hội lớn chưa được khai thác</em> mà phe cải cách nhìn thấy: nếu tăng năng suất khu vực dịch vụ nội địa, Nhật có thể tăng trưởng mà không cần tăng đầu vào.</p>
+      </div>
+    </div>
+
+    <!-- S3 -->
+    <div class="sec" id="s3">
+      <div class="sec-head"><span class="sec-num">03</span><h2>Suy Kiệt Yếu Tố Đầu Vào — Bẫy Tăng Trưởng Thấp Dài Hạn</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag">Dân số già hóa</span><span class="tag am">Giảm phát tiềm năng</span><span class="tag">Hưu trí</span></div>
+
+      <div class="bar-wrap">
+        <div class="bar-title">Tăng trưởng GDP thực bình quân theo thập kỷ</div>
+        <div class="bar-row"><span class="bar-year">1950s</span><div class="bar-track"><div class="bar-fill olive" style="width:87%"><span class="bar-fill-val">8.7%</span></div></div></div>
+        <div class="bar-row"><span class="bar-year">1960s</span><div class="bar-track"><div class="bar-fill olive" style="width:100%"><span class="bar-fill-val">10.0% ← đỉnh</span></div></div></div>
+        <div class="bar-row"><span class="bar-year">1970s</span><div class="bar-track"><div class="bar-fill navy" style="width:60%"><span class="bar-fill-val">6.0%</span></div></div></div>
+        <div class="bar-row"><span class="bar-year">1980s</span><div class="bar-track"><div class="bar-fill navy" style="width:40%"><span class="bar-fill-val">~4%</span></div></div></div>
+        <div class="bar-row"><span class="bar-year">1990s</span><div class="bar-track"><div class="bar-fill rust" style="width:12%"><span class="bar-fill-val">~1%</span></div></div></div>
+        <div class="bar-row"><span class="bar-year">2000+</span><div class="bar-track"><div class="bar-fill rust" style="width:6%"><span class="bar-fill-val">≤1%</span></div></div></div>
+      </div>
+
+      <div class="prose">
+        <p>Nền kinh tế chiến tranh Nhật Bản tối đa hóa <strong>đầu vào</strong> (lao động, đất, vốn, công nghệ) thay vì tối đa hóa <em>năng suất</em>. Khi cả bốn đầu vào cùng đạt tới giới hạn, không có cách nào để duy trì tăng trưởng cao theo cách cũ.</p>
+      </div>
+
+      <div class="dg">
+        <div class="db"><div class="db-val ne">Đỉnh</div><div class="db-label">Tham gia lực lượng lao động</div><div class="db-sub">→ sẽ giảm do già hóa</div></div>
+        <div class="db"><div class="db-val ne">Cố định</div><div class="db-label">Đất đai có thể sử dụng</div><div class="db-sub">→ khó tăng thêm</div></div>
+        <div class="db"><div class="db-val ne">Giảm tốc</div><div class="db-label">Lợi tức cận biên của vốn</div><div class="db-sub">→ quá nhiều vốn đã đầu tư</div></div>
+        <div class="db"><div class="db-val ne">Đắt đỏ</div><div class="db-label">Công nghệ mới phải tự R&D</div><div class="db-sub">→ không còn copy được</div></div>
+      </div>
+
+      <div class="card rust">
+        <div class="card-label">👴 Khủng hoảng hưu trí — Áp lực thêm vào hệ thống đã mệt mỏi</div>
+        <p>Xã hội già hóa tạo ra áp lực kép: lực lượng lao động đóng thuế <strong>thu hẹp</strong> trong khi chi hưu trí và phúc lợi <strong>bùng nổ</strong>. Hệ thống hưu trí <em>pay-as-you-go</em> (thế hệ sau trả cho thế hệ trước) của Nhật đã dùng thặng dư từ thời tăng trưởng cao một cách lãng phí — giờ đây không còn dự trữ. Đã có hơn một người nghỉ hưu cho mỗi hai người đang đóng góp. Ngay cả cắt giảm lương hưu mạnh tay và tăng đóng góp mạnh cũng không đủ. <strong>Giải pháp duy nhất là tăng tốc độ tăng trưởng GDP</strong> để tạo ra nhiều của cải hơn để chia cho người cao tuổi.</p>
+      </div>
+    </div>
+
+    <!-- S4 -->
+    <div class="sec" id="s4">
+      <div class="sec-head"><span class="sec-num">04</span><h2>Endaka & Làn Sóng Cải Cách — Yen Mạnh Phá Vỡ Mọi Kháng Cự</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag">Endaka</span><span class="tag ol">Big Bang 1998</span><span class="tag nv">¥80/$</span></div>
+      <div class="prose">
+        <p>Chính sách tiền tệ thắt chặt của BoJ thập niên 1990 đã tạo ra <strong>endaka</strong> — đồng yen mạnh lịch sử. Đây vừa là công cụ cưỡng bức cải cách, vừa là cơ chế tự động đẩy nhanh mở cửa kinh tế mà không cần luật mới.</p>
+      </div>
+
+      <div class="flow-box">
+        <div class="flow-title">Cơ chế Endaka → Cải cách tự động</div>
+        <div class="flow-chain">
+          <div class="fn r">BoJ thắt tín dụng<br>→ Yen tăng giá</div>
+          <div class="fa">→</div>
+          <div class="fn">Nhà máy Nhật<br>chuyển ra nước ngoài<br>(chủ yếu sang châu Á)</div>
+          <div class="fa">→</div>
+          <div class="fn ol">Nhập khẩu hàng CN<br>tăng mạnh<br>26%→64% (1980–2000)</div>
+          <div class="fa">→</div>
+          <div class="fn nv">DN nội địa buộc phải<br>cắt giảm giá &<br>tăng năng suất</div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>Tháng 4/1995, yen đạt mức lịch sử <strong>¥80/đô la</strong>. Cú sốc này đã thuyết phục được cả những người bảo thủ cứng đầu nhất — Nhật Bản không còn lựa chọn. Chỉ vài tuần sau, gói cải cách khổng lồ được công bố: <em>1.000 mục quy định bị bãi bỏ</em>. "Sách trắng về Phi quy định hóa" ra đời cuối năm đó.</p>
+      </div>
+
+      <div class="pillars">
+        <div class="pillar rust">
+          <div class="pillar-icon">💹</div>
+          <div class="pillar-title">Big Bang Tài chính (4/1998)</div>
+          <div class="pillar-desc">Phi quy định hóa luật ngoại hối. Tự do hóa hoa hồng môi giới chứng khoán. Xóa ranh giới giữa các loại tổ chức tài chính.</div>
+        </div>
+        <div class="pillar olive">
+          <div class="pillar-icon">📱</div>
+          <div class="pillar-title">Viễn thông (1993)</div>
+          <div class="pillar-desc">Phi quy định hóa tạo bùng nổ điện thoại di động và dịch vụ thông tin. Tạo ra hàng trăm nghìn việc làm mới.</div>
+        </div>
+        <div class="pillar navy">
+          <div class="pillar-icon">🏪</div>
+          <div class="pillar-title">Bán lẻ quy mô lớn</div>
+          <div class="pillar-desc">Sửa đổi Luật Bán lẻ Quy mô Lớn → bùng nổ siêu thị giảm giá → giá tiêu dùng giảm → "price destruction" lần đầu xuất hiện.</div>
+        </div>
+        <div class="pillar amber">
+          <div class="pillar-icon">⚡</div>
+          <div class="pillar-title">Điện lực (1996)</div>
+          <div class="pillar-desc">Luật Doanh nghiệp Điện được sửa đổi — công ty ngoài tiện ích công cộng được phép phát điện. Phá vỡ độc quyền ngành năng lượng.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S5 -->
+    <div class="sec" id="s5">
+      <div class="sec-head"><span class="sec-num">05</span><h2>Từ Tập Thể Sang Cá Nhân — Cuộc Cách Mạng Xã Hội</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag">Cartel</span><span class="tag ol">Cá nhân hóa</span><span class="tag">Hệ thống thâm niên</span></div>
+
+      <div class="decade-grid">
+        <div class="decade-card a">
+          <div class="dc-period">1960</div>
+          <div class="dc-title">Đỉnh của hệ thống cartel</div>
+          <div class="dc-desc">Hơn 1.000 cartel hợp pháp được miễn trừ Luật Chống độc quyền. Thị trường nội địa đóng cửa hoàn toàn với cạnh tranh. LDP thống trị bằng lợi ích nông thôn.</div>
+        </div>
+        <div class="decade-card b">
+          <div class="dc-period">Giữa 1994</div>
+          <div class="dc-title">Bước ngoặt lực lượng lao động</div>
+          <div class="dc-desc">Lần đầu tiên trong lịch sử Nhật Bản, khu vực dịch vụ thuê nhiều lao động hơn khu vực sản xuất. Xã hội đang chuyển đổi cơ cấu.</div>
+        </div>
+        <div class="decade-card c">
+          <div class="dc-period">1998</div>
+          <div class="dc-title">Cartel gần bằng 0</div>
+          <div class="dc-desc">Phi quy định hóa liên tục đưa số cartel hợp pháp xuống gần bằng không. Ủy ban Thương mại Công bằng được độc lập và mạnh hơn.</div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>Biến đổi sâu sắc nhất không phải ở kinh tế mà ở văn hóa doanh nghiệp. Hệ thống lương thâm niên — nơi ai làm lâu hơn thì được trả nhiều hơn, bất kể năng lực — bắt đầu nhường chỗ cho <strong>lương theo thành tích với phần thưởng lớn cho cá nhân sáng tạo</strong>. Chế độ tuyển dụng cứng nhắc một lần mỗi năm (người mới tốt nghiệp vào tháng 4) được thay bằng <em>tuyển dụng linh hoạt quanh năm</em>.</p>
+        <p>Hệ thống giáo dục — trước đây nhào nặn "nguyên liệu đầu vào cho sản xuất" bằng học thuộc lòng — bắt đầu dịch chuyển sang <strong>khuyến khích tư duy cá nhân và sáng tạo</strong>. Luật trách nhiệm sản phẩm 1995 lần đầu tiên trong lịch sử đặt quyền lợi người tiêu dùng lên trên nhà sản xuất.</p>
+      </div>
+
+      <div class="card olive">
+        <div class="card-label">🏛️ Cải cách hệ thống chính trị</div>
+        <p>Luật bầu cử Nhật từng ưu đãi phiếu nông thôn — lên đến <strong>gấp 3 lần phiếu thành thị</strong> — tạo nền tảng cho quyền lực lâu dài của nông nghiệp và LDP. Chính quyền Hosokawa 1993 thay đổi hệ thống bầu cử, chuyển cán cân về phía cử tri đô thị. Nhập khẩu nông sản tăng. Thị trường gạo — biểu tượng thần thánh của sự bảo hộ — bị buộc mở cửa năm 1993. Các chính trị gia bắt đầu cạnh tranh <em>bằng chính sách</em>, không chỉ bằng dự án công trình địa phương.</p>
+      </div>
+    </div>
+
+    <!-- S6 -->
+    <div class="sec" id="s6">
+      <div class="sec-head"><span class="sec-num">06</span><h2>10 Năm Thay Đổi Nhật Bản — Ba Di Sản của Bong Bóng và Suy Thoái</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag">Kế hoạch Maekawa</span><span class="tag ol">Di sản bong bóng</span><span class="tag nv">Price Destruction</span></div>
+      <div class="prose">
+        <p>Kế hoạch 10 năm của Maekawa (báo cáo 1986) kêu gọi Nhật Bản quay lại nền kinh tế thị trường tự do hơn như đã tồn tại trong thập niên 1920 và biến nền <em>kinh tế sản xuất</em> thành <em>kinh tế tiêu dùng</em>. Đến cuối thập niên 1990, <strong>tất cả mục tiêu chính đã đạt được</strong>.</p>
+      </div>
+
+      <div class="flow-box">
+        <div class="flow-title">Ba di sản của bong bóng — Thay đổi tư duy xã hội</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:4px;">
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:14px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--rust);margin-bottom:8px;text-transform:uppercase;">Di sản 1</div>
+            <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;">Người Nhật học thích tiêu dùng</div>
+            <div style="font-size:12.5px;color:var(--ink3);line-height:1.6;">Tiêu xài xa xỉ lần đầu xuất hiện cuối 1980s. Xóa bỏ kỳ thị xã hội với "conspicuous consumption" suốt nhiều thập kỷ.</div>
+          </div>
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:14px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--olive);margin-bottom:8px;text-transform:uppercase;">Di sản 2</div>
+            <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;">Nhà máy ào ạt ra nước ngoài</div>
+            <div style="font-size:12.5px;color:var(--ink3);line-height:1.6;">FDI khổng lồ ra nước ngoài, chủ yếu chuyển nhà máy sang châu Á. Năm tài chính 1995: Nhật sản xuất nhiều hơn ở nước ngoài so với xuất khẩu từ trong nước.</div>
+          </div>
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:14px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--navy);margin-bottom:8px;text-transform:uppercase;">Di sản 3</div>
+            <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;">Người tiêu dùng đòi giá trị</div>
+            <div style="font-size:12.5px;color:var(--ink3);line-height:1.6;">Suy thoái dạy người dân mới quen tiêu dùng biết đòi giá trị cho đồng tiền. "Price destruction" và giảm phát lan rộng. Nền kinh tế đảo chiều.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card navy">
+        <div class="card-label">📊 Làn sóng bài viết báo — Dấu hiệu thay đổi tư duy (từ 1992)</div>
+        <p>Werner trích dẫn số liệu từ 4 tờ báo Nikkei: Các bài viết về <em>amakudari</em> (quan chức hạ cánh vào tư nhân), về chênh lệch giá nội địa–ngoại địa, và về phi quy định hóa đều <strong>bùng nổ từ năm 1992</strong> — không phải trước. Điều gì xảy ra năm 1992? <em>Đó là năm suy thoái thực sự bắt đầu được cảm nhận.</em> Bằng chứng rõ ràng rằng suy thoái — không phải thuyết phục trí tuệ — mới là nguyên nhân khiến xã hội từ bỏ niềm tin vào hệ thống cũ.</p>
+      </div>
+
+      <div class="q">
+        <p>"Trong mười năm kể từ khi bong bóng kinh tế sụp đổ, chính phủ đã thử mọi chính sách tài chính và tài khóa có thể. Nhưng suy thoái kinh tế vẫn tiếp tục vì chính phủ chưa bao giờ cố gắng cải tổ các hệ thống kinh tế và xã hội mệt mỏi của chế độ thời chiến."</p>
+        <div class="q-src">— Báo Yomiuri (phát hành rộng rãi), giữa năm 2000</div>
+      </div>
+    </div>
+
+    <!-- S7 -->
+    <div class="sec" id="s7">
+      <div class="sec-head"><span class="sec-num">07</span><h2>Mô Hình Thay Thế — Con Đường Đức Nhật Bản Đã Bỏ Lỡ</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag ol">Soziale Marktwirtschaft</span><span class="tag">Ludwig Erhard</span><span class="tag nv">Con đường thứ ba</span></div>
+      <div class="prose">
+        <p>Werner đưa ra lập luận mạnh mẽ nhất của chương: <strong>Vấn đề của Nhật Bản những năm 1970s không đòi hỏi phải xóa bỏ toàn bộ hệ thống kinh tế chiến tranh</strong>. Cần chỉ cần điều chỉnh nó. Giải pháp đơn giản: sử dụng công cụ kiểm soát tín dụng để <em>bơm vốn vào khu vực dịch vụ, R&D, giáo dục, phúc lợi</em> thay vì tiếp tục đổ vào sản xuất.</p>
+        <p>Lịch sử đã có tiền lệ thành công: <strong>Đức hậu chiến dưới Ludwig Erhard</strong>.</p>
+      </div>
+
+      <div class="compare">
+        <div class="cmp-col">
+          <div class="cmp-head ol">Mô hình Đức (Soziale Marktwirtschaft)</div>
+          <div class="cmp-item"><strong>Hệ thống tài chính:</strong> Vẫn lấy ngân hàng làm trung tâm — cho phép phân bổ tín dụng vào sản xuất</div>
+          <div class="cmp-item"><strong>Bảo vệ lao động:</strong> Cao — công nhân tham gia hội đồng quản trị, lợi nhuận được chia đều</div>
+          <div class="cmp-item"><strong>Bất bình đẳng:</strong> Thấp hơn Mỹ — cơ cấu thu nhập bình đẳng hơn nhiều</div>
+          <div class="cmp-item"><strong>Bất động sản:</strong> Tỷ lệ vay thế chấp thấp theo quy định — hạn chế đầu cơ</div>
+          <div class="cmp-item"><strong>Kết quả:</strong> Tăng trưởng cao hậu chiến, "thần kỳ kinh tế Đức", chất lượng sống cao</div>
+        </div>
+        <div class="cmp-col">
+          <div class="cmp-head r">Mô hình Mỹ (Nhật Bản đã chọn)</div>
+          <div class="cmp-item"><strong>Hệ thống tài chính:</strong> Thị trường chứng khoán là trung tâm — cổ đông là thượng đế</div>
+          <div class="cmp-item"><strong>Bảo vệ lao động:</strong> Thấp — sa thải tự do, bất ổn việc làm tăng</div>
+          <div class="cmp-item"><strong>Bất bình đẳng:</strong> Cao hơn — khoảng cách thu nhập mở rộng</div>
+          <div class="cmp-item"><strong>Bất động sản:</strong> Thị trường tự do — đầu cơ không hạn chế</div>
+          <div class="cmp-item"><strong>Kết quả:</strong> Năng suất tăng nhưng bất bình đẳng, thất nghiệp, tội phạm đi kèm</div>
+        </div>
+      </div>
+
+      <div class="card olive">
+        <div class="card-label">🇩🇪 Điều Nhật Bản có thể đã làm</div>
+        <p>Werner lập luận: Nhật Bản hoàn toàn có thể duy trì <em>chủ nghĩa tư bản không có nhà tư bản</em> — cạnh tranh vì quy mô và thị phần, không phải lợi nhuận — nhưng cập nhật nó. Cần chuyển hướng window guidance từ <strong>sản xuất</strong> sang <strong>R&D, phần mềm, dịch vụ thông tin, nhà ở, giáo dục, y tế, môi trường</strong>. Tín dụng vào các lĩnh vực năng suất thấp truyền thống sẽ bị giảm dần tự nhiên — buộc chúng phải tái cơ cấu hoặc chuyển ra nước ngoài. Không cần phá vỡ hệ thống — chỉ cần đổi hướng dòng chảy tín dụng.</p>
+      </div>
+    </div>
+
+    <!-- S8 -->
+    <div class="sec" id="s8">
+      <div class="sec-head"><span class="sec-num">08</span><h2>Không Có Tranh Luận Công Khai — BoJ Quyết Định Thay Cho Toàn Dân</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag">Dân chủ hóa</span><span class="tag am">Tinh hoa mất gốc</span><span class="tag">Chiến tranh Lạnh</span></div>
+      <div class="prose">
+        <p>Quyết định chọn giữa <em>cải cách hệ thống cũ</em> hay <em>xóa bỏ hoàn toàn</em> là quyết định chính trị sâu sắc nhất, ảnh hưởng đến phân phối thu nhập, cấu trúc xã hội và thiết chế kinh tế. Nó phải được tranh luận công khai và quyết định dân chủ. <strong>Điều đó đã không bao giờ xảy ra.</strong></p>
+      </div>
+
+      <div class="flow-box">
+        <div class="flow-title">Tại sao không có tranh luận — Chuỗi nhân quả</div>
+        <div class="flow-chain">
+          <div class="fn am">Lãnh đạo hậu chiến biết<br>sự thật nhưng im lặng<br>(Chiến tranh Lạnh)</div>
+          <div class="fa">→</div>
+          <div class="fn">Thế hệ tinh hoa 1980s<br>không hiểu hệ thống<br>của chính mình</div>
+          <div class="fa">→</div>
+          <div class="fn r">Tinh hoa được đào tạo<br>kinh tế Mỹ tại Mỹ<br>→ không biết phản biện</div>
+          <div class="fa">→</div>
+          <div class="fn ol">Mỹ dễ thắng tranh luận<br>công khai về tự do<br>thương mại</div>
+          <div class="fa">→</div>
+          <div class="fn nv">Không ai biết hỏi<br>"Có con đường<br>nào khác không?"</div>
+        </div>
+      </div>
+
+      <div class="card amber">
+        <div class="card-label">🎓 Nghịch lý tinh hoa mất gốc</div>
+        <p>Sau chiến tranh, để đuổi kịp phương Tây và vì lý do phủ nhận nguồn gốc chiến tranh của hệ thống, <strong>một thế hệ tinh hoa Nhật Bản được gửi sang Mỹ học kinh tế học và MBA theo phong cách Mỹ</strong>. Họ trở về được đào tạo trong các lý thuyết thị trường tự do — nhưng chưa bao giờ được dạy các nguyên tắc của chính nền kinh tế nước họ. Kết quả: khi Mỹ gây áp lực thay đổi, không có nhà kinh tế học, doanh nhân hay quan chức Nhật Bản nào có thể phản biện bằng lý luận mạch lạc. Các lãnh đạo lớn tuổi <em>cảm nhận bản năng</em> rằng hệ thống Nhật đã phục vụ tốt — nhưng không thể lập luận được.</p>
+      </div>
+
+      <div class="q">
+        <p>"Không một công dân Nhật Bản nào bầu cho BoJ thực hiện chính sách thúc đẩy tái cơ cấu này, và thực tế không có quan chức dân cử nào ủy thác nhiệm vụ này cho BoJ hay đưa mục tiêu 'khuyến khích sự phá hủy sáng tạo' vào nhiệm vụ của họ."</p>
+        <div class="q-src">— Adam Posen, trích dẫn bởi Werner</div>
+      </div>
+    </div>
+
+    <!-- S9 -->
+    <div class="sec" id="s9">
+      <div class="sec-head"><span class="sec-num">09</span><h2>Phán Quyết Của Werner — Mục Đích Tốt Không Biện Hộ Cho Phương Tiện Sai</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag">Lạm dụng quyền lực</span><span class="tag am">Phân tích chi phí–lợi ích</span><span class="tag nv">Dân chủ</span></div>
+      <div class="prose">
+        <p>Werner dành phần cuối chương để trả lời câu hỏi đạo đức trung tâm: <em>Nếu kết quả cuối cùng tốt — Nhật Bản thực sự năng suất và cạnh tranh hơn — thì có phải các hoàng tử BoJ đã làm đúng không?</em></p>
+        <p>Ông đưa ra hai lý do dứt khoát để nói <strong>Không</strong>.</p>
+      </div>
+
+      <div class="card rust">
+        <div class="card-label">❌ Lý do 1 — Phân tích chi phí–lợi ích thất bại</div>
+        <p>Werner dùng ẩn dụ đơn giản và mạnh mẽ: <em>"Kéo dài suy thoái để thực hiện thay đổi cơ cấu giống như thu nhỏ cái bánh xuống kích thước nhỏ xíu để có thể cắt nó dễ hơn."</em> Chính sách chu kỳ nhằm tăng quy mô GDP. Chính sách cơ cấu nhằm tăng hiệu quả phân phối. Dù cải cách cơ cấu có thể tăng hiệu quả nhất định, <strong>chi phí kinh tế và xã hội của 10 năm suy thoái rõ ràng vượt xa lợi ích tiềm năng</strong>. Ngoài ra, có giải pháp thay thế (mô hình Đức) có thể tăng năng suất mà không cần bất kỳ thập kỷ mất mát nào.</p>
+      </div>
+
+      <div class="card rust">
+        <div class="card-label">❌ Lý do 2 — Vượt quá thẩm quyền dân chủ</div>
+        <p>Đây là lý do căn bản hơn. Bất kể đánh giá kinh tế có hợp lý đến đâu, <strong>quyết định về cải cách cơ cấu ảnh hưởng đến phân phối thu nhập, cấu trúc xã hội và thiết chế là quyết định <em>chính trị</em></strong> — phải thuộc về người dân thông qua đại diện dân chủ. Không điều khoản nào trong Luật BoJ cũ hay mới trao cho ngân hàng trung ương quyền thực hiện chương trình nghị sự biến đổi xã hội dài hạn như vậy. Cố tình tạo ra suy thoái để xây dựng đồng thuận chính trị ủng hộ cải cách cơ cấu là <em>lạm dụng quyền lực thể chế</em>.</p>
+      </div>
+
+      <div class="compare">
+        <div class="cmp-col">
+          <div class="cmp-head ol">Điều BoJ có quyền làm</div>
+          <div class="cmp-item"><strong>Mục tiêu pháp lý:</strong> Ổn định giá cả và hỗ trợ tăng trưởng kinh tế</div>
+          <div class="cmp-item"><strong>Công cụ:</strong> Điều chỉnh cung tiền và lãi suất trong phạm vi nhiệm vụ được giao</div>
+          <div class="cmp-item"><strong>Trách nhiệm:</strong> Báo cáo trước nghị viện và công chúng</div>
+          <div class="cmp-item"><strong>Giới hạn:</strong> Không vượt quá nhiệm vụ được ủy thác dân chủ</div>
+        </div>
+        <div class="cmp-col">
+          <div class="cmp-head r">Điều BoJ đã thực sự làm</div>
+          <div class="cmp-item"><strong>Mục tiêu thực:</strong> Xóa bỏ hệ thống kinh tế 60 năm tuổi, thay bằng mô hình Mỹ</div>
+          <div class="cmp-item"><strong>Công cụ:</strong> Cố tình tạo suy thoái để buộc cải cách cơ cấu</div>
+          <div class="cmp-item"><strong>Trách nhiệm:</strong> Không ai được hỏi, không có tranh luận công khai</div>
+          <div class="cmp-item"><strong>Giới hạn:</strong> Vượt xa nhiệm vụ được ủy thác — không có ủy quyền dân chủ</div>
+        </div>
+      </div>
+
+      <div class="card navy">
+        <div class="card-label">🔮 Nhìn về phía trước — Bài học cho thế giới ngày nay</div>
+        <p>Werner kết thúc bằng một nhận định không lạc quan: <em>Có vẻ như BoJ đã làm đúng, xét về kết quả.</em> Nhưng đây chính xác là lý do cần cảnh giác nhất. <strong>Khi một thể chế không được bầu chọn có thể định hình lại toàn bộ xã hội theo ý chí của mình — và được khen ngợi vì kết quả — chúng ta đã mặc nhiên chấp nhận rằng technocracy quan liêu có thể thay thế nền dân chủ.</strong> Đây là câu hỏi mà không chỉ Nhật Bản, mà toàn thế giới cần trả lời: Ngân hàng trung ương "độc lập" thực sự độc lập với ai, và chịu trách nhiệm trước ai?</p>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+const SECS = ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9'];
+function show(id) {
+  SECS.forEach(s => { const e=document.getElementById(s); if(e) e.classList.remove('active'); });
+  const t=document.getElementById(id);
+  if(t) t.classList.add('active');
+  document.querySelectorAll('.ni').forEach(n =>
+    n.classList.toggle('active', (n.getAttribute('onclick')||'').includes("'"+id+"'"))
+  );
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+let notesOpen=false, tab=0, saveT=null;
+const KEYS=['ch15_n0','ch15_n1','ch15_n2','ch15_n3'];
+
+function toggleNotes(){
+  notesOpen=!notesOpen;
+  document.getElementById('np').classList.toggle('open',notesOpen);
+  document.getElementById('ov').classList.toggle('show',notesOpen);
+  document.getElementById('nBtn').classList.toggle('active',notesOpen);
+  if(notesOpen) loadN();
+}
+function switchTab(i){
+  saveN(); tab=i;
+  document.querySelectorAll('.ntab').forEach((t,j)=>t.classList.toggle('active',i===j));
+  loadN();
+}
+function loadN(){ document.getElementById('ne').innerHTML=localStorage.getItem(KEYS[tab])||''; setS('—',''); }
+function saveN(){ localStorage.setItem(KEYS[tab],document.getElementById('ne').innerHTML); }
+function scheduleAutoSave(){
+  setS('Đang lưu...','saving');
+  if(saveT) clearTimeout(saveT);
+  saveT=setTimeout(()=>{ saveN(); setS('Đã lưu ✓','saved'); setTimeout(()=>setS('—',''),2000); },800);
+}
+function setS(t,c){ const e=document.getElementById('nst'); e.textContent=t; e.className='nst '+c; }
+function fmt(cmd){ document.getElementById('ne').focus(); document.execCommand(cmd,false,null); scheduleAutoSave(); }
+function handleKD(e){
+  if(e.ctrlKey||e.metaKey){
+    if(e.key==='b'){e.preventDefault();fmt('bold');}
+    if(e.key==='i'){e.preventDefault();fmt('italic');}
+    if(e.key==='u'){e.preventDefault();fmt('underline');}
+  }
+}
+function clearN(){
+  if(confirm('Xóa ghi chú của tab này?')){ document.getElementById('ne').innerHTML=''; saveN(); setS('Đã xóa','saving'); setTimeout(()=>setS('—',''),1500); }
+}
+function exportN(){
+  const tabs=['Tổng_quan','MoF_vs_BoJ','Cải_cách','Phán_quyết'];
+  let out='=== GHI CHÚ CHƯƠNG 15 — PRINCES OF THE YEN ===\n\n';
+  KEYS.forEach((k,i)=>{ const html=localStorage.getItem(k)||''; const d=document.createElement('div'); d.innerHTML=html; const txt=(d.textContent||d.innerText||'').trim(); if(txt) out+=`--- ${tabs[i]} ---\n${txt}\n\n`; });
+  const blob=new Blob([out],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a');
+  a.href=url; a.download='ghi_chu_chuong15_princes_of_the_yen.txt'; a.click(); URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>

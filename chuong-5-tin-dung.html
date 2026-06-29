@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chương 5 — Tín Dụng: Bộ Tổng Tham Mưu Kinh Tế (Light Mode)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* --- LIGHT MODE PALETTE --- */
+    --bg:      #f8f9fa; /* Nền chính sáng */
+    --bg2:     #ffffff; /* Nền sidebar/trắng tinh */
+    --bg3:     #f1f3f5; /* Nền card/nhóm nội dung */
+    --bg4:     #e9ecef; /* Nền nhấn nhẹ */
+    --border:  #dee2e6; /* Đường viền xám nhạt */
+    
+    --crimson: #a02d22; /* Crimson đậm hơn để đọc trên nền sáng */
+    --crimson2:#c0392b;
+    --copper:  #8d5a25; /* Đồng đậm hơn */
+    --copper2: #b87333;
+    
+    --ivory:   #343a40; /* Đảo ngược sang màu tối */
+    --ivory2:  #212529;
+    --sage:    #218838;
+    --blue:    #1e608f;
+    
+    --text:    #212529; /* Chữ chính đen xám */
+    --text2:   #495057; /* Chữ phụ xám đậm */
+    --text3:   #adb5bd; /* Chữ gợi ý xám nhạt */
+    --sw: 270px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    line-height: 1.75;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ─── SIDEBAR ─── */
+  #sidebar {
+    width: var(--sw);
+    min-height: 100vh;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    position: fixed; top: 0; left: 0;
+    display: flex; flex-direction: column;
+    z-index: 100; overflow-y: auto;
+  }
+  .sb-head {
+    padding: 24px 18px 16px;
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .sb-head::before {
+    content: '5';
+    position: absolute; right: 10px; top: 4px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 88px; font-weight: 700;
+    color: rgba(192,57,43,0.04);
+    line-height: 1; pointer-events: none;
+  }
+  .sb-book { font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: var(--text3); margin-bottom: 6px; }
+  .sb-title { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 700; color: var(--crimson2); line-height: 1.3; }
+  .sb-ch { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--copper); margin-top: 5px; letter-spacing: 0.5px; }
+  .sb-nav { padding: 10px 0; flex: 1; }
+  .nav-group { font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: var(--text3); padding: 8px 18px 3px; }
+  .ni { display: flex; align-items: flex-start; gap: 10px; padding: 7px 18px; cursor: pointer; transition: background .15s; border-left: 2px solid transparent; }
+  .ni:hover { background: var(--bg3); }
+  .ni.active { background: rgba(192,57,43,0.05); border-left-color: var(--crimson); }
+  .ni-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text3); padding-top: 2px; flex-shrink: 0; width: 20px; }
+  .ni.active .ni-num { color: var(--crimson); }
+  .ni-label { font-size: 12px; line-height: 1.4; color: var(--text2); }
+  .ni.active .ni-label { color: var(--ivory2); font-weight: 500; }
+  .sb-notes {
+    margin: 8px 12px 16px;
+    background: rgba(192,57,43,0.05);
+    border: 1px solid rgba(192,57,43,0.15);
+    color: var(--crimson2);
+    padding: 8px 12px; border-radius: 6px;
+    cursor: pointer; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; text-align: center; transition: all .2s;
+  }
+  .sb-notes:hover { background: rgba(192,57,43,0.12); }
+  .sb-notes.active { background: rgba(192,57,43,0.15); border-color: var(--crimson); }
+
+  /* ─── MAIN ─── */
+  #main { margin-left: var(--sw); flex: 1; padding-bottom: 80px; }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f3f5 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 58px 64px 46px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: 'CREDIT';
+    position: absolute; right: 48px; bottom: -20px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 120px; font-weight: 700; letter-spacing: 8px;
+    color: rgba(0,0,0,0.02);
+    line-height: 1; pointer-events: none; user-select: none;
+  }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; text-transform: uppercase; letter-spacing: 3px;
+    color: var(--copper); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-eyebrow::after { content:''; flex:1; max-width:72px; height:1px; background:var(--copper); opacity:.4; }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 44px; font-weight: 700;
+    color: var(--ivory2); line-height: 1.12;
+    margin-bottom: 10px; max-width: 680px;
+  }
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 19px;
+    color: var(--text2); margin-bottom: 34px;
+  }
+  .hero-stats { display: flex; gap: 30px; flex-wrap: wrap; }
+  .hs { text-align: center; }
+  .hs-val { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 700; color: var(--crimson2); }
+  .hs-val.c { color: var(--copper2); }
+  .hs-val.g { color: var(--sage); }
+  .hs-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--text3); margin-top: 2px; }
+
+  /* ─── CONTENT ─── */
+  #content { padding: 0 64px; }
+  .sec { padding: 52px 0 12px; border-bottom: 1px solid var(--border); display: none; animation: fu .28s ease; }
+  .sec.active { display: block; }
+  @keyframes fu { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .sec-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 28px; }
+  .sec-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--crimson); background: rgba(192,57,43,0.06); border: 1px solid rgba(192,57,43,0.15); padding: 4px 8px; border-radius: 4px; flex-shrink: 0; margin-top: 5px; }
+  .sec h2 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: var(--ivory2); line-height: 1.2; }
+
+  /* ─── PROSE ─── */
+  .prose p { color: var(--text); margin-bottom: 14px; font-size: 14.5px; line-height: 1.82; max-width: 740px; }
+  .prose strong { color: var(--ivory2); font-weight: 600; }
+  .prose em { color: var(--copper2); font-style: italic; }
+
+  /* ─── CARDS ─── */
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 18px 22px; margin: 20px 0; max-width: 740px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .card.red  { border-left: 3px solid var(--crimson); }
+  .card.cop  { border-left: 3px solid var(--copper); }
+  .card.grn  { border-left: 3px solid var(--sage); }
+  .card.blu  { border-left: 3px solid var(--blue); }
+  .card-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .card.red .card-label { color: var(--crimson2); }
+  .card.cop .card-label { color: var(--copper2); }
+  .card.grn .card-label { color: var(--sage); }
+  .card.blu .card-label { color: var(--blue); }
+  .card p { color: var(--text); font-size: 14px; line-height: 1.72; margin: 0; }
+  .card p + p { margin-top: 8px; }
+
+  /* ─── DATA ─── */
+  .dg { display: grid; grid-template-columns: repeat(auto-fit,minmax(168px,1fr)); gap: 13px; margin: 20px 0; max-width: 740px; }
+  .db { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.03); }
+  .db-val { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 700; color: var(--crimson2); }
+  .db-val.c { color: var(--copper2); }
+  .db-val.g { color: var(--sage); }
+  .db-val.b { color: var(--blue); }
+  .db-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--text3); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .db-sub { font-size: 11.5px; color: var(--text2); margin-top: 3px; }
+
+  /* ─── TIMELINE ─── */
+  .tl { max-width: 740px; margin: 20px 0; padding-left: 22px; border-left: 2px solid var(--border); }
+  .tl-item { margin-bottom: 20px; position: relative; }
+  .tl-item::before { content:''; position:absolute; left:-29px; top:6px; width:10px; height:10px; border-radius:50%; background:var(--crimson); border:2px solid var(--bg); }
+  .tl-date { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--copper); margin-bottom: 3px; }
+  .tl-text { font-size: 14px; color: var(--text); line-height: 1.65; }
+  .tl-text strong { color: var(--ivory2); }
+
+  /* ─── FLOW ─── */
+  .flow-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 22px; margin: 20px 0; max-width: 740px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+  .flow-title { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--crimson); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; }
+  .flow-chain { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .fn { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; font-size: 12px; color: var(--text); line-height: 1.3; text-align: center; }
+  .fn.r { border-color:rgba(192,57,43,.2); color:var(--crimson2); background: rgba(192,57,43,.02); }
+  .fn.c { border-color:rgba(192,129,58,.2); color:var(--copper2); background: rgba(192,129,58,.02); }
+  .fn.g { border-color:rgba(39,174,96,.2); color:var(--sage); background: rgba(39,174,96,.02); }
+  .fn.b { border-color:rgba(41,128,185,.2); color:var(--blue); background: rgba(41,128,185,.02); }
+  .fa { color: var(--text3); font-size: 15px; }
+
+  /* ─── QUOTE ─── */
+  .q { border-left: 3px solid var(--copper); padding: 14px 18px; margin: 20px 0; max-width: 660px; background: rgba(192,129,58,0.05); border-radius: 0 8px 8px 0; }
+  .q p { font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--text2); font-size: 15.5px; line-height: 1.7; margin: 0 0 7px; }
+  .q-src { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text3); }
+
+  /* ─── TABLE ─── */
+  .dt { width: 100%; max-width: 740px; border-collapse: collapse; margin: 20px 0; background: var(--bg2); }
+  .dt th { background: var(--bg4); color: var(--copper); font-family: 'JetBrains Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 1px; padding: 9px 14px; text-align: left; border: 1px solid var(--border); }
+  .dt td { padding: 9px 14px; border: 1px solid var(--border); font-size: 13px; color: var(--text); line-height: 1.5; vertical-align: top; }
+  .dt tr:nth-child(even) td { background: rgba(0,0,0,0.012); }
+
+  /* ─── COMPARE COLS ─── */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 740px; margin: 20px 0; }
+  .cmp-col { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+  .cmp-head { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .cmp-head.r { color: var(--crimson2); }
+  .cmp-head.g { color: var(--sage); }
+  .cmp-item { font-size: 13px; color: var(--text2); padding: 5px 0; border-bottom: 1px solid var(--border); line-height: 1.5; }
+  .cmp-item:last-child { border-bottom: none; }
+  .cmp-item strong { color: var(--ivory2); }
+
+  /* ─── BORROWER CLASS ─── */
+  .abc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; max-width: 740px; margin: 20px 0; }
+  .abc-card { border-radius: 8px; padding: 18px; border: 1px solid; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+  .abc-card.a { background:rgba(192,57,43,0.02); border-color:rgba(192,57,43,0.15); }
+  .abc-card.b { background:rgba(192,129,58,0.02); border-color:rgba(192,129,58,0.15); }
+  .abc-card.c { background:rgba(41,128,185,0.02); border-color:rgba(41,128,185,0.15); }
+  .abc-letter { font-family:'Cormorant Garamond',serif; font-size:40px; font-weight:700; line-height:1; margin-bottom:8px; }
+  .abc-card.a .abc-letter { color:var(--crimson2); }
+  .abc-card.b .abc-letter { color:var(--copper2); }
+  .abc-card.c .abc-letter { color:var(--blue); }
+  .abc-title { font-size:13px; font-weight:600; color:var(--ivory2); margin-bottom:6px; }
+  .abc-desc { font-size:12.5px; color:var(--text2); line-height:1.6; }
+
+  /* ─── OV GRID ─── */
+  .og { display: grid; grid-template-columns: repeat(auto-fit,minmax(268px,1fr)); gap: 14px; margin: 20px 0; max-width: 740px; }
+  .oc { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 18px; cursor: pointer; transition: all .2s; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+  .oc:hover { border-color:rgba(192,57,43,.3); transform:translateY(-2px); box-shadow: 0 4px 12px rgba(192,57,43,0.08); }
+  .oc-num { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text3); margin-bottom:7px; }
+  .oc-title { font-family:'Cormorant Garamond',serif; font-size:15px; font-weight:700; color:var(--ivory2); margin-bottom:7px; line-height:1.3; }
+  .oc-sum { font-size:12.5px; color:var(--text2); line-height:1.6; }
+
+  /* ─── TAGS ─── */
+  .tag { display:inline-block; background:rgba(192,57,43,0.05); border:1px solid rgba(192,57,43,0.15); color:var(--crimson2); font-family:'JetBrains Mono',monospace; font-size:10px; padding:2px 8px; border-radius:20px; margin:2px; letter-spacing:.4px; }
+  .tag.c { background:rgba(192,129,58,0.05); border-color:rgba(192,129,58,0.2); color:var(--copper2); }
+  .tag.g { background:rgba(39,174,96,0.05); border-color:rgba(39,174,96,0.2); color:var(--sage); }
+  .tag.b { background:rgba(41,128,185,0.05); border-color:rgba(41,128,185,0.2); color:var(--blue); }
+
+  /* ─── PERSON ─── */
+  .person-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; max-width:740px; margin:20px 0; }
+  .pc { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:16px 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+  .pc-name { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:700; color:var(--ivory2); margin-bottom:3px; }
+  .pc-role { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--copper); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+  .pc-desc { font-size:13px; color:var(--text2); line-height:1.6; }
+
+  /* ─── NOTES ─── */
+  #np { position:fixed; top:0; right:-500px; width:460px; height:100vh; background:var(--bg2); border-left:1px solid var(--border); display:flex; flex-direction:column; z-index:200; transition:right .3s cubic-bezier(.4,0,.2,1); box-shadow:-8px 0 32px rgba(0,0,0,.1); }
+  #np.open { right:0; }
+  .nh { padding:18px 18px 0; border-bottom:1px solid var(--border); flex-shrink:0; }
+  .nh-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .nt-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:700; color:var(--crimson2); }
+  .nc { background:none; border:none; color:var(--text3); cursor:pointer; font-size:20px; padding:4px; transition:color .2s; }
+  .nc:hover { color:var(--text); }
+  .tb { display:flex; gap:4px; padding-bottom:12px; flex-wrap:wrap; align-items:center; }
+  .tbb { background:var(--bg); border:1px solid var(--border); color:var(--text2); padding:6px 10px; border-radius:5px; cursor:pointer; font-size:13px; transition:all .15s; font-family:inherit; line-height:1; }
+  .tbb:hover { background:var(--bg4); color:var(--text); }
+  .sep { width:1px; height:24px; background:var(--border); margin:0 2px; }
+  .nst { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text3); margin-left:auto; }
+  .nst.saved { color:var(--sage); }
+  .nst.saving { color:var(--copper); }
+  .ntabs { display:flex; border-bottom:1px solid var(--border); padding:0 18px; overflow-x:auto; }
+  .ntab { font-family:'JetBrains Mono',monospace; font-size:11px; padding:8px 12px; border-bottom:2px solid transparent; cursor:pointer; color:var(--text3); white-space:nowrap; transition:all .15s; }
+  .ntab:hover { color:var(--text2); }
+  .ntab.active { color:var(--crimson2); border-bottom-color:var(--crimson); }
+  .nb { flex:1; overflow:hidden; display:flex; flex-direction:column; }
+  .nw { flex:1; overflow-y:auto; padding:14px 18px; }
+  .ne { min-height:100%; outline:none; color:var(--text); font-family:'Cormorant Garamond',serif; font-size:15px; line-height:1.8; caret-color:var(--crimson); }
+  .ne:empty::before { content:'Ghi chú tại đây… Ctrl+B / I / U, bullet points.'; color:var(--text3); font-style:italic; pointer-events:none; }
+  .ne ul { padding-left:20px; }
+  .ne li { margin-bottom:4px; }
+  .ne b { color:var(--ivory2); }
+  .ne i { color:var(--copper2); }
+  .ne u { text-decoration-color:var(--crimson); }
+  .nf { padding:10px 18px; border-top:1px solid var(--border); display:flex; gap:8px; flex-shrink:0; }
+  .bcl { background:none; border:1px solid var(--border); color:var(--text3); padding:6px 12px; border-radius:5px; cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:11px; transition:all .15s; }
+  .bcl:hover { border-color:var(--crimson); color:var(--crimson); }
+  .bex { background:rgba(192,57,43,0.05); border:1px solid rgba(192,57,43,0.15); color:var(--crimson2); padding:6px 12px; border-radius:5px; cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:11px; transition:all .15s; margin-left:auto; }
+  .bex:hover { background:rgba(192,57,43,0.1); }
+
+  ::-webkit-scrollbar { width:5px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+  #ov { display:none; position:fixed; inset:0; background:rgba(0,0,0,.2); z-index:150; backdrop-filter:blur(1px); }
+  #ov.show { display:block; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-head">
+    <div class="sb-book">Princes of the Yen · Werner</div>
+    <div class="sb-title">Tín Dụng: Bộ Tổng Tham Mưu Kinh Tế</div>
+    <div class="sb-ch">Chương 5 · Dashboard</div>
+  </div>
+  <div class="sb-nav">
+    <div class="nav-group">Nội dung chương</div>
+    <div class="ni active" onclick="show('s0')"><span class="ni-num">00</span><span class="ni-label">Tổng quan chương</span></div>
+    <div class="ni" onclick="show('s1')"><span class="ni-num">01</span><span class="ni-label">Từ chứng khoán sang tín dụng ngân hàng</span></div>
+    <div class="ni" onclick="show('s2')"><span class="ni-num">02</span><span class="ni-label">3 lý do chiến lược chọn tín dụng ngân hàng</span></div>
+    <div class="ni" onclick="show('s3')"><span class="ni-num">03</span><span class="ni-label">Ngân hàng là người tạo ra tiền</span></div>
+    <div class="ni" onclick="show('s4')"><span class="ni-num">04</span><span class="ni-label">Tín dụng sản xuất vs Tín dụng đầu cơ</span></div>
+    <div class="ni" onclick="show('s5')"><span class="ni-num">05</span><span class="ni-label">Reichsbank & Schacht — "Nhà độc tài tín dụng"</span></div>
+    <div class="ni" onclick="show('s6')"><span class="ni-num">06</span><span class="ni-label">Nhật Bản sao chép mô hình Đức</span></div>
+    <div class="ni" onclick="show('s7')"><span class="ni-num">07</span><span class="ni-label">BoJ làm trung tâm kiểm soát — Phân loại A/B/C</span></div>
+    <div class="ni" onclick="show('s8')"><span class="ni-num">08</span><span class="ni-label">Kiểm soát tín dụng duy trì sau chiến tranh</span></div>
+    <div class="nav-group" style="margin-top:10px;">Công cụ</div>
+  </div>
+  <button class="sb-notes" id="nBtn" onclick="toggleNotes()">📝 Ghi chú của tôi</button>
+</nav>
+
+<div id="ov" onclick="toggleNotes()"></div>
+
+<!-- NOTES PANEL -->
+<div id="np">
+  <div class="nh">
+    <div class="nh-top">
+      <span class="nt-title">📝 Ghi chú</span>
+      <button class="nc" onclick="toggleNotes()">✕</button>
+    </div>
+    <div class="tb">
+      <button class="tbb" onclick="fmt('bold')" title="Ctrl+B"><b>B</b></button>
+      <button class="tbb" onclick="fmt('italic')" title="Ctrl+I"><i>I</i></button>
+      <button class="tbb" onclick="fmt('underline')" title="Ctrl+U"><u>U</u></button>
+      <div class="sep"></div>
+      <button class="tbb" onclick="fmt('insertUnorderedList')">• List</button>
+      <button class="tbb" onclick="fmt('insertOrderedList')">1. List</button>
+      <div class="sep"></div>
+      <button class="tbb" onclick="fmt('removeFormat')">✕ Fmt</button>
+      <span class="nst" id="nst">—</span>
+    </div>
+    <div class="ntabs">
+      <div class="ntab active" onclick="switchTab(0)">Tổng quan</div>
+      <div class="ntab" onclick="switchTab(1)">Lý thuyết tín dụng</div>
+      <div class="ntab" onclick="switchTab(2)">Reichsbank & Schacht</div>
+      <div class="ntab" onclick="switchTab(3)">Nhật Bản hậu chiến</div>
+    </div>
+  </div>
+  <div class="nb">
+    <div class="nw">
+      <div class="ne" id="ne" contenteditable="true"
+           oninput="scheduleAutoSave()" onkeydown="handleKD(event)"></div>
+    </div>
+  </div>
+  <div class="nf">
+    <button class="bcl" onclick="clearN()">🗑 Xóa tab này</button>
+    <button class="bex" onclick="exportN()">⬇ Xuất .txt</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Chương 5</div>
+    <h1>Tín Dụng</h1>
+    <div class="hero-sub">The Economic High Command — Bộ Tổng Tham Mưu Kinh Tế</div>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-val">81%</div><div class="hs-label">Vốn cổ phần / tổng nợ DN (1934–36)</div></div>
+      <div class="hs"><div class="hs-val">89%</div><div class="hs-label">Vay ngân hàng / tổng nợ DN (1965)</div></div>
+      <div class="hs"><div class="hs-val c">1400→64</div><div class="hs-label">Số ngân hàng: cuối 1920s → cuối CTTG II</div></div>
+      <div class="hs"><div class="hs-val g">1942</div><div class="hs-label">Luật BoJ mới — sao chép luật Reichsbank của Hitler</div></div>
+    </div>
+  </div>
+
+  <div id="content">
+
+    <!-- S0 OVERVIEW -->
+    <div class="sec active" id="s0">
+      <div class="sec-head"><span class="sec-num">00</span><h2>Tổng quan Chương 5</h2></div>
+      <div class="prose">
+        <p>Chương 5 là <strong>nền tảng lý luận quan trọng nhất</strong> của toàn bộ cuốn sách. Werner giải thích tại sao Nhật Bản trong nền kinh tế chiến tranh đã chủ động từ bỏ hệ thống tài chính dựa trên thị trường chứng khoán — giống như Mỹ ngày nay — và xây dựng một hệ thống <em>tín dụng ngân hàng do nhà nước kiểm soát</em>, sao chép trực tiếp từ Reichsbank của Đức.</p>
+        <p>Đây là chương đặt nền móng lý thuyết cho <strong>window guidance</strong> — công cụ quyền lực thực sự của BoJ. Chương cũng trình bày phân biệt căn bản giữa <em>tín dụng sản xuất</em> và <em>tín dụng đầu cơ</em> — một phân biệt mà hầu hết các nhà kinh tế học hiện đại đã bỏ qua, nhưng Werner cho là chìa khóa giải thích mọi chu kỳ bùng nổ–sụp đổ trong lịch sử.</p>
+      </div>
+
+      <div class="og">
+        <div class="oc" onclick="show('s1')">
+          <div class="oc-num">01 — Chuyển đổi lịch sử</div>
+          <div class="oc-title">Từ chứng khoán sang tín dụng ngân hàng</div>
+          <div class="oc-sum">1930s: 81% vốn cổ phần. 1940s: 60% vay ngân hàng. 1965: 89% vay ngân hàng. Không phải thị trường quyết định — mà là bàn tay hữu hình của nhà nước.</div>
+        </div>
+        <div class="oc" onclick="show('s2')">
+          <div class="oc-num">02 — 3 lý do chiến lược</div>
+          <div class="oc-title">Tại sao chọn tín dụng ngân hàng?</div>
+          <div class="oc-sum">Empower managers over shareholders. Tốc độ huy động vốn trong chiến tranh. Kiểm soát tiết kiệm và tiêu dùng. Ba lý do tạo ra một hệ thống hoàn chỉnh.</div>
+        </div>
+        <div class="oc" onclick="show('s3')">
+          <div class="oc-num">03 — Lý thuyết tiền tệ</div>
+          <div class="oc-title">Ngân hàng là người tạo ra tiền</div>
+          <div class="oc-sum">Khi doanh nhân vay từ ngân hàng, tiền mới được tạo ra. Khi vay từ nhà đầu tư, chỉ là chuyển dịch tiền hiện có. Đây là bí mật cốt lõi của hệ thống ngân hàng hiện đại.</div>
+        </div>
+        <div class="oc" onclick="show('s4')">
+          <div class="oc-num">04 — Phân biệt then chốt</div>
+          <div class="oc-title">Tín dụng sản xuất vs Tín dụng đầu cơ</div>
+          <div class="oc-sum">Tín dụng cho sản xuất: tăng GDP, không lạm phát. Tín dụng cho đầu cơ: bong bóng tài sản, lạm phát, rồi khủng hoảng. Phân biệt này mà các nhà kinh tế học hiện đại đã bỏ quên.</div>
+        </div>
+        <div class="oc" onclick="show('s5')">
+          <div class="oc-num">05 — Nguồn gốc Window Guidance</div>
+          <div class="oc-title">Reichsbank & Schacht — "Nhà độc tài tín dụng"</div>
+          <div class="oc-sum">Không có cơ sở pháp lý — chỉ là "moral suasion" với đe dọa ngầm. Schacht kiểm soát toàn bộ nền kinh tế Đức từ 1924–1930. Chính phủ Weimar sụp đổ liên tiếp; Schacht vẫn trên đỉnh quyền lực.</div>
+        </div>
+        <div class="oc" onclick="show('s6')">
+          <div class="oc-num">06 — Nhập khẩu mô hình Đức</div>
+          <div class="oc-title">Nhật Bản sao chép Reichsbank</div>
+          <div class="oc-sum">BoJ cử quan chức học tại Reichsbank Berlin. 1942: Luật BoJ mới — dịch trực tiếp từ Luật Reichsbank của Hitler 1939. BoJ trở thành công cụ nhà nước tối cao.</div>
+        </div>
+        <div class="oc" onclick="show('s7')">
+          <div class="oc-num">07 — Cơ chế phân bổ</div>
+          <div class="oc-title">BoJ kiểm soát — Phân loại A / B / C</div>
+          <div class="oc-sum">Hệ thống phân loại 3 tầng: A = vũ khí/nguyên liệu (ưu tiên tuyệt đối), B = trung bình, C = xa xỉ phẩm (gần như không thể vay). Main bank được phân công cho mỗi doanh nghiệp A.</div>
+        </div>
+        <div class="oc" onclick="show('s8')">
+          <div class="oc-num">08 — Di sản chiến tranh</div>
+          <div class="oc-title">Kiểm soát tín dụng tồn tại hậu chiến</div>
+          <div class="oc-sum">Hệ thống được mang nguyên vẹn sang thời bình. "Vũ khí = sản xuất công nghiệp". Kiểm soát tín dụng là lý do chính Nhật Bản phát triển thần kỳ — và là nguồn gốc bong bóng 1980s.</div>
+        </div>
+      </div>
+
+      <div class="card red">
+        <div class="card-label">🔑 Luận điểm trung tâm</div>
+        <p>Chương 5 chứng minh rằng <strong>window guidance không phải là phát minh ngẫu hứng của BoJ thời hậu chiến</strong>. Đây là hệ thống được <em>thiết kế có chủ đích từ thời chiến tranh</em>, dựa trực tiếp trên mô hình Reichsbank của Đức dưới Hjalmar Schacht — và được duy trì nguyên vẹn sang thời bình với chỉ một thay đổi mục tiêu: từ sản xuất vũ khí sang sản xuất hàng công nghiệp.</p>
+      </div>
+    </div>
+
+    <!-- S1 -->
+    <div class="sec" id="s1">
+      <div class="sec-head"><span class="sec-num">01</span><h2>Từ Chứng Khoán sang Tín Dụng Ngân Hàng — Cuộc Chuyển Đổi Lịch Sử</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag c">1920s–1980s</span><span class="tag">Cơ cấu tài chính</span><span class="tag b">Bàn tay hữu hình</span></div>
+      <div class="prose">
+        <p>Trong thập niên 1920 và đầu 1930, các doanh nghiệp Nhật chủ yếu huy động vốn từ <strong>thị trường chứng khoán</strong> — giống như Mỹ ngày nay. Từ 1934 đến 1936, bình quân <strong>81% nợ phải trả của doanh nghiệp là vốn cổ phần</strong>, chỉ 18% là vay ngân hàng.</p>
+        <p>Chưa đến mười năm sau, nguồn vốn đã đảo lộn hoàn toàn. Từ 1940 đến 1950, <strong>60% nợ phải trả là vay ngân hàng</strong>, chỉ 40% là vốn cổ phần. Sự thống trị của tài chính ngân hàng tiếp tục cho đến cuối thập niên 1980 — năm 1965: 89% là vay ngân hàng; 1970: 85%; 1980: 87%.</p>
+      </div>
+
+      <div class="dg">
+        <div class="db"><div class="db-val">18%</div><div class="db-label">Vay ngân hàng / nợ DN</div><div class="db-sub">Trung bình 1934–1936</div></div>
+        <div class="db"><div class="db-val">81%</div><div class="db-label">Vốn cổ phần / nợ DN</div><div class="db-sub">Trung bình 1934–1936</div></div>
+        <div class="db"><div class="db-val c">60%</div><div class="db-label">Vay ngân hàng / nợ DN</div><div class="db-sub">Trung bình 1940–1950</div></div>
+        <div class="db"><div class="db-val g">89%</div><div class="db-label">Vay ngân hàng / nợ DN</div><div class="db-sub">Năm 1965</div></div>
+      </div>
+
+      <div class="card cop">
+        <div class="card-label">⚙️ Bàn tay hữu hình — Không phải thị trường</div>
+        <p>Werner nhấn mạnh rõ ràng: Sự thay đổi lớn trong cơ cấu tài chính doanh nghiệp Nhật Bản — từ thị trường chứng khoán sang vay ngân hàng — <strong>không xảy ra do tình cờ hay lực lượng thị trường</strong>. Bàn tay hữu hình của chính phủ đã có chủ đích đặt tín dụng ngân hàng vào trung tâm của nền kinh tế chiến tranh. Các quan chức chính phủ thấy nhiều lợi thế trong tài chính ngân hàng và do đó đã <em>triệt tiêu nguồn tài chính từ thị trường chứng khoán và trái phiếu</em>.</p>
+      </div>
+
+      <div class="compare">
+        <div class="cmp-col">
+          <div class="cmp-head r">Hệ thống thị trường chứng khoán (1920s)</div>
+          <div class="cmp-item"><strong>Quyền lực:</strong> Cổ đông kiểm soát công ty</div>
+          <div class="cmp-item"><strong>Mục tiêu:</strong> Tối đa hóa lợi nhuận</div>
+          <div class="cmp-item"><strong>Tốc độ:</strong> Chậm — cần luật sư, bảo lãnh, phân phối</div>
+          <div class="cmp-item"><strong>Tiết kiệm:</strong> Dân phải mua cổ phiếu/trái phiếu — rủi ro</div>
+          <div class="cmp-item"><strong>Kiểm soát:</strong> Nhà nước khó can thiệp trực tiếp</div>
+        </div>
+        <div class="cmp-col">
+          <div class="cmp-head g">Hệ thống tín dụng ngân hàng (1940s–)</div>
+          <div class="cmp-item"><strong>Quyền lực:</strong> Ban quản lý (bankers) kiểm soát</div>
+          <div class="cmp-item"><strong>Mục tiêu:</strong> Tối đa hóa tăng trưởng sản lượng</div>
+          <div class="cmp-item"><strong>Tốc độ:</strong> Nhanh — loan officer ký một chữ là xong</div>
+          <div class="cmp-item"><strong>Tiết kiệm:</strong> Gửi ngân hàng — được bảo lãnh, an toàn</div>
+          <div class="cmp-item"><strong>Kiểm soát:</strong> Nhà nước kiểm soát trực tiếp qua BoJ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2 -->
+    <div class="sec" id="s2">
+      <div class="sec-head"><span class="sec-num">02</span><h2>Ba Lý Do Chiến Lược Chọn Tín Dụng Ngân Hàng</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag">Lý thuyết chiến tranh</span><span class="tag c">Kinh tế huy động</span></div>
+      <div class="prose">
+        <p>Các nhà quan liêu cải cách thập niên 1930 không chọn ngẫu hứng. Họ có <strong>ba lý do chiến lược rõ ràng</strong> khi đặt tín dụng ngân hàng vào trung tâm nền kinh tế chiến tranh:</p>
+      </div>
+
+      <div class="flow-box">
+        <div class="flow-title">Lý do 1 — Loại bỏ quyền lực cổ đông, trao quyền cho nhà quản lý</div>
+        <div class="flow-chain">
+          <div class="fn r">Vốn cổ phần<br>→ Cổ đông kiểm soát</div>
+          <div class="fa">→</div>
+          <div class="fn r">Định hướng<br>tối đa lợi nhuận</div>
+          <div class="fa">→</div>
+          <div class="fn r">KHÔNG phù hợp<br>cho chiến tranh</div>
+        </div>
+        <div style="margin:12px 0 6px;">
+        <div class="flow-chain">
+          <div class="fn g">Vay ngân hàng<br>→ Banker kiểm soát</div>
+          <div class="fa">→</div>
+          <div class="fn g">Banker cũng là<br>nhà quản lý</div>
+          <div class="fa">→</div>
+          <div class="fn g">Ưu tiên tăng trưởng<br>sản lượng, không phải lợi nhuận</div>
+        </div>
+        </div>
+        <div style="font-size:13px;color:var(--text2);margin-top:10px;line-height:1.65;">Chủ sở hữu ngân hàng bị gạt ra ngoài — banker giờ là nhà quản lý chuyên nghiệp. Banker ít quan tâm đến lợi nhuận hơn đến tăng trưởng — họ muốn mở rộng cho vay, điều này chỉ khả thi khi doanh nghiệp tăng trưởng nhanh và tiếp tục cần vay.</div>
+      </div>
+
+      <div class="flow-box">
+        <div class="flow-title">Lý do 2 — Tốc độ huy động vốn trong thời chiến</div>
+        <div class="flow-chain">
+          <div class="fn c">Ngành chiến lược<br>cần vốn gấp</div>
+          <div class="fa">→</div>
+          <div class="fn c">Phát hành cổ phiếu/trái phiếu:<br>cần luật sư, bảo lãnh, phân phối<br>= mất hàng tháng</div>
+          <div class="fa">vs</div>
+          <div class="fn g">Vay ngân hàng:<br>Loan officer ký<br>= tiền có ngay</div>
+        </div>
+        <div style="font-size:13px;color:var(--text2);margin-top:10px;line-height:1.65;">Trong thời chiến, các ngành ưu tiên phải huy động vốn lớn nhanh chóng. Tài chính ngân hàng vượt trội tài chính thị trường về tốc độ và sự dễ dàng. Nhà hoạch định chiến tranh không thể cho phép nhịp độ thong thả như vậy.</div>
+      </div>
+
+      <div class="flow-box">
+        <div class="flow-title">Lý do 3 — Kiểm soát tiết kiệm và tiêu dùng</div>
+        <div class="flow-chain">
+          <div class="fn r">Ngành ưu tiên<br>được phân bổ<br>sức mua</div>
+          <div class="fa">→</div>
+          <div class="fn r">Cạnh tranh tài nguyên<br>với người tiêu dùng<br>→ lạm phát</div>
+          <div class="fa">→</div>
+          <div class="fn c">Giải pháp:<br>Dân gửi tiết kiệm<br>ngân hàng thay vì tiêu</div>
+          <div class="fa">→</div>
+          <div class="fn g">Ngân hàng bảo lãnh<br>tiền gửi → người dân<br>sẵn sàng tiết kiệm</div>
+        </div>
+        <div style="font-size:13px;color:var(--text2);margin-top:10px;line-height:1.65;">Hệ thống ngân hàng cho phép nhà nước đơn giản bảo lãnh tiền gửi. Đổi lại an toàn cao, người gửi tiết kiệm chấp nhận lãi suất thấp hơn. Từ 1937, các chiến dịch tiết kiệm hàng năm được phát động — truyền thông tuyên truyền "tiêu xài là xấu, tiết kiệm là tốt".</div>
+      </div>
+    </div>
+
+    <!-- S3 -->
+    <div class="sec" id="s3">
+      <div class="sec-head"><span class="sec-num">03</span><h2>Ngân Hàng Là Người Tạo Ra Tiền — Bí Mật Cốt Lõi</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag b">Lý thuyết tiền tệ</span><span class="tag c">Tạo tín dụng</span><span class="tag g">Tăng trưởng kinh tế</span></div>
+      <div class="prose">
+        <p>Lý do quan trọng nhất mà những người hoạch định kinh tế chiến tranh ưu tiên tài chính ngân hàng là: <strong>ngân hàng tạo ra phần lớn lượng tiền trong nền kinh tế</strong>. Và chính ngân hàng — không phải thị trường — ra quyết định quan trọng ai sẽ nhận được số tiền này. Hành động của chúng do đó tác động sâu sắc đến công bằng, tăng trưởng, hiệu quả, và lạm phát.</p>
+      </div>
+
+      <div class="flow-box">
+        <div class="flow-title">Cơ chế tạo tiền — Hai nguồn vốn hoàn toàn khác nhau</div>
+        <div style="margin-bottom:16px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">Kịch bản A — Vay từ Nhà đầu tư</div>
+          <div class="flow-chain">
+            <div class="fn">Nhà đầu tư<br>có sẵn tiền</div>
+            <div class="fa">→</div>
+            <div class="fn">Rút từ cổ phiếu/<br>trái phiếu/tiền gửi khác</div>
+            <div class="fa">→</div>
+            <div class="fn">Cho doanh nhân vay</div>
+            <div class="fa">→</div>
+            <div class="fn r">Sức mua chuyển dịch<br>Không có tiền MỚI<br>GDP không đổi</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">Kịch bản B — Vay từ Ngân hàng</div>
+          <div class="flow-chain">
+            <div class="fn c">Doanh nhân<br>vay ngân hàng</div>
+            <div class="fa">→</div>
+            <div class="fn g">Ngân hàng tạo<br>tiền ghi sổ mới</div>
+            <div class="fa">→</div>
+            <div class="fn g">Sức mua MỚI<br>được bơm vào KT</div>
+            <div class="fa">→</div>
+            <div class="fn g">Không dự án cũ<br>phải dừng lại<br>GDP tăng</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card red">
+        <div class="card-label">💡 Hàm ý chính sách — Ai kiểm soát ngân hàng, kiểm soát nền kinh tế</div>
+        <p>Nếu ngân hàng tạo ra tiền, và tiền tạo ra tăng trưởng, thì <strong>người kiểm soát các ngân hàng thực chất kiểm soát toàn bộ quỹ đạo tăng trưởng kinh tế quốc gia</strong>. Đây là nhận thức mà các nhà quan liêu cải cách Nhật Bản đã học từ các nhà kinh tế học Đức — đặc biệt là từ tác phẩm của Georg Friedrich Knapp và Silvio Gesell. Bằng cách "hướng dẫn" các ngân hàng, quan chức có thể chuyển hướng tiền được tạo ra mới sang <em>các dự án sản xuất ưu tiên</em>.</p>
+      </div>
+
+      <div class="card cop">
+        <div class="card-label">🏛️ Lập luận về quản trị ngân hàng</div>
+        <p>Werner trích dẫn lập luận của các nhà kinh tế Đức và thậm chí của Tổng thống Mỹ Thomas Jefferson: <strong>Ngân hàng là tổ chức đặc biệt vì họ phục vụ chức năng công cộng — tạo và phân bổ tiền</strong>. Nhưng banker không được bầu chọn dân chủ. Chủ ngân hàng thường là một số ít gia đình nắm quyền lực rộng lớn. Do đó, <em>tín dụng ngân hàng phải được nhà nước điều tiết vì lợi ích chung</em> — đây không phải chủ nghĩa xã hội, mà là logic của nền cộng hòa lành mạnh.</p>
+      </div>
+    </div>
+
+    <!-- S4 -->
+    <div class="sec" id="s4">
+      <div class="sec-head"><span class="sec-num">04</span><h2>Tín Dụng Sản Xuất vs Tín Dụng Đầu Cơ — Phân Biệt Căn Bản Nhất</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag g">Tín dụng sản xuất</span><span class="tag">Tín dụng đầu cơ</span><span class="tag c">Lạm phát vs Bong bóng</span></div>
+      <div class="prose">
+        <p>Đây là phân biệt <strong>quan trọng nhất trong toàn bộ lý thuyết kinh tế của Werner</strong> — và là phân biệt mà hầu hết các nhà kinh tế học hiện đại đã bỏ qua hoàn toàn. Mọi chu kỳ bùng nổ–sụp đổ, mọi khủng hoảng tài chính trong lịch sử đều có thể giải thích qua lăng kính này.</p>
+      </div>
+
+      <div class="compare">
+        <div class="cmp-col">
+          <div class="cmp-head g">Tín dụng sản xuất</div>
+          <div class="cmp-item"><strong>Dùng cho:</strong> Triển khai công nghệ mới, tăng năng lực sản xuất</div>
+          <div class="cmp-item"><strong>Tác động:</strong> Tăng cả lượng tiền VÀ lượng hàng hóa → giá cả ổn định</div>
+          <div class="cmp-item"><strong>Cơ chế hoàn trả:</strong> Thu nhập từ dự án sản xuất trả được gốc và lãi</div>
+          <div class="cmp-item"><strong>Nợ xấu:</strong> Thấp — có doanh thu thực để trả nợ</div>
+          <div class="cmp-item"><strong>Hậu quả dài hạn:</strong> Tăng trưởng bền vững, không lạm phát</div>
+        </div>
+        <div class="cmp-col">
+          <div class="cmp-head r">Tín dụng đầu cơ / tiêu dùng</div>
+          <div class="cmp-item"><strong>Dùng cho:</strong> Mua đất đai đầu cơ, cổ phiếu, hàng xa xỉ</div>
+          <div class="cmp-item"><strong>Tác động:</strong> Tăng lượng tiền nhưng KHÔNG tăng hàng hóa → giá tài sản bong bóng</div>
+          <div class="cmp-item"><strong>Cơ chế hoàn trả:</strong> Chỉ có thể trả từ bán tài sản với giá cao hơn — tất yếu sụp đổ</div>
+          <div class="cmp-item"><strong>Nợ xấu:</strong> Cao — không có thu nhập thực để trả nợ</div>
+          <div class="cmp-item"><strong>Hậu quả dài hạn:</strong> Bong bóng → vỡ bong bóng → khủng hoảng ngân hàng</div>
+        </div>
+      </div>
+
+      <div class="card red">
+        <div class="card-label">⚠️ Nghịch lý ngân hàng — Fallacy of Composition</div>
+        <p>Trong nền kinh tế thị trường tự do, mỗi ngân hàng có thể tạo tín dụng và phân bổ cho bất kỳ ai, kể cả người dùng cho mục đích không sản xuất. Cuối cùng điều này cũng không tốt cho chính ngân hàng, vì <strong>cho vay không sản xuất là rủi ro hơn nhiều</strong>. Tuy nhiên, ngân hàng không dễ nhận ra rủi ro thực sự trong các khoản vay của mình. Mỗi ngân hàng nghĩ rằng mình sẽ lấy được tiền về từ các khoản vay bất động sản — nhưng <em>tập thể tất cả ngân hàng</em> sẽ cho vay nhiều hơn mức bất động sản có thể hấp thu sản xuất. Kết quả: tiền được tạo ra nhưng không có sản lượng và thu nhập mới.</p>
+      </div>
+
+      <div class="card cop">
+        <div class="card-label">📖 Điều mà kinh tế học cổ điển đã bỏ lỡ</div>
+        <p>Nhiều nhà kinh tế học cổ điển và tân cổ điển lo ngại rằng tạo tiền quá mức sẽ dẫn đến lạm phát giá tiêu dùng. Werner chỉ ra rằng <strong>đây chỉ đúng một phần</strong>: Lạm phát giá tiêu dùng xảy ra khi tiền mới được dùng cho tiêu dùng hoặc đầu cơ hàng hóa thông thường. Nhưng khi tiền mới được bơm vào <em>thị trường tài sản</em> (đất đai, cổ phiếu), hậu quả là <strong>lạm phát tài sản — bong bóng</strong> — không xuất hiện trong chỉ số CPI. Đây là lý do tại sao thập niên 1980s Nhật Bản có lạm phát CPI thấp trong khi bong bóng tài sản nổ to.</p>
+      </div>
+
+      <div class="q">
+        <p>"Nếu tiền thêm được tạo ra không được dùng để triển khai công nghệ mới và tạo ra thêm sản lượng, mà đơn thuần cho tiêu dùng hoặc đầu cơ, thì nhiều tiền hơn sẽ đuổi theo một số lượng hàng hóa không đổi. Giá cả sẽ được đẩy lên và lạm phát sẽ xảy ra."</p>
+        <div class="q-src">— Richard Werner, Princes of the Yen, Chương 5</div>
+      </div>
+    </div>
+
+    <!-- S5 -->
+    <div class="sec" id="s5">
+      <div class="sec-head"><span class="sec-num">05</span><h2>Reichsbank & Schacht — Nguồn Gốc của Window Guidance</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag">1920s Đức</span><span class="tag c">Schacht</span><span class="tag">Moral Suasion</span></div>
+      <div class="prose">
+        <p>Công cụ kiểm soát tín dụng không phải là phát minh của Nhật Bản — nó được <strong>tiên phong bởi ngân hàng trung ương Đức, Reichsbank</strong>. Trong Thế chiến I và thập niên 1920, Reichsbank đã tích lũy kinh nghiệm vô giá trong việc hạn chế tăng trưởng tín dụng và phân bổ tiền mới tạo ra cho các khu vực ưu tiên.</p>
+        <p>Thủ tục rất đơn giản: Mỗi ngân hàng phải xin Reichsbank cấp hạn ngạch cho vay cho kỳ tới. Các ngân hàng sau đó phân bổ hạn ngạch của mình cho các bên vay. Khi hạn ngạch cạn kiệt, Reichsbank sẽ từ chối chiết khấu thêm hối phiếu và sẽ <em>trừng phạt</em> các ngân hàng mở rộng tín dụng thêm.</p>
+      </div>
+
+      <div class="card red">
+        <div class="card-label">⚠️ Không có cơ sở pháp lý — Chỉ là "Moral Suasion"</div>
+        <p>Vì không có cơ sở pháp lý cho việc kiểm soát tín dụng này, Reichsbank dựa vào <strong>"moral suasion"</strong> — áp lực hành chính phi chính thức với đe dọa về các biện pháp trừng phạt có thể gây tổn thất lớn cho ngân hàng. Một bản ghi chú nội bộ Reichsbank năm 1924 ghi khô khan rằng ngân hàng trung ương có <em>"phương tiện gây áp lực đáng kể"</em> mà nó <em>"sẽ không ngần ngại sử dụng."</em> Đây chính xác là cơ chế mà BoJ sẽ sao chép và gọi là <strong>window guidance</strong>.</p>
+      </div>
+
+      <div class="person-row">
+        <div class="pc">
+          <div class="pc-name">Hjalmar Schacht</div>
+          <div class="pc-role">Thống đốc Reichsbank 1924–1930</div>
+          <div class="pc-desc">Được đương thời gọi là <strong>"nhà độc tài tín dụng"</strong> và <strong>"nhà độc tài kinh tế"</strong>. Reichsbank dưới thời ông được gọi là <strong>"chính phủ thứ hai của Đức"</strong>. Các chính phủ Weimar sụp đổ liên tiếp — Schacht vẫn vững vàng từ 1924 đến 1930.</div>
+        </div>
+        <div class="pc">
+          <div class="pc-name">Hisato Ichimada</div>
+          <div class="pc-role">Đặc phái viên BoJ tại Reichsbank Berlin</div>
+          <div class="pc-desc">Được BoJ cử đến học tại Reichsbank. Sau này trở thành <strong>Thống đốc BoJ thời hậu chiến</strong> — áp dụng trực tiếp bài học học được ở Berlin vào nền kinh tế Nhật. Werner gọi ông là "nhà độc tài tín dụng hậu chiến của Nhật Bản".</div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>Schacht không chỉ kiểm soát <em>lượng</em> tín dụng — ông đưa ra hướng dẫn chi tiết cho các ngân hàng về loại ngành công nghiệp và thậm chí <strong>công ty cụ thể nào được vay và công ty nào bị cắt tín dụng</strong>. Điều này cho phép ông thực hiện chính sách kinh tế cơ cấu sâu rộng, ưu tiên các vùng, ngành và tổ chức cụ thể mà ông coi là "năng suất" và thúc đẩy tái cơ cấu doanh nghiệp. Schacht đặt những thay đổi cơ cấu này lên trên nhu cầu kích thích kinh tế — kết quả: thất nghiệp là vấn đề dai dẳng suốt thập niên 1920.</p>
+      </div>
+
+      <div class="card cop">
+        <div class="card-label">🏛️ Ngân hàng trung ương như "chính phủ thực sự"</div>
+        <p>Nhiều nhà quan sát đương thời lập luận rằng trong một nền dân chủ, những quyết định quan trọng như vậy chỉ có thể do nghị viện và chính phủ được bầu chọn đưa ra. Thực tế là <strong>Reichsbank đã trở thành chính phủ thực sự của Đức</strong>, dễ dàng vượt qua các chính phủ Weimar mong manh và ngắn ngủi về mức độ ảnh hưởng đến nền kinh tế. Werner sử dụng ví dụ lịch sử này để lập luận rằng <em>ngân hàng trung ương "độc lập" không phải là trung tính về chính trị — họ là trung tâm quyền lực chính trị thực sự</em>.</p>
+      </div>
+    </div>
+
+    <!-- S6 -->
+    <div class="sec" id="s6">
+      <div class="sec-head"><span class="sec-num">06</span><h2>Nhật Bản Sao Chép Mô Hình Đức — Luật BoJ 1942</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag">1932–1942</span><span class="tag c">Luật kiểm soát</span><span class="tag">Copy Reichsbank</span></div>
+      <div class="prose">
+        <p>Khi các nhà quan liêu cải cách Nhật nhận ra tầm quan trọng của hệ thống ngân hàng trong việc định hình nền kinh tế, họ bắt đầu nghiên cứu cách các ngân hàng trung ương giám sát ngân hàng. <strong>Họ cử quan chức đến Berlin</strong> — làm việc tại đại sứ quán Nhật Bản hoặc trực tiếp tại Reichsbank — để học hỏi thực tế.</p>
+      </div>
+
+      <div class="tl">
+        <div class="tl-item">
+          <div class="tl-date">1932</div>
+          <div class="tl-text"><strong>Luật Ngăn chặn Thoát vốn</strong> — kiểm soát dòng tiền ra nước ngoài. Đây là bước đầu tiên hướng tới nền kinh tế chiến tranh "bán chính thức".</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1933</div>
+          <div class="tl-text"><strong>Luật Kiểm soát Ngoại hối</strong> — cùng với Luật 1932, đặt nền móng cho bộ máy kiểm soát tài chính. Nhân viên bộ phận kiểm soát ngoại hối mới tại MoF trở thành lõi kinh nghiệm của các nhà kiểm soát kinh tế.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1937</div>
+          <div class="tl-text"><strong>Luật Điều chỉnh Quỹ Tạm thời</strong> — đưa ngân hàng và quyết định đầu tư, cho vay vào kiểm soát chặt chẽ bởi BoJ và MoF. Nguồn tài chính thị trường chứng khoán giảm xuống còn nhỏ giọt.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1942</div>
+          <div class="tl-text"><strong>Luật Ngân hàng Nhật Bản mới</strong> — dịch trực tiếp từ <em>Luật Reichsbank của Hitler năm 1939</em> và áp dụng là Luật BoJ mới. BoJ được đặt trực tiếp dưới sự kiểm soát của chính phủ. Điều 1: BoJ phục vụ <em>"huy động toàn diện nguồn lực quốc gia"</em>. Điều 2: BoJ <em>"vận hành độc quyền nhằm hoàn thành mục đích của nhà nước."</em></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Cuối CTTG II</div>
+          <div class="tl-text">Số ngân hàng giảm từ <strong>~1.400 xuống còn 64</strong> để đơn giản hóa cơ chế phân bổ tín dụng. Ngân hàng được tổ chức thành <em>Hiệp hội Kiểm soát Tài chính</em> — sau chiến tranh trở thành <em>Hiệp hội Ngân hàng Nhật Bản</em>.</div>
+        </div>
+      </div>
+
+      <div class="card red">
+        <div class="card-label">🔍 Chi tiết pháp lý gây sốc</div>
+        <p>Werner cung cấp bằng chứng cụ thể: Luật Ngân hàng Nhật Bản năm 1942 được <strong>dịch trực tiếp từ Luật Reichsbank mới của Hitler năm 1939</strong>. Đây không phải ẩn dụ hay so sánh — là sao chép văn bản pháp lý. Điều khoản <em>"vận hành độc quyền nhằm hoàn thành mục đích của nhà nước"</em> là phiên bản Nhật Bản của ngôn ngữ pháp lý Đức Quốc xã. Đây là nền tảng pháp lý mà toàn bộ hệ thống window guidance sau này được xây dựng trên.</p>
+      </div>
+    </div>
+
+    <!-- S7 -->
+    <div class="sec" id="s7">
+      <div class="sec-head"><span class="sec-num">07</span><h2>BoJ Làm Trung Tâm Kiểm Soát — Hệ Thống Phân Loại A / B / C</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag">Phân bổ tín dụng</span><span class="tag c">Main Bank</span><span class="tag g">Keiretsu</span></div>
+      <div class="prose">
+        <p>Thống đốc BoJ đứng đầu <em>Hiệp hội Kiểm soát Tài chính Quốc gia</em> — được BoJ vận hành và triển khai các kế hoạch phân bổ nguồn lực do <em>Hội đồng Kế hoạch Nội các</em> vạch ra. Kế hoạch được cấu trúc từ trên xuống: Trước tiên quyết định sản lượng cần thiết, sau đó xác định hệ thống phân cấp nhà sản xuất, thầu phụ, nhà nhập khẩu nguyên liệu thô. Cuối cùng, các ngân hàng được yêu cầu đảm bảo sức mua được cung cấp cho tất cả các công ty.</p>
+      </div>
+
+      <div class="abc-grid">
+        <div class="abc-card a">
+          <div class="abc-letter">A</div>
+          <div class="abc-title">Ưu tiên tuyệt đối — Chiến lược quốc gia</div>
+          <div class="abc-desc">Vũ khí, đạn dược, nguyên liệu thô chiến lược. Được cấp "main bank" chuyên trách để đảm bảo đủ tín dụng cho mục tiêu sản xuất. Tiếp cận vốn không hạn chế.</div>
+        </div>
+        <div class="abc-card b">
+          <div class="abc-letter">B</div>
+          <div class="abc-title">Trung bình — Hỗ trợ chiến tranh</div>
+          <div class="abc-desc">Ngành hỗ trợ, thầu phụ cấp hai. Phân bổ tín dụng bị hạn chế. Được vay nhưng không được ưu tiên tuyệt đối như nhóm A.</div>
+        </div>
+        <div class="abc-card c">
+          <div class="abc-letter">C</div>
+          <div class="abc-title">Thấp — Hàng xa xỉ & Tiêu dùng nội địa</div>
+          <div class="abc-desc">Hàng tiêu dùng nội địa, mặt hàng "xa xỉ". Gần như không thể vay vốn. Nếu không chuyển đổi sang sản xuất chiến tranh, đơn giản là không tồn tại được.</div>
+        </div>
+      </div>
+
+      <div class="card cop">
+        <div class="card-label">🎻 Ví dụ lịch sử — Yamaha và Bài học Chuyển đổi</div>
+        <p>Nhà sản xuất đàn piano Yamaha — bị xếp loại C — buộc phải <strong>chuyển đổi sản xuất sang cánh quạt máy bay</strong>. Di sản chiến tranh này cho phép Yamaha đa dạng hóa sang sản xuất xe máy sau chiến tranh — và trở thành một trong những thương hiệu xe máy lớn nhất thế giới. Hệ thống phân loại tín dụng chiến tranh đã <em>định hình cơ cấu ngành công nghiệp Nhật Bản trong nhiều thập kỷ</em>.</p>
+      </div>
+
+      <div class="prose">
+        <p>Hệ thống này nhanh chóng tái định hình nền kinh tế. Nó đảm bảo rằng chỉ các nhà sản xuất ưu tiên mới nhận được sức mua mới được tạo ra. Các công ty và ngành ít ưu tiên bị suy yếu, trong khi các công ty và ngành chiến lược phát triển nhanh chóng. Một phần lớn các mối liên kết hậu chiến giữa các công ty trong nhiều <em>keiretsu</em> (tập đoàn kinh doanh), thầu phụ và main bank của họ có <strong>nguồn gốc từ hệ thống phân bổ tín dụng thời chiến</strong>.</p>
+      </div>
+    </div>
+
+    <!-- S8 -->
+    <div class="sec" id="s8">
+      <div class="sec-head"><span class="sec-num">08</span><h2>Di Sản Chiến Tranh — Kiểm Soát Tín Dụng Tồn Tại Hậu Chiến</h2></div>
+      <div style="margin-bottom:10px;"><span class="tag g">Hậu chiến</span><span class="tag c">Thần kỳ kinh tế</span><span class="tag">Window Guidance</span></div>
+      <div class="prose">
+        <p>Trong thời chiến, loại sản lượng mong muốn là vũ khí. Trong thời hậu chiến, đó là <strong>hàng công nghiệp và tiêu dùng</strong>. Hệ thống kiểm soát hoạt động hiệu quả đến mức nó được <em>mang nguyên vẹn sang thời hậu chiến</em>. Mục tiêu thay đổi, cơ chế không thay đổi.</p>
+      </div>
+
+      <div class="flow-box">
+        <div class="flow-title">Sự liên tục của cơ chế kiểm soát — Chiến tranh → Hòa bình</div>
+        <div class="flow-chain">
+          <div class="fn c">Chiến tranh:<br>Mục tiêu = Sản xuất<br>vũ khí tối đa</div>
+          <div class="fa">→ chỉ đổi mục tiêu</div>
+          <div class="fn g">Hòa bình:<br>Mục tiêu = Sản xuất<br>công nghiệp tối đa</div>
+        </div>
+        <div style="margin:12px 0 6px;">
+        <div class="flow-chain">
+          <div class="fn c">Cơ chế:<br>Window Guidance<br>phân loại A/B/C</div>
+          <div class="fa">→ giữ nguyên</div>
+          <div class="fn g">Cơ chế:<br>Window Guidance<br>phân loại ngành CN ưu tiên</div>
+        </div>
+        </div>
+        <div style="margin:12px 0 6px;">
+        <div class="flow-chain">
+          <div class="fn c">Công cụ:<br>Luật huy động<br>+ hình phạt nặng</div>
+          <div class="fa">→ thay bằng</div>
+          <div class="fn g">Công cụ:<br>Tsutatsu (thông báo hành chính)<br>+ bảo lãnh tín dụng</div>
+        </div>
+        </div>
+      </div>
+
+      <div class="dt">
+        <tr><th>Cơ chế tuân thủ</th><th>Thời chiến</th><th>Thời hậu chiến</th></tr>
+        <tr>
+          <td>Cơ sở pháp lý</td>
+          <td>Luật huy động — hình phạt cực nặng</td>
+          <td>Tsutatsu (lệnh hành chính phi chính thức) — không có cơ sở luật pháp</td>
+        </tr>
+        <tr>
+          <td>Biện pháp tuân thủ</td>
+          <td>Lệnh quân sự</td>
+          <td>Moral suasion + đe dọa ngầm + bảo lãnh tín dụng</td>
+        </tr>
+        <tr>
+          <td>Vì sao ngân hàng tuân thủ</td>
+          <td>Sợ hình phạt</td>
+          <td>Phụ thuộc vào BoJ + bảo lãnh tín dụng = không dám cãi</td>
+        </tr>
+        <tr>
+          <td>Mục tiêu phân bổ</td>
+          <td>Vũ khí, nguyên liệu chiến lược</td>
+          <td>Thép, đóng tàu, điện tử, ô tô, máy móc</td>
+        </tr>
+        <tr>
+          <td>Hạn chế tín dụng</td>
+          <td>Ngành loại C (xa xỉ phẩm)</td>
+          <td>Bất động sản, tiêu dùng, nhập khẩu cạnh tranh</td>
+        </tr>
+      </div>
+
+      <div class="card red">
+        <div class="card-label">🌟 Lý do thực sự của "Thần kỳ kinh tế Nhật Bản"</div>
+        <p>Werner kết luận: <strong>Lý do chính cho sự phát triển kinh tế hậu chiến thành công của Nhật Bản là hệ thống kiểm soát tài chính</strong>, giúp "hướng dẫn" tín dụng đến các ngành có giá trị gia tăng cao và tận dụng tối đa cơ cấu kinh tế thời chiến. Nếu Nhật Bản theo chính sách tự do không can thiệp, thì nguồn lao động dồi dào sẽ hướng nền kinh tế về các ngành thâm dụng lao động, không phải công nghiệp nặng. Quá nhiều tiền cũng sẽ chảy vào đầu cơ bất động sản và tiêu dùng xa xỉ. <em>"Khu vực tài chính là 'tổng tham mưu phía sau chiến trường trong cuộc tổng chiến gọi là tăng trưởng kinh tế cao.'"</em></p>
+      </div>
+
+      <div class="card cop">
+        <div class="card-label">⚠️ Mặt tối — Bong bóng là hậu quả tất yếu</div>
+        <p>Cùng hệ thống tạo ra thần kỳ cũng tạo ra thảm họa. Khi BoJ <em>nới lỏng</em> window guidance và cho phép ngân hàng cấp tín dụng cho đầu cơ bất động sản trong thập niên 1980, <strong>chính cơ chế quyền năng này đã tạo ra bong bóng lớn nhất lịch sử</strong>. Và khi BoJ siết window guidance từ 1989–90, cùng cơ chế đó đã phá vỡ bong bóng và tạo ra "Thập kỷ mất mát". Lưỡi dao window guidance cắt cả hai chiều.</p>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+const SECS = ['s0','s1','s2','s3','s4','s5','s6','s7','s8'];
+function show(id) {
+  SECS.forEach(s => { const e=document.getElementById(s); if(e) e.classList.remove('active'); });
+  const t=document.getElementById(id);
+  if(t) t.classList.add('active');
+  document.querySelectorAll('.ni').forEach(n => n.classList.toggle('active',(n.getAttribute('onclick')||'').includes("'"+id+"'")));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+let notesOpen=false, tab=0, saveT=null;
+const KEYS=['ch5_n0','ch5_n1','ch5_n2','ch5_n3'];
+
+function toggleNotes(){
+  notesOpen=!notesOpen;
+  document.getElementById('np').classList.toggle('open',notesOpen);
+  document.getElementById('ov').classList.toggle('show',notesOpen);
+  document.getElementById('nBtn').classList.toggle('active',notesOpen);
+  if(notesOpen) loadN();
+}
+function switchTab(i){
+  saveN(); tab=i;
+  document.querySelectorAll('.ntab').forEach((t,j)=>t.classList.toggle('active',i===j));
+  loadN();
+}
+function loadN(){ document.getElementById('ne').innerHTML=localStorage.getItem(KEYS[tab])||''; setS('—',''); }
+function saveN(){ localStorage.setItem(KEYS[tab],document.getElementById('ne').innerHTML); }
+function scheduleAutoSave(){
+  setS('Đang lưu...','saving');
+  if(saveT) clearTimeout(saveT);
+  saveT=setTimeout(()=>{ saveN(); setS('Đã lưu ✓','saved'); setTimeout(()=>setS('—',''),2000); },800);
+}
+function setS(t,c){ const e=document.getElementById('nst'); e.textContent=t; e.className='nst '+c; }
+function fmt(cmd){ document.getElementById('ne').focus(); document.execCommand(cmd,false,null); scheduleAutoSave(); }
+function handleKD(e){
+  if(e.ctrlKey||e.metaKey){
+    if(e.key==='b'){e.preventDefault();fmt('bold');}
+    if(e.key==='i'){e.preventDefault();fmt('italic');}
+    if(e.key==='u'){e.preventDefault();fmt('underline');}
+  }
+}
+function clearN(){
+  if(confirm('Xóa ghi chú của tab này?')){ document.getElementById('ne').innerHTML=''; saveN(); setS('Đã xóa','saving'); setTimeout(()=>setS('—',''),1500); }
+}
+function exportN(){
+  const tabs=['Tổng_quan','Lý_thuyết_tín_dụng','Reichsbank_Schacht','Nhật_Bản_hậu_chiến'];
+  let out='=== GHI CHÚ CHƯƠNG 5 — PRINCES OF THE YEN ===\n\n';
+  KEYS.forEach((k,i)=>{ const html=localStorage.getItem(k)||''; const d=document.createElement('div'); d.innerHTML=html; const txt=(d.textContent||d.innerText||'').trim(); if(txt) out+=`--- ${tabs[i]} ---\n${txt}\n\n`; });
+  const blob=new Blob([out],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a');
+  a.href=url; a.download='ghi_chu_chuong5_princes_of_the_yen.txt'; a.click(); URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>

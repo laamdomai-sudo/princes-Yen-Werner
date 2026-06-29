@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chương 8 — Princes of the Yen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --cream: #faf8f3;
+    --paper: #f4f0e8;
+    --bone: #ede8dc;
+    --ink: #1a1714;
+    --ink-light: #3d3830;
+    --ink-muted: #7a7165;
+    --accent: #b5340a;
+    --accent-light: #d4500f;
+    --accent-pale: #f5e8e2;
+    --gold: #c9922a;
+    --gold-pale: #fdf4e0;
+    --blue: #1b4b82;
+    --blue-pale: #e8eef7;
+    --green: #2d6a4f;
+    --green-pale: #e8f4ee;
+    --border: #d9d3c7;
+    --shadow: rgba(26,23,20,0.08);
+    --shadow-md: rgba(26,23,20,0.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 2.2rem 3rem 1.8rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent, transparent 59px,
+      rgba(255,255,255,0.03) 60px
+    );
+  }
+  .header-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    position: relative;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    position: relative;
+  }
+  .header-sub {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: #c5bdb0;
+    margin-top: 0.3rem;
+    position: relative;
+  }
+  .header-meta {
+    margin-top: 1rem;
+    display: flex; gap: 1.5rem; flex-wrap: wrap;
+    position: relative;
+  }
+  .meta-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #c5bdb0;
+    padding: 0.3rem 0.8rem;
+    border-radius: 2px;
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 0;
+    min-height: calc(100vh - 120px);
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main-content {
+    padding: 2rem 2.5rem;
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+  }
+
+  /* ── SECTION TABS ── */
+  .tabs {
+    display: flex; gap: 0; flex-wrap: wrap;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .tab-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    padding: 0.7rem 1.1rem;
+    cursor: pointer;
+    color: var(--ink-muted);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--ink); background: var(--bone); }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: var(--accent-pale);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
+
+  @keyframes fadeIn { from { opacity:0; transform: translateY(4px); } to { opacity:1; transform: translateY(0); } }
+
+  /* ── CARDS & SECTIONS ── */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .section-icon {
+    font-size: 1rem;
+    background: var(--accent-pale);
+    color: var(--accent);
+    width: 28px; height: 28px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.4rem;
+    margin-bottom: 1.4rem;
+    box-shadow: 0 1px 4px var(--shadow);
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.8rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .card-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+  .tag-red { background: var(--accent-pale); color: var(--accent); }
+  .tag-gold { background: var(--gold-pale); color: var(--gold); }
+  .tag-blue { background: var(--blue-pale); color: var(--blue); }
+  .tag-green { background: var(--green-pale); color: var(--green); }
+
+  p.body-text {
+    color: var(--ink-light);
+    font-size: 0.93rem;
+    line-height: 1.75;
+    margin-bottom: 0.7rem;
+  }
+  p.body-text:last-child { margin-bottom: 0; }
+
+  /* ── STAT GRID ── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.9rem;
+    margin: 1.2rem 0;
+  }
+  .stat-box {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 1rem;
+    text-align: center;
+  }
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.63rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    line-height: 1.3;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 1.8rem; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 0.5rem; top: 0.4rem; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 1.3rem;
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -1.35rem; top: 0.4rem;
+    width: 9px; height: 9px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 2px solid var(--cream);
+    outline: 1px solid var(--accent);
+  }
+  .tl-year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.2rem;
+  }
+  .tl-text {
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    line-height: 1.6;
+  }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-pale);
+    padding: 1rem 1.2rem;
+    margin: 1.2rem 0;
+    border-radius: 0 5px 5px 0;
+    font-size: 0.92rem;
+    color: var(--ink-light);
+    font-style: italic;
+    line-height: 1.65;
+  }
+  .callout-gold {
+    border-left-color: var(--gold);
+    background: var(--gold-pale);
+  }
+  .callout-blue {
+    border-left-color: var(--blue);
+    background: var(--blue-pale);
+    font-style: normal;
+  }
+
+  /* ── KEY INSIGHTS ── */
+  .insight-list { list-style: none; }
+  .insight-list li {
+    display: flex; gap: 0.8rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--bone);
+    font-size: 0.91rem;
+    color: var(--ink-light);
+    line-height: 1.6;
+    align-items: flex-start;
+  }
+  .insight-list li:last-child { border-bottom: none; }
+  .insight-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: #fff;
+    background: var(--accent);
+    border-radius: 50%;
+    width: 20px; height: 20px;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow-row {
+    display: flex; align-items: center; gap: 0.4rem;
+    flex-wrap: wrap;
+    margin: 0.5rem 0;
+    font-size: 0.85rem;
+  }
+  .flow-box {
+    background: var(--blue-pale);
+    border: 1px solid #b6c8e0;
+    color: var(--blue);
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .flow-box.red { background: var(--accent-pale); border-color: #e0a090; color: var(--accent); }
+  .flow-box.gold { background: var(--gold-pale); border-color: #e0c070; color: #8a6010; }
+  .flow-arrow { color: var(--ink-muted); font-size: 1rem; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: var(--paper);
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .sidebar-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── KEY TERMS ── */
+  .term-item {
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--bone);
+  }
+  .term-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .term-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.2rem;
+  }
+  .term-def {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  /* ── NOTES PANEL ── */
+  .notes-panel {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px var(--shadow);
+  }
+  .notes-header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 0.7rem 1rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .notes-header-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .notes-toolbar {
+    display: flex; gap: 2px;
+    padding: 0.4rem 0.7rem;
+    background: var(--bone);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .tool-btn {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-size: 0.78rem;
+    color: var(--ink-light);
+    transition: all 0.15s;
+    font-weight: 600;
+    line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    min-width: 26px; height: 26px;
+  }
+  .tool-btn:hover {
+    background: var(--accent-pale);
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .tool-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .tool-sep {
+    width: 1px; background: var(--border);
+    margin: 0 3px; align-self: stretch;
+  }
+
+  .notes-area {
+    min-height: 280px;
+    max-height: 400px;
+    padding: 0.9rem 1rem;
+    overflow-y: auto;
+    outline: none;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.88rem;
+    color: var(--ink);
+    line-height: 1.75;
+    caret-color: var(--accent);
+  }
+  .notes-area:empty::before {
+    content: 'Ghi chú của bạn về Chương 8…';
+    color: var(--ink-muted);
+    pointer-events: none;
+    font-style: italic;
+  }
+  .notes-area ul { padding-left: 1.3rem; }
+  .notes-area li { margin-bottom: 0.2rem; }
+
+  .notes-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.4rem 0.9rem;
+    background: var(--paper);
+    border-top: 1px solid var(--border);
+  }
+  .save-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+    display: flex; align-items: center; gap: 0.35rem;
+  }
+  .save-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--ink-muted);
+    transition: background 0.3s;
+  }
+  .save-dot.saved { background: var(--green); }
+  .save-dot.dirty { background: var(--gold); }
+  .clear-btn {
+    background: none; border: none;
+    font-size: 0.7rem; color: var(--ink-muted);
+    cursor: pointer; font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    transition: all 0.15s;
+  }
+  .clear-btn:hover { color: var(--accent); background: var(--accent-pale); }
+
+  /* ── CHAPTER SUMMARY BOXES ── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  .summary-box {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 0.9rem;
+  }
+  .summary-box-icon {
+    font-size: 1.3rem;
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+  .summary-box-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.63rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-muted);
+    margin-bottom: 0.2rem;
+  }
+  .summary-box-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+
+  /* ── SCHEME CARD ── */
+  .scheme-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 0.9rem;
+    margin-bottom: 0.8rem;
+    border-left: 3px solid var(--gold);
+  }
+  .scheme-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+  }
+  .scheme-text {
+    font-size: 0.84rem;
+    color: var(--ink-light);
+    line-height: 1.6;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { border-top: 1px solid var(--border); }
+    .summary-grid { grid-template-columns: 1fr; }
+    header { padding: 1.5rem 1.5rem 1.2rem; }
+    .main-content { padding: 1.5rem; }
+  }
+
+  strong { color: var(--ink); }
+  em { font-style: italic; color: var(--ink-light); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-eyebrow">Princes of the Yen · Richard A. Werner</div>
+  <div class="header-title">Chương 8: Mysterious Money</div>
+  <div class="header-sub">The Ebb and Flow of the Yen — Dòng Chảy Bí Ẩn của Đồng Yên</div>
+  <div class="header-meta">
+    <span class="meta-badge">📅 Bối cảnh: 1980–1991</span>
+    <span class="meta-badge">🌏 Toàn cầu hóa tài chính</span>
+    <span class="meta-badge">💴 Dòng vốn Nhật Bản</span>
+    <span class="meta-badge">🔍 Bí ẩn kinh tế học</span>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('overview')">Tổng quan</button>
+      <button class="tab-btn" onclick="switchTab('flows')">Dòng vốn</button>
+      <button class="tab-btn" onclick="switchTab('schemes')">Thủ thuật kế toán</button>
+      <button class="tab-btn" onclick="switchTab('mystery')">Bí ẩn & Đảo chiều</button>
+      <button class="tab-btn" onclick="switchTab('insights')">Luận điểm chính</button>
+    </div>
+
+    <!-- TAB 1: OVERVIEW -->
+    <div id="tab-overview" class="tab-panel active">
+      <div class="section-title">
+        <span class="section-icon">🌐</span>
+        Bức tranh tổng thể — Thập niên 1980
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-box">
+          <span class="summary-box-icon">💸</span>
+          <div class="summary-box-label">Giao dịch ngoại hối/ngày</div>
+          <div class="summary-box-value">Nửa nghìn tỷ USD</div>
+        </div>
+        <div class="summary-box">
+          <span class="summary-box-icon">📈</span>
+          <div class="summary-box-label">Capital flows vs. Trade</div>
+          <div class="summary-box-value">Gấp 20 lần thương mại</div>
+        </div>
+        <div class="summary-box">
+          <span class="summary-box-icon">🇯🇵</span>
+          <div class="summary-box-label">Tỷ trọng của Nhật (1987)</div>
+          <div class="summary-box-value">86.6% net capital exports</div>
+        </div>
+        <div class="summary-box">
+          <span class="summary-box-icon">🔼</span>
+          <div class="summary-box-label">Xuất khẩu vốn dài hạn đỉnh</div>
+          <div class="summary-box-value">$137 tỷ (1987)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          Bối cảnh: Kỷ nguyên "Hot Money"
+          <span class="card-tag tag-red">Toàn cầu hóa tài chính</span>
+        </div>
+        <p class="body-text">Thập niên 1980 đánh dấu sự trỗi dậy mạnh mẽ của toàn cầu hóa tài chính: các quy định quản lý ngân hàng và chứng khoán được nới lỏng, các rào cản về cartel tài chính bị xóa bỏ, và hầu hết các nước công nghiệp hóa dỡ bỏ kiểm soát vốn. Các giao dịch vốn xuyên biên giới tăng vọt, đạt mức <strong>gấp hơn 20 lần luồng thương mại hàng hóa</strong>.</p>
+        <p class="body-text">Các quỹ phòng hộ (hedge funds) bùng nổ, thống trị thị trường ngoại hối. Chỉ cần một quyết định thay đổi quan điểm của các nhà quản lý quỹ là có thể khiến hàng tỷ đô-la chảy từ quốc gia này sang quốc gia khác, tạo ra làn sóng biến động tỷ giá và thị trường chứng khoán toàn cầu.</p>
+        <div class="callout">
+          Werner chỉ ra rằng hiện tượng "toàn cầu hóa vốn" thực chất không phải là một xu hướng đồng đều của nhiều nước — mà chủ yếu là <em>một hiện tượng của Nhật Bản</em>. Năm 1987, Nhật Bản chiếm 86,6% tổng xuất khẩu vốn ròng của 11 nước xuất khẩu vốn lớn nhất thế giới.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          "Nhật Bản đang thâu tóm thế giới"
+          <span class="card-tag tag-gold">Địa chính trị kinh tế</span>
+        </div>
+        <p class="body-text">Dòng tiền khổng lồ từ Nhật Bản đã định hình lại nền kinh tế toàn cầu. Các công ty Nhật mua lại nhiều tài sản biểu tượng của Mỹ và thế giới:</p>
+        <ul class="insight-list" style="margin-top:0.5rem;">
+          <li><span class="insight-num">•</span>Rockefeller Center, Columbia Pictures, Pebble Beach Golf Course</li>
+          <li><span class="insight-num">•</span>Bất động sản Hawaii, California, Australia</li>
+          <li><span class="insight-num">•</span>Nhà máy sản xuất ô-tô tại Anh và Midwest Mỹ</li>
+          <li><span class="insight-num">•</span>Các nhà máy tại châu Á — biến khu vực thành "xưởng sản xuất mới" của Nhật</li>
+        </ul>
+        <div class="callout callout-gold">
+          Điều này tạo ra nỗi sợ và phẫn nộ ở các nước nhận đầu tư. Nhiều nhà kinh tế Mỹ phát triển chiến lược chống lại "mối đe dọa Nhật Bản". Một số cảnh báo: <em>"Nhật Bản thua chiến tranh nhưng đang thắng về kinh tế."</em>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: FLOWS -->
+    <div id="tab-flows" class="tab-panel">
+      <div class="section-title">
+        <span class="section-icon">📊</span>
+        Chi tiết dòng vốn Nhật Bản
+      </div>
+
+      <div class="card">
+        <div class="card-title">Xuất khẩu vốn dài hạn theo thời gian <span class="card-tag tag-blue">Portfolio + FDI</span></div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-year">1980</div>
+            <div class="tl-text">Nhật Bản còn là nước <strong>nhập khẩu ròng vốn</strong> ($2 tỷ vào). Đây là điểm xuất phát trước khi bùng nổ.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">1981</div>
+            <div class="tl-text">Đảo chiều thành xuất khẩu ròng: gần $10 tỷ ra ngoài.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">1985</div>
+            <div class="tl-text">Bùng nổ đến <strong>$65 tỷ</strong> — tăng gần 7 lần chỉ trong 4 năm. Năm này cũng là năm Hiệp định Plaza được ký kết.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">1986</div>
+            <div class="tl-text">Tăng gấp đôi lên <strong>$132 tỷ</strong>. Portfolio flows đạt đỉnh: $101,4 tỷ — trong đó 77% vào trái phiếu, gần 90% là trái phiếu Kho bạc Mỹ.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">1987</div>
+            <div class="tl-text">Kỷ lục <strong>$137 tỷ</strong> — gần gấp đôi thặng dư tài khoản vãng lai. Nhật Bản mua 75% toàn bộ trái phiếu Kho bạc Mỹ đấu thầu trong năm này.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">1988–1990</div>
+            <div class="tl-text">FDI lên ngôi: $46 tỷ năm 1990, trở thành nước xuất khẩu FDI số 1 thế giới. Hơn 50% FDI hướng đến Mỹ và châu Âu.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">1991</div>
+            <div class="tl-text"><strong>Đảo chiều đột ngột:</strong> Nhật ghi nhận $40 tỷ nhập khẩu vốn ròng — lần đầu tiên sau hơn một thập kỷ. Nhà đầu tư Nhật bán tháo tài sản nước ngoài ồ ạt.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Portfolio vs. FDI — Tương quan <span class="card-tag tag-red">Phân tích</span></div>
+        <p class="body-text">Werner phân biệt rõ hai luồng vốn chính:</p>
+
+        <div class="flow-row">
+          <div class="flow-box">Portfolio Investment</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box gold">Trái phiếu Kho bạc Mỹ (90%)</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box red">Đỉnh 1986: $101,4 tỷ</div>
+        </div>
+
+        <div class="flow-row" style="margin-top:0.5rem;">
+          <div class="flow-box">FDI</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box gold">Bất động sản + Doanh nghiệp</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box red">Đỉnh 1990: $46–48 tỷ</div>
+        </div>
+
+        <p class="body-text" style="margin-top:1rem;">Điều đáng chú ý: <strong>portfolio đi trước, FDI theo sau</strong>. Đến cuối thập niên, FDI đã vượt qua portfolio để thống trị. Và cả hai đều tăng trong giai đoạn đồng yên lên giá mạnh — điều này <em>hoàn toàn trái với logic kinh tế thông thường</em>.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Nghịch lý Plaza Accord <span class="card-tag tag-red">Anomaly</span></div>
+        <div class="stat-grid">
+          <div class="stat-box">
+            <span class="stat-number">40%</span>
+            <span class="stat-label">Giá trị đầu tư nước ngoài mất đi (tính theo yên) trong 2 năm 1985–1987</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number">Tiếp tục</span>
+            <span class="stat-label">Nhà đầu tư Nhật vẫn tiếp tục đổ tiền ra nước ngoài bất chấp thua lỗ</span>
+          </div>
+        </div>
+        <p class="body-text">Sau Plaza Accord, đồng yên tăng giá mạnh — khiến tất cả tài sản nước ngoài mất giá trị khi tính theo yên. Trong 2 năm (1/1985–1/1987), khoảng <strong>40% giá trị đầu tư nước ngoài lũy kế của Nhật Bản đã bị "xóa sổ"</strong> theo đồng yên. Dù vậy, dòng vốn ra vẫn không ngừng. Không một mô hình kinh tế học chuẩn nào có thể giải thích được điều này.</p>
+      </div>
+    </div>
+
+    <!-- TAB 3: SCHEMES -->
+    <div id="tab-schemes" class="tab-panel">
+      <div class="section-title">
+        <span class="section-icon">🎭</span>
+        Các thủ thuật che giấu dòng vốn thực
+      </div>
+
+      <div class="callout callout-blue">
+        <strong>Luận điểm cốt lõi của Werner:</strong> Các con số chính thức về dòng vốn Nhật Bản đã bị <em>cố tình làm nhỏ lại</em>. Cục Tài chính Quốc tế (MoF) đã tạo ra nhiều cơ chế kế toán sáng tạo để đồng thời làm giảm cả thặng dư thương mại lẫn xuất khẩu vốn trên giấy tờ.
+      </div>
+
+      <div class="scheme-card">
+        <div class="scheme-title">🥇 Thủ thuật 1: Vàng — "Goldwashing" tài khoản vãng lai</div>
+        <div class="scheme-text">Từ đầu 1980, Nhật trở thành nước nhập khẩu vàng thỏi lớn nhất thế giới. Năm 1986, nhập khẩu lên tới <strong>gần 600 tấn — chiếm 50% sản lượng vàng thế giới phi cộng sản</strong>. Các công ty chứng khoán bán "tài khoản tiết kiệm vàng" — vàng mua trên giấy, chưa bao giờ rời kho ở London hay New York. Nhưng về thống kê cán cân thanh toán, chúng được tính là <em>nhập khẩu</em> vào Nhật, qua đó làm giảm thặng dư thương mại một cách giả tạo. Năm 1990 đạt ~$6 tỷ theo cơ chế này. Chính MoF cấp phép và đặt hàng đúc tiền kỷ niệm vàng.</div>
+      </div>
+
+      <div class="scheme-card">
+        <div class="scheme-title">✈️ Thủ thuật 2: Cho thuê máy bay — "Samurai Plan"</div>
+        <div class="scheme-text">Cuối thập niên 1970, MITI và các ngân hàng lớn lập kế hoạch "Samurai": khi một hãng hàng không nước ngoài mua máy bay từ nhà sản xuất ngoại quốc khác, ngân hàng Nhật sẽ mua máy bay rồi cho thuê lại. Giao dịch được hạch toán như <em>nhập khẩu của Nhật</em> — làm giảm thặng dư thương mại ảo. MoF ban đầu lo IMF phát hiện nên ngừng, nhưng thập niên 1980 áp dụng lại phiên bản tinh vi hơn qua các công ty con ở nước ngoài. Nhật trở thành cường quốc lớn về cho thuê máy bay quốc tế, với công ty cho thuê lớn nhất thế giới thuộc sở hữu Nhật Bản.</div>
+      </div>
+
+      <div class="scheme-card">
+        <div class="scheme-title">💱 Thủ thuật 3: Impact Loans — Đổi chiều thống kê vốn</div>
+        <div class="scheme-text">Ngân hàng Nhật cung cấp "impact loans" cho doanh nghiệp trong nước: khoản vay bằng đô-la, được hoán đổi ngay sang yên (thực chất là khoản vay yên). Nhưng khoản vay được hạch toán qua các trung tâm tài chính nước ngoài và <em>được ghi nhận là nhập khẩu vốn dài hạn</em> vào Nhật. Kết quả: một giao dịch thuần túy trong nước lại xuất hiện trên thống kê như một luồng vốn chảy vào — làm giảm con số xuất khẩu vốn ròng trên giấy tờ.</div>
+      </div>
+
+      <div class="scheme-card">
+        <div class="scheme-title">🏦 Thủ thuật 4: Chuyển khoản nội bộ ngân hàng — Tàng hình FDI</div>
+        <div class="scheme-text">Đầu tư ra nước ngoài thông qua các chi nhánh Nhật ở London/New York được hạch toán là "interoffice transfer" — không xuất hiện trong thống kê xuất khẩu vốn dài hạn. Cách này hoàn toàn vô hình với cán cân thanh toán. Năm 1989, riêng khoản "errors and omissions" trong cán cân thanh toán Nhật đã lên tới <strong>¥3 nghìn tỷ — gần bằng 50% tổng xuất khẩu vốn ròng chính thức</strong>.</div>
+      </div>
+
+      <div class="callout">
+        Tất cả bốn cơ chế trên đều không phát sinh tự nhiên từ thị trường mà đều có sự <strong>chủ động thiết kế và thực thi của các cơ quan nhà nước Nhật Bản</strong> (MoF, MITI), đặt ra câu hỏi lớn về ai thực sự điều phối dòng vốn này và vì mục đích gì.
+      </div>
+    </div>
+
+    <!-- TAB 4: MYSTERY & REVERSAL -->
+    <div id="tab-mystery" class="tab-panel">
+      <div class="section-title">
+        <span class="section-icon">🔍</span>
+        Bí ẩn kinh tế học & Đảo chiều 1991
+      </div>
+
+      <div class="card">
+        <div class="card-title">Thập niên 1970: Mô hình "Textbook" <span class="card-tag tag-green">Logic chuẩn</span></div>
+        <p class="body-text">Trong thập niên 1970, dòng vốn Nhật Bản vận hành đúng theo lý thuyết kinh tế học: xuất khẩu vốn xấp xỉ bằng thặng dư tài khoản vãng lai. Tiền kiếm được từ xuất khẩu ròng được "tái chế" ra thị trường quốc tế. Tài khoản thương mại là động lực, dòng vốn chỉ điều chỉnh theo.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Thập niên 1980: Mô hình sụp đổ <span class="card-tag tag-red">Khủng hoảng lý thuyết</span></div>
+        <p class="body-text">Đến thập niên 1980, mọi thứ đảo lộn:</p>
+        <ul class="insight-list">
+          <li><span class="insight-num">1</span><strong>Vốn đi trước thương mại:</strong> Xuất khẩu vốn dài hạn vượt xa và đi trước thặng dư tài khoản vãng lai về cả thời gian lẫn quy mô.</li>
+          <li><span class="insight-num">2</span><strong>Đi vay để đầu tư:</strong> Nhật Bản thực tế phải <em>vay ngoại tệ</em> để tài trợ cho hoạt động mua tài sản nước ngoài — vượt quá khả năng từ xuất khẩu.</li>
+          <li><span class="insight-num">3</span><strong>Không vì lợi nhuận:</strong> Mô hình đa dạng hóa danh mục đầu tư chuẩn thất bại hoàn toàn. Lãi suất chênh lệch không giải thích được dòng vốn. Nhiều nhà đầu tư không thậm chí làm phân tích dòng tiền hay dự báo lợi nhuận trước khi mua tài sản.</li>
+          <li><span class="insight-num">4</span><strong>Tiếp tục dù lỗ nặng:</strong> Dù đồng yên tăng giá làm 40% giá trị đầu tư nước ngoài bốc hơi, dòng tiền vẫn không ngừng chảy ra.</li>
+        </ul>
+        <div class="callout">
+          Các nghiên cứu hàn lâm nghiêm túc thừa nhận không thể giải thích đợt bùng nổ này và thường kết thúc bằng các từ: đầu tư Nhật là "hard to understand", "counterintuitive", hay đơn giản là một <em>"mystery"</em>.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Đảo chiều 1991: Bí ẩn càng sâu hơn <span class="card-tag tag-red">Đột biến</span></div>
+        <div class="stat-grid">
+          <div class="stat-box">
+            <span class="stat-number">$90B+</span>
+            <span class="stat-label">Thặng dư tài khoản vãng lai kỷ lục năm 1991</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number">−$40B</span>
+            <span class="stat-label">Luồng vốn dài hạn ròng 1991 (nhập khẩu ròng lần đầu sau 10 năm)</span>
+          </div>
+        </div>
+        <p class="body-text">Năm 1991, đúng lúc thặng dư thương mại Nhật đạt kỷ lục $90+ tỷ, dòng vốn dài hạn ròng <strong>đột ngột đảo chiều</strong>: Nhật trở thành người nhập khẩu ròng $40 tỷ vốn dài hạn — lần đầu tiên sau hơn một thập kỷ. Các nhà đầu tư Nhật bán tháo tài sản nước ngoài ở mọi lĩnh vực: từ nhà sản xuất, ngân hàng đến công ty bất động sản.</p>
+        <p class="body-text">Đây là nghịch lý kép: <em>thặng dư thương mại kỷ lục + thặng dư tài khoản vốn đồng thời</em> — hoàn toàn không thể giải thích bằng lý thuyết kinh tế chuẩn.</p>
+        <div class="callout">
+          Werner kết luận: Sự bùng nổ và sụp đổ của dòng vốn Nhật Bản không thể hiểu được nếu chỉ nhìn vào yếu tố thị trường. Đây là bằng chứng mạnh mẽ rằng <strong>có một lực lượng phi thị trường nào đó đã điều phối toàn bộ chu kỳ này</strong> — và đó chính là câu hỏi cốt lõi mà cuốn sách muốn trả lời.
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: INSIGHTS -->
+    <div id="tab-insights" class="tab-panel">
+      <div class="section-title">
+        <span class="section-icon">💡</span>
+        Luận điểm chính & Ý nghĩa
+      </div>
+
+      <div class="card">
+        <div class="card-title">5 Luận điểm cốt lõi của Chương 8</div>
+        <ul class="insight-list">
+          <li>
+            <span class="insight-num">1</span>
+            <div><strong>"Toàn cầu hóa vốn" là một huyền thoại một phần.</strong> Điều được coi là xu hướng toàn cầu thực ra chủ yếu do một quốc gia tạo ra: Nhật Bản chiếm 86,6% xuất khẩu vốn ròng của 11 nước dẫn đầu năm 1987.</div>
+          </li>
+          <li>
+            <span class="insight-num">2</span>
+            <div><strong>Dòng vốn Nhật Bản không được thị trường dẫn dắt.</strong> Không phải lãi suất, không phải lợi nhuận kỳ vọng, không phải đa dạng hóa rủi ro — không mô hình kinh tế chuẩn nào giải thích được. Điều này gợi ý sự hiện diện của một tác nhân phi thị trường ở phía sau.</div>
+          </li>
+          <li>
+            <span class="insight-num">3</span>
+            <div><strong>Số liệu chính thức bị bóp méo có chủ đích.</strong> MoF và MITI dùng ít nhất 4 cơ chế kế toán sáng tạo để làm giảm cả thặng dư thương mại lẫn xuất khẩu vốn trên sổ sách. Con số thực còn lớn hơn nhiều so với số đã công bố.</div>
+          </li>
+          <li>
+            <span class="insight-num">4</span>
+            <div><strong>Đầu tư không vì lợi nhuận.</strong> Thực tế rằng ngay cả các tập đoàn lớn cũng không thèm phân tích dòng tiền trước khi mua tài sản nước ngoài cho thấy mục tiêu thực sự không phải là lợi nhuận thương mại.</div>
+          </li>
+          <li>
+            <span class="insight-num">5</span>
+            <div><strong>Đảo chiều 1991 còn bí ẩn hơn bùng nổ.</strong> Thặng dư thương mại kỷ lục đi kèm với đảo chiều vốn ồ ạt — không có cơ chế thị trường nào có thể tạo ra cả hai cùng lúc. Phải có một quyết định điều phối từ bên ngoài thị trường.</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Ý nghĩa với luận điểm toàn sách <span class="card-tag tag-blue">Big Picture</span></div>
+        <p class="body-text">Chương 8 đặt nền móng kinh nghiệm thực tế cho toàn bộ lập luận của Werner: nếu dòng vốn không phải do thị trường điều khiển, thì ai điều khiển? Câu trả lời — theo Werner — nằm ở cơ chế cấp tín dụng của Ngân hàng Trung ương Nhật Bản (BoJ) thông qua <em>"window guidance"</em> (hướng dẫn cửa sổ): BoJ kiểm soát lượng và hướng đi của tín dụng ngân hàng, qua đó có thể bơm tiền vào nền kinh tế theo bất kỳ hướng nào — kể cả ra nước ngoài.</p>
+        <div class="callout callout-blue">
+          <strong>Kết nối chương này với toàn sách:</strong> Sự bùng nổ tín dụng trong nước → bong bóng tài sản trong nước (Ch.9) → khi bong bóng vỡ, tiền rút về → sụp đổ 1991. Chu kỳ toàn bộ không phải ngẫu nhiên mà được thiết kế và điều phối bởi các "Hoàng tử của đồng Yên" — các quan chức BoJ ẩn danh nhưng có quyền lực tuyệt đối.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- KEY TERMS -->
+    <div>
+      <div class="sidebar-section-title">Thuật ngữ trọng yếu</div>
+      <div class="term-item">
+        <div class="term-name">Hot Money</div>
+        <div class="term-def">Dòng vốn lưu động quốc tế chạy theo lợi suất cao nhất, có thể dịch chuyển trong tích tắc giữa các quốc gia và loại tài sản.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">Portfolio Investment</div>
+        <div class="term-def">Đầu tư tài chính (trái phiếu, cổ phiếu) không kèm quyền kiểm soát. Nhật Bản dùng chủ yếu để mua trái phiếu Kho bạc Mỹ.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">FDI — Foreign Direct Investment</div>
+        <div class="term-def">Đầu tư trực tiếp nước ngoài vào tài sản thực: bất động sản, nhà máy, doanh nghiệp. Nhật chiếm vị trí số 1 thế giới năm 1989–1990.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">Plaza Accord (1985)</div>
+        <div class="term-def">Thỏa thuận G5 nhằm phá giá đô-la (nâng giá yên) để giảm thặng dư thương mại Nhật. Nghịch lý: dòng vốn ra tăng chứ không giảm sau đó.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">Impact Loans</div>
+        <div class="term-def">Khoản vay đô-la được swap ngay sang yên, nhưng hạch toán qua offshore centers như nhập khẩu vốn — làm giảm số liệu xuất khẩu vốn ròng trên sổ sách.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-name">Window Guidance</div>
+        <div class="term-def">Cơ chế BoJ trực tiếp chỉ định hạn mức tín dụng cho từng ngân hàng thương mại — công cụ quyền lực thực sự đứng sau mọi biến động vốn.</div>
+      </div>
+    </div>
+
+    <!-- NOTES PANEL -->
+    <div>
+      <div class="sidebar-section-title">Ghi chú cá nhân</div>
+      <div class="notes-panel">
+        <div class="notes-header">
+          <span class="notes-header-title">📝 My Notes — Chương 8</span>
+          <span class="save-status" id="saveStatus">
+            <span class="save-dot" id="saveDot"></span>
+            <span id="saveText">chưa có ghi chú</span>
+          </span>
+        </div>
+        <div class="notes-toolbar">
+          <button class="tool-btn" title="Bôi đậm" onclick="execCmd('bold')"><b>B</b></button>
+          <button class="tool-btn" title="In nghiêng" onclick="execCmd('italic')"><i>I</i></button>
+          <button class="tool-btn" title="Gạch chân" onclick="execCmd('underline')"><u>U</u></button>
+          <div class="tool-sep"></div>
+          <button class="tool-btn" title="Bullet list" onclick="execCmd('insertUnorderedList')">• –</button>
+          <button class="tool-btn" title="Numbered list" onclick="execCmd('insertOrderedList')">1.</button>
+          <div class="tool-sep"></div>
+          <button class="tool-btn" title="Undo" onclick="execCmd('undo')">↩</button>
+          <button class="tool-btn" title="Redo" onclick="execCmd('redo')">↪</button>
+        </div>
+        <div
+          class="notes-area"
+          id="notesArea"
+          contenteditable="true"
+          spellcheck="true"
+          oninput="onNotesInput()"
+        ></div>
+        <div class="notes-footer">
+          <span class="save-status">
+            <span class="save-dot" id="saveDot2"></span>
+            <span id="saveText2">Tự động lưu</span>
+          </span>
+          <button class="clear-btn" onclick="clearNotes()">Xoá</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK STATS -->
+    <div>
+      <div class="sidebar-section-title">Số liệu nhanh</div>
+      <div class="stat-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="stat-box">
+          <span class="stat-number">$137B</span>
+          <span class="stat-label">Đỉnh xuất khẩu vốn 1987</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-number">86.6%</span>
+          <span class="stat-label">Tỷ trọng Nhật trong vốn toàn cầu 1987</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-number">75%</span>
+          <span class="stat-label">T-Bonds Mỹ Nhật mua năm 1986</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-number">600T</span>
+          <span class="stat-label">Tấn vàng nhập khẩu năm 1986</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ── TAB SWITCHING ──
+  function switchTab(id) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  // ── NOTES: TOOLBAR ──
+  function execCmd(cmd) {
+    document.getElementById('notesArea').focus();
+    document.execCommand(cmd, false, null);
+    onNotesInput();
+  }
+
+  // ── NOTES: AUTO SAVE ──
+  const STORAGE_KEY = 'ch8_princes_yen_notes';
+  let saveTimer = null;
+
+  function setStatus(state) {
+    const dot = document.getElementById('saveDot');
+    const dot2 = document.getElementById('saveDot2');
+    const text = document.getElementById('saveText');
+    const text2 = document.getElementById('saveText2');
+
+    [dot, dot2].forEach(d => {
+      d.className = 'save-dot ' + state;
+    });
+
+    const msgs = {
+      saved: 'Đã lưu',
+      dirty: 'Chưa lưu…',
+      '': 'Chưa có ghi chú'
+    };
+    const msg = msgs[state] || 'Tự động lưu';
+    text.textContent = msg;
+    text2.textContent = msg;
+  }
+
+  function onNotesInput() {
+    setStatus('dirty');
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveNotes, 1200);
+  }
+
+  function saveNotes() {
+    const area = document.getElementById('notesArea');
+    const content = area.innerHTML;
+    try {
+      localStorage.setItem(STORAGE_KEY, content);
+      setStatus('saved');
+    } catch(e) {
+      // storage unavailable
+    }
+  }
+
+  function loadNotes() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved && saved.trim()) {
+        document.getElementById('notesArea').innerHTML = saved;
+        setStatus('saved');
+      }
+    } catch(e) {}
+  }
+
+  function clearNotes() {
+    if (!confirm('Xoá toàn bộ ghi chú?')) return;
+    document.getElementById('notesArea').innerHTML = '';
+    try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+    setStatus('');
+  }
+
+  // ── INIT ──
+  window.addEventListener('DOMContentLoaded', () => {
+    loadNotes();
+  });
+
+  // Save before page unload
+  window.addEventListener('beforeunload', saveNotes);
+</script>
+</body>
+</html>
